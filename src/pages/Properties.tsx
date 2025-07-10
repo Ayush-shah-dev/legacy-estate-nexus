@@ -131,8 +131,8 @@ export default function Properties() {
   const filteredProperties = properties.filter(property => {
     const matchesSearch = property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          property.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = !propertyType || property.type === propertyType;
-    const matchesLocation = !location || property.location.includes(location);
+    const matchesType = !propertyType || propertyType === 'all' || property.type === propertyType;
+    const matchesLocation = !location || location === 'all' || property.location.includes(location);
     
     return matchesSearch && matchesType && matchesLocation;
   });
@@ -169,7 +169,7 @@ export default function Properties() {
                   <SelectValue placeholder="Property Type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Types</SelectItem>
+                  <SelectItem value="all">All Types</SelectItem>
                   <SelectItem value="Villa">Villa</SelectItem>
                   <SelectItem value="Apartment">Apartment</SelectItem>
                   <SelectItem value="Penthouse">Penthouse</SelectItem>
@@ -183,7 +183,7 @@ export default function Properties() {
                   <SelectValue placeholder="Location" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Locations</SelectItem>
+                  <SelectItem value="all">All Locations</SelectItem>
                   <SelectItem value="Whitefield">Whitefield</SelectItem>
                   <SelectItem value="Koramangala">Koramangala</SelectItem>
                   <SelectItem value="Indiranagar">Indiranagar</SelectItem>
