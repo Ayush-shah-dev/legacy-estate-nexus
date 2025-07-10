@@ -55,11 +55,11 @@ export const Layout = () => {
             {/* Contact Info */}
             <div className="hidden lg:flex items-center space-x-4">
               <a
-                href="tel:+919876543210"
+                href="tel:+919903188690"
                 className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-brand-maroon transition-colors"
               >
                 <Phone className="h-4 w-4" />
-                <span>+91 98765 43210</span>
+                <span>+91 99031 88690</span>
               </a>
               <Button variant="outline" size="sm" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
                 Book Consultation
@@ -100,11 +100,11 @@ export const Layout = () => {
               ))}
               <div className="pt-4 pb-3 border-t">
                 <a
-                  href="tel:+919876543210"
+                  href="tel:+919903188690"
                   className="flex items-center space-x-2 px-3 py-2 text-sm text-muted-foreground"
                 >
                   <Phone className="h-4 w-4" />
-                  <span>+91 98765 43210</span>
+                  <span>+91 99031 88690</span>
                 </a>
               </div>
             </div>
@@ -119,7 +119,7 @@ export const Layout = () => {
 
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/919876543210?text=Hi, I'm interested in your real estate services"
+        href="https://wa.me/919903188690?text=Hi, I'm interested in your real estate services"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-luxury transition-all duration-300 hover:scale-110 z-50"
@@ -140,10 +140,9 @@ export const Layout = () => {
                 exceptional properties and unmatched service.
               </p>
               <div className="flex space-x-4">
-                <a href="tel:+919876543210" className="text-brand-classic-gold hover:text-secondary transition-colors">
-                  +91 98765 43210
+                <a href="tel:+919903188690" className="text-brand-classic-gold hover:text-secondary transition-colors">
+                  +91 99031 88690
                 </a>
-                <span className="text-primary-foreground/60">|</span>
                 <a href="mailto:info@estatenexus.com" className="text-brand-classic-gold hover:text-secondary transition-colors">
                   info@estatenexus.com
                 </a>

@@ -67,8 +67,8 @@ export default function Contact() {
     {
       icon: Phone,
       title: "Call Us",
-      details: ["+91 98765 43210", "+91 99876 54321"],
-      action: "tel:+919876543210"
+      details: ["+91 99031 88690"],
+      action: "tel:+919903188690"
     },
     {
       icon: Mail,
@@ -94,20 +94,8 @@ export default function Contact() {
     {
       city: "Bangalore",
       address: "123 Business District, MG Road",
-      phone: "+91 98765 43210",
+      phone: "+91 99031 88690",
       email: "bangalore@estatenexus.com"
-    },
-    {
-      city: "Chennai",
-      address: "456 Anna Salai, Nungambakkam",
-      phone: "+91 98765 43211",
-      email: "chennai@estatenexus.com"
-    },
-    {
-      city: "Hyderabad",
-      address: "789 Banjara Hills, Road No. 12",
-      phone: "+91 98765 43212",
-      email: "hyderabad@estatenexus.com"
     }
   ];
 
@@ -327,14 +315,14 @@ export default function Contact() {
                   </h3>
                   <div className="space-y-4">
                     <a
-                      href="tel:+919876543210"
+                      href="tel:+919903188690"
                       className="flex items-center justify-center w-full p-4 bg-brand-maroon text-white rounded-lg hover:bg-brand-maroon/90 transition-colors"
                     >
                       <Phone className="mr-2 h-5 w-5" />
                       Call Now
                     </a>
                     <a
-                      href="https://wa.me/919876543210?text=Hi, I'm interested in your real estate services"
+                      href="https://wa.me/919903188690?text=Hi, I'm interested in your real estate services"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-center w-full p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
@@ -401,7 +389,7 @@ export default function Contact() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8">
             {officeLocations.map((office, index) => (
               <Card key={index} className="hover:shadow-luxury transition-all duration-300">
                 <CardContent className="p-6">
