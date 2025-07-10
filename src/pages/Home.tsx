@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Building2, Users, Award, Star, ArrowRight, Phone } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import heroImage from '@/assets/hero-background.jpg';
 
 export default function Home() {
@@ -104,14 +105,18 @@ export default function Home() {
             and unmatched service excellence.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in">
-            <Button size="lg" className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300">
-              Explore Properties
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
-              <Phone className="mr-2 h-5 w-5" />
-              Schedule Consultation
-            </Button>
+            <Link to="/properties">
+              <Button size="lg" className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300">
+                Explore Properties
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+            <Link to="/contact">
+              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
+                <Phone className="mr-2 h-5 w-5" />
+                Schedule Consultation
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -214,10 +219,12 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-12">
-            <Button variant="outline" size="lg" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
-              View All Properties
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <Link to="/properties">
+              <Button variant="outline" size="lg" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
+                View All Properties
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
