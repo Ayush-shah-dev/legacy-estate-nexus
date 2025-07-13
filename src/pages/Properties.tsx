@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +22,17 @@ export default function Properties() {
   const [priceRange, setPriceRange] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [location, setLocation] = useState('');
+  
+  // Get URL parameters to determine if showing residential or commercial
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const typeParam = urlParams.get('type');
+    if (typeParam === 'residential') {
+      setPropertyType('Residential');
+    } else if (typeParam === 'commercial') {
+      setPropertyType('Commercial');
+    }
+  }, []);
 
   const properties = [
     {
@@ -30,7 +41,8 @@ export default function Properties() {
       location: "Juhu, Mumbai",
       price: "₹8.5 Cr",
       originalPrice: "₹9.2 Cr",
-      type: "Villa",
+      type: "Residential",
+      subType: "Villa",
       bedrooms: 4,
       bathrooms: 5,
       area: "4500 sq ft",
@@ -47,7 +59,8 @@ export default function Properties() {
       location: "Bandra West, Mumbai",
       price: "₹4.2 Cr",
       originalPrice: "₹4.8 Cr",
-      type: "Apartment",
+      type: "Residential",
+      subType: "Apartment",
       bedrooms: 3,
       bathrooms: 3,
       area: "1800 sq ft",
@@ -64,7 +77,8 @@ export default function Properties() {
       location: "Worli, Mumbai",
       price: "₹12.5 Cr",
       originalPrice: "₹14.0 Cr",
-      type: "Penthouse",
+      type: "Residential",
+      subType: "Penthouse",
       bedrooms: 4,
       bathrooms: 4,
       area: "3200 sq ft",
@@ -77,73 +91,116 @@ export default function Properties() {
     },
     {
       id: 4,
-      title: "Modern Apartment in Andheri",
-      location: "Andheri West, Mumbai",
-      price: "₹2.8 Cr",
-      originalPrice: "₹3.1 Cr",
-      type: "Apartment",
-      bedrooms: 2,
-      bathrooms: 2,
-      area: "1200 sq ft",
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop",
-      features: ["Swimming Pool", "Gym", "Garden", "24x7 Security"],
-      rating: 4.4,
-      reviews: 12,
-      status: "Ready to Move",
-      developer: "Godrej Properties"
-    },
-    {
-      id: 5,
-      title: "Luxury Villa in Powai",
-      location: "Powai, Mumbai",
-      price: "₹6.5 Cr",
-      originalPrice: "₹7.2 Cr",
-      type: "Villa",
-      bedrooms: 3,
-      bathrooms: 3,
-      area: "2800 sq ft",
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop",
-      features: ["Lake View", "Garden", "Parking", "Security"],
-      rating: 4.5,
-      reviews: 15,
-      status: "Under Construction",
-      developer: "Kalpataru Limited"
-    },
-    {
-      id: 6,
-      title: "Commercial Space in BKC",
+      title: "Corporate Office in BKC",
       location: "Bandra Kurla Complex, Mumbai",
       price: "₹3.5 Cr",
       originalPrice: "₹4.0 Cr",
       type: "Commercial",
+      subType: "Office Space",
       bedrooms: 0,
       bathrooms: 2,
       area: "2500 sq ft",
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop",
-      features: ["Metro Connectivity", "Security", "Elevator", "Prime Location"],
+      image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&h=300&fit=crop",
+      features: ["Metro Connectivity", "24/7 Security", "High-speed Internet", "Conference Rooms"],
       rating: 4.7,
       reviews: 28,
       status: "Ready to Move",
       developer: "Lodha Group"
+    },
+    {
+      id: 5,
+      title: "Premium Retail Space in Palladium Mall",
+      location: "Lower Parel, Mumbai",
+      price: "₹2.8 Cr",
+      originalPrice: "₹3.2 Cr",
+      type: "Commercial",
+      subType: "Retail Space",
+      bedrooms: 0,
+      bathrooms: 1,
+      area: "1200 sq ft",
+      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500&h=300&fit=crop",
+      features: ["High Footfall", "Prime Location", "Parking Available", "24/7 Security"],
+      rating: 4.5,
+      reviews: 15,
+      status: "Available for Lease",
+      developer: "Palladium Group"
+    },
+    {
+      id: 6,
+      title: "IT Office Space in Powai",
+      location: "Powai, Mumbai",
+      price: "₹1.8 Cr",
+      originalPrice: "₹2.1 Cr",
+      type: "Commercial",
+      subType: "IT Office",
+      bedrooms: 0,
+      bathrooms: 3,
+      area: "3000 sq ft",
+      image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=500&h=300&fit=crop",
+      features: ["Tech Park Location", "Flexible Layout", "Cafeteria", "Ample Parking"],
+      rating: 4.6,
+      reviews: 22,
+      status: "Ready to Occupy",
+      developer: "Hiranandani Group"
+    },
+    {
+      id: 7,
+      title: "Warehouse in Bhiwandi",
+      location: "Bhiwandi, Mumbai",
+      price: "₹4.2 Cr",
+      originalPrice: "₹4.8 Cr",
+      type: "Commercial",
+      subType: "Warehouse",
+      bedrooms: 0,
+      bathrooms: 2,
+      area: "25000 sq ft",
+      image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=500&h=300&fit=crop",
+      features: ["Highway Access", "Loading Docks", "Security Systems", "Large Space"],
+      rating: 4.3,
+      reviews: 18,
+      status: "Ready for Use",
+      developer: "Industrial Realty"
+    },
+    {
+      id: 8,
+      title: "Medical Center Space in Andheri",
+      location: "Andheri East, Mumbai",
+      price: "₹1.5 Cr",
+      originalPrice: "₹1.7 Cr",
+      type: "Commercial",
+      subType: "Medical Space",
+      bedrooms: 0,
+      bathrooms: 4,
+      area: "1800 sq ft",
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=500&h=300&fit=crop",
+      features: ["Medical Zoning", "Parking", "Accessibility Compliant", "Prime Medical Hub"],
+      rating: 4.4,
+      reviews: 12,
+      status: "Available",
+      developer: "Healthcare Realty"
     }
   ];
 
   const partnerDevelopers = [
     "Lodha Group",
-    "Godrej Properties",
+    "Godrej Properties", 
     "Oberoi Realty",
-    "Hiranandani Group", 
-    "Kalpataru Limited"
+    "Hiranandani Group",
+    "Palladium Group",
+    "Industrial Realty"
   ];
 
   const filteredProperties = properties.filter(property => {
     const matchesSearch = property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          property.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesType = !propertyType || propertyType === 'all' || property.type === propertyType;
+    const matchesType = !propertyType || propertyType === 'all' || property.type === propertyType || property.subType === propertyType;
     const matchesLocation = !location || location === 'all' || property.location.includes(location);
     
     return matchesSearch && matchesType && matchesLocation;
   });
+
+  const isCommercialSection = propertyType === 'Commercial';
+  const isResidentialSection = propertyType === 'Residential';
 
   return (
     <div className="min-h-screen">
@@ -152,10 +209,15 @@ export default function Properties() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              Premium <span className="text-brand-classic-gold">Properties</span>
+              {isCommercialSection ? 'Commercial' : isResidentialSection ? 'Residential' : 'Premium'} <span className="text-brand-classic-gold">Properties</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
-              Discover luxury living with our curated collection of premium properties in Mumbai
+              {isCommercialSection 
+                ? 'Discover prime commercial spaces and investment opportunities in Mumbai\'s business districts'
+                : isResidentialSection
+                ? 'Find your dream home with our curated collection of luxury residential properties in Mumbai'
+                : 'Discover luxury living with our curated collection of premium properties in Mumbai'
+              }
             </p>
           </div>
 
@@ -178,10 +240,22 @@ export default function Properties() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="Villa">Villa</SelectItem>
-                  <SelectItem value="Apartment">Apartment</SelectItem>
-                  <SelectItem value="Penthouse">Penthouse</SelectItem>
-                  <SelectItem value="Commercial">Commercial</SelectItem>
+                  {isCommercialSection ? (
+                    <>
+                      <SelectItem value="Commercial">All Commercial</SelectItem>
+                      <SelectItem value="Office Space">Office Space</SelectItem>
+                      <SelectItem value="Retail Space">Retail Space</SelectItem>
+                      <SelectItem value="Warehouse">Warehouse</SelectItem>
+                      <SelectItem value="Medical Space">Medical Space</SelectItem>
+                    </>
+                  ) : (
+                    <>
+                      <SelectItem value="Residential">All Residential</SelectItem>
+                      <SelectItem value="Villa">Villa</SelectItem>
+                      <SelectItem value="Apartment">Apartment</SelectItem>
+                      <SelectItem value="Penthouse">Penthouse</SelectItem>
+                    </>
+                  )}
                 </SelectContent>
               </Select>
 
@@ -197,6 +271,8 @@ export default function Properties() {
                   <SelectItem value="Andheri">Andheri</SelectItem>
                   <SelectItem value="Powai">Powai</SelectItem>
                   <SelectItem value="Bandra Kurla Complex">BKC</SelectItem>
+                  <SelectItem value="Lower Parel">Lower Parel</SelectItem>
+                  <SelectItem value="Bhiwandi">Bhiwandi</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -218,7 +294,12 @@ export default function Properties() {
                 {filteredProperties.length} Properties Found
               </h2>
               <p className="text-brand-grey">
-                Showing premium properties in Mumbai
+                {isCommercialSection 
+                  ? 'Showing commercial properties and investment opportunities in Mumbai'
+                  : isResidentialSection
+                  ? 'Showing residential properties and luxury homes in Mumbai'
+                  : 'Showing premium properties in Mumbai'
+                }
               </p>
             </div>
             
@@ -259,7 +340,7 @@ export default function Properties() {
                   </div>
                   <div className="absolute bottom-4 left-4">
                     <Badge variant="outline" className="bg-white text-primary border-white">
-                      {property.type}
+                      {property.subType || property.type}
                     </Badge>
                   </div>
                 </div>
@@ -306,18 +387,33 @@ export default function Properties() {
 
                   <div className="flex items-center justify-between mb-4 text-sm text-brand-grey">
                     <div className="flex items-center space-x-4">
-                      <div className="flex items-center">
-                        <BedDouble className="h-4 w-4 mr-1" />
-                        {property.bedrooms > 0 ? `${property.bedrooms} Bed` : 'Office'}
-                      </div>
-                      <div className="flex items-center">
-                        <Bath className="h-4 w-4 mr-1" />
-                        {property.bathrooms} Bath
-                      </div>
-                      <div className="flex items-center">
-                        <Square className="h-4 w-4 mr-1" />
-                        {property.area}
-                      </div>
+                      {property.type === 'Commercial' ? (
+                        <>
+                          <div className="flex items-center">
+                            <Square className="h-4 w-4 mr-1" />
+                            {property.area}
+                          </div>
+                          <div className="flex items-center">
+                            <Bath className="h-4 w-4 mr-1" />
+                            {property.bathrooms} Facilities
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="flex items-center">
+                            <BedDouble className="h-4 w-4 mr-1" />
+                            {property.bedrooms > 0 ? `${property.bedrooms} Bed` : 'Studio'}
+                          </div>
+                          <div className="flex items-center">
+                            <Bath className="h-4 w-4 mr-1" />
+                            {property.bathrooms} Bath
+                          </div>
+                          <div className="flex items-center">
+                            <Square className="h-4 w-4 mr-1" />
+                            {property.area}
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -359,11 +455,14 @@ export default function Properties() {
               Our Partner Developers
             </h2>
             <p className="text-xl text-brand-grey">
-              Trusted partnerships with Mumbai's leading developers
+              {isCommercialSection 
+                ? 'Trusted partnerships with Mumbai\'s leading commercial developers'
+                : 'Trusted partnerships with Mumbai\'s leading residential developers'
+              }
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
             {partnerDevelopers.map((developer, index) => (
               <Card key={index} className="p-6 text-center hover:shadow-gold transition-all duration-300">
                 <CardContent className="p-0">
