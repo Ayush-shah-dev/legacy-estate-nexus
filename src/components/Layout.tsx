@@ -10,8 +10,9 @@ export const Layout = () => {
 
   const navItems = [
     { name: 'Home', path: '/' },
+    { name: 'Residential', path: '/properties?type=residential' },
+    { name: 'Commercial', path: '/properties?type=commercial' },
     { name: 'Legacy', path: '/legacy' },
-    { name: 'Properties', path: '/properties' },
     { name: 'Contact', path: '/contact' }
   ];
 
@@ -28,7 +29,7 @@ export const Layout = () => {
             {/* Logo */}
             <div className="flex-shrink-0">
               <NavLink to="/" className="text-2xl font-bold text-primary">
-                Estate<span className="text-brand-maroon">Nexus</span>
+                Regal <span className="text-brand-maroon">Estate Consultants</span>
               </NavLink>
             </div>
 
@@ -62,7 +63,7 @@ export const Layout = () => {
                 <span>+91 99031 88690</span>
               </a>
               <Button variant="outline" size="sm" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
-                Book Consultation
+                <NavLink to="/contact">Enquiry Form</NavLink>
               </Button>
             </div>
 
@@ -133,18 +134,18 @@ export const Layout = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <h3 className="text-2xl font-bold mb-4">
-                Estate<span className="text-brand-classic-gold">Nexus</span>
+                Regal <span className="text-brand-classic-gold">Estate Consultants</span>
               </h3>
               <p className="text-primary-foreground/80 mb-4">
-                Your trusted partner in premium real estate. Connecting dreams with reality through 
-                exceptional properties and unmatched service.
+                Mumbai's trusted partner in premium real estate. Connecting dreams with reality through 
+                exceptional properties and unmatched service across the city.
               </p>
               <div className="flex space-x-4">
                 <a href="tel:+919903188690" className="text-brand-classic-gold hover:text-secondary transition-colors">
                   +91 99031 88690
                 </a>
-                <a href="mailto:info@estatenexus.com" className="text-brand-classic-gold hover:text-secondary transition-colors">
-                  info@estatenexus.com
+                <a href="mailto:info@regalestate.com" className="text-brand-classic-gold hover:text-secondary transition-colors">
+                  info@regalestate.com
                 </a>
               </div>
             </div>
@@ -176,9 +177,9 @@ export const Layout = () => {
             </div>
           </div>
           
-          <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-primary-foreground/60">
-            <p>&copy; 2024 EstateNexus. All rights reserved.</p>
-          </div>
+            <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center text-primary-foreground/60">
+              <p>&copy; 2024 Regal Estate Consultants. All rights reserved.</p>
+            </div>
         </div>
       </footer>
     </div>

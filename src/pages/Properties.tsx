@@ -26,67 +26,67 @@ export default function Properties() {
   const properties = [
     {
       id: 1,
-      title: "Luxury Villa in Whitefield",
-      location: "Whitefield, Bangalore",
-      price: "₹2.5 Cr",
-      originalPrice: "₹2.8 Cr",
+      title: "Luxury Villa in Juhu",
+      location: "Juhu, Mumbai",
+      price: "₹8.5 Cr",
+      originalPrice: "₹9.2 Cr",
       type: "Villa",
       bedrooms: 4,
       bathrooms: 5,
-      area: "3500 sq ft",
+      area: "4500 sq ft",
       image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop",
-      features: ["Swimming Pool", "Garden", "Parking", "Security"],
+      features: ["Swimming Pool", "Sea View", "Garden", "Parking"],
       rating: 4.8,
       reviews: 24,
       status: "Ready to Move",
-      developer: "Prestige Group"
+      developer: "Lodha Group"
     },
     {
       id: 2,
-      title: "Premium Apartment in Koramangala",
-      location: "Koramangala, Bangalore",
-      price: "₹1.8 Cr",
-      originalPrice: "₹2.0 Cr",
+      title: "Premium Apartment in Bandra",
+      location: "Bandra West, Mumbai",
+      price: "₹4.2 Cr",
+      originalPrice: "₹4.8 Cr",
       type: "Apartment",
       bedrooms: 3,
       bathrooms: 3,
-      area: "2200 sq ft",
+      area: "1800 sq ft",
       image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop",
       features: ["Gym", "Club House", "Parking", "Power Backup"],
       rating: 4.6,
       reviews: 18,
       status: "Under Construction",
-      developer: "Brigade Group"
+      developer: "Oberoi Realty"
     },
     {
       id: 3,
-      title: "Penthouse Suite in Indiranagar",
-      location: "Indiranagar, Bangalore",
-      price: "₹3.2 Cr",
-      originalPrice: "₹3.5 Cr",
+      title: "Sea View Penthouse in Worli",
+      location: "Worli, Mumbai",
+      price: "₹12.5 Cr",
+      originalPrice: "₹14.0 Cr",
       type: "Penthouse",
       bedrooms: 4,
       bathrooms: 4,
-      area: "4000 sq ft",
+      area: "3200 sq ft",
       image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop",
-      features: ["Terrace Garden", "Private Lift", "Jacuzzi", "City View"],
+      features: ["Sea View", "Private Terrace", "Jacuzzi", "Premium Finishes"],
       rating: 4.9,
       reviews: 32,
       status: "Ready to Move",
-      developer: "Sobha Limited"
+      developer: "Hiranandani Group"
     },
     {
       id: 4,
-      title: "Modern Studio in HSR Layout",
-      location: "HSR Layout, Bangalore",
-      price: "₹85 L",
-      originalPrice: "₹95 L",
-      type: "Studio",
-      bedrooms: 1,
-      bathrooms: 1,
-      area: "800 sq ft",
+      title: "Modern Apartment in Andheri",
+      location: "Andheri West, Mumbai",
+      price: "₹2.8 Cr",
+      originalPrice: "₹3.1 Cr",
+      type: "Apartment",
+      bedrooms: 2,
+      bathrooms: 2,
+      area: "1200 sq ft",
       image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop",
-      features: ["Furnished", "Balcony", "Parking", "24x7 Security"],
+      features: ["Swimming Pool", "Gym", "Garden", "24x7 Security"],
       rating: 4.4,
       reviews: 12,
       status: "Ready to Move",
@@ -94,38 +94,46 @@ export default function Properties() {
     },
     {
       id: 5,
-      title: "Luxury Townhouse in Electronic City",
-      location: "Electronic City, Bangalore",
-      price: "₹1.2 Cr",
-      originalPrice: "₹1.4 Cr",
-      type: "Townhouse",
+      title: "Luxury Villa in Powai",
+      location: "Powai, Mumbai",
+      price: "₹6.5 Cr",
+      originalPrice: "₹7.2 Cr",
+      type: "Villa",
       bedrooms: 3,
       bathrooms: 3,
       area: "2800 sq ft",
       image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop",
-      features: ["Private Garden", "Parking", "Security", "Clubhouse"],
+      features: ["Lake View", "Garden", "Parking", "Security"],
       rating: 4.5,
       reviews: 15,
       status: "Under Construction",
-      developer: "Puravankara"
+      developer: "Kalpataru Limited"
     },
     {
       id: 6,
-      title: "Premium Villa in Sarjapur",
-      location: "Sarjapur, Bangalore",
-      price: "₹1.9 Cr",
-      originalPrice: "₹2.1 Cr",
-      type: "Villa",
-      bedrooms: 4,
-      bathrooms: 4,
-      area: "3200 sq ft",
+      title: "Commercial Space in BKC",
+      location: "Bandra Kurla Complex, Mumbai",
+      price: "₹3.5 Cr",
+      originalPrice: "₹4.0 Cr",
+      type: "Commercial",
+      bedrooms: 0,
+      bathrooms: 2,
+      area: "2500 sq ft",
       image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop",
-      features: ["Swimming Pool", "Garden", "Security", "Vastu Compliant"],
+      features: ["Metro Connectivity", "Security", "Elevator", "Prime Location"],
       rating: 4.7,
       reviews: 28,
       status: "Ready to Move",
-      developer: "Total Environment"
+      developer: "Lodha Group"
     }
+  ];
+
+  const partnerDevelopers = [
+    "Lodha Group",
+    "Godrej Properties",
+    "Oberoi Realty",
+    "Hiranandani Group", 
+    "Kalpataru Limited"
   ];
 
   const filteredProperties = properties.filter(property => {
@@ -147,7 +155,7 @@ export default function Properties() {
               Premium <span className="text-brand-classic-gold">Properties</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
-              Discover luxury living with our curated collection of premium properties
+              Discover luxury living with our curated collection of premium properties in Mumbai
             </p>
           </div>
 
@@ -173,8 +181,7 @@ export default function Properties() {
                   <SelectItem value="Villa">Villa</SelectItem>
                   <SelectItem value="Apartment">Apartment</SelectItem>
                   <SelectItem value="Penthouse">Penthouse</SelectItem>
-                  <SelectItem value="Studio">Studio</SelectItem>
-                  <SelectItem value="Townhouse">Townhouse</SelectItem>
+                  <SelectItem value="Commercial">Commercial</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -184,12 +191,12 @@ export default function Properties() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Locations</SelectItem>
-                  <SelectItem value="Whitefield">Whitefield</SelectItem>
-                  <SelectItem value="Koramangala">Koramangala</SelectItem>
-                  <SelectItem value="Indiranagar">Indiranagar</SelectItem>
-                  <SelectItem value="HSR Layout">HSR Layout</SelectItem>
-                  <SelectItem value="Electronic City">Electronic City</SelectItem>
-                  <SelectItem value="Sarjapur">Sarjapur</SelectItem>
+                  <SelectItem value="Juhu">Juhu</SelectItem>
+                  <SelectItem value="Bandra">Bandra</SelectItem>
+                  <SelectItem value="Worli">Worli</SelectItem>
+                  <SelectItem value="Andheri">Andheri</SelectItem>
+                  <SelectItem value="Powai">Powai</SelectItem>
+                  <SelectItem value="Bandra Kurla Complex">BKC</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -211,7 +218,7 @@ export default function Properties() {
                 {filteredProperties.length} Properties Found
               </h2>
               <p className="text-brand-grey">
-                Showing premium properties in Bangalore
+                Showing premium properties in Mumbai
               </p>
             </div>
             
@@ -250,24 +257,24 @@ export default function Properties() {
                       <Eye className="h-4 w-4" />
                     </Button>
                   </div>
-                  {property.originalPrice !== property.price && (
-                    <div className="absolute bottom-4 left-4">
-                      <Badge className="bg-green-500 text-white">
-                        Best Deal
-                      </Badge>
-                    </div>
-                  )}
+                  <div className="absolute bottom-4 left-4">
+                    <Badge variant="outline" className="bg-white text-primary border-white">
+                      {property.type}
+                    </Badge>
+                  </div>
                 </div>
 
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-2">
-                    <Badge variant="outline" className="border-brand-classic-gold text-brand-classic-gold">
-                      {property.type}
-                    </Badge>
                     <div className="flex items-center space-x-1">
-                      <Star className="h-4 w-4 text-brand-classic-gold fill-current" />
-                      <span className="text-sm text-brand-grey">
-                        {property.rating} ({property.reviews})
+                      {[...Array(5)].map((_, i) => (
+                        <Star 
+                          key={i} 
+                          className={`h-4 w-4 ${i < Math.floor(property.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
+                        />
+                      ))}
+                      <span className="text-sm text-brand-grey ml-1">
+                        {property.rating} ({property.reviews} reviews)
                       </span>
                     </div>
                   </div>
@@ -275,7 +282,7 @@ export default function Properties() {
                   <h3 className="text-xl font-semibold text-primary mb-2 group-hover:text-brand-maroon transition-colors">
                     {property.title}
                   </h3>
-
+                  
                   <div className="flex items-center text-brand-grey mb-3">
                     <MapPin className="h-4 w-4 mr-1" />
                     <span className="text-sm">{property.location}</span>
@@ -283,49 +290,50 @@ export default function Properties() {
 
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <div className="text-2xl font-bold text-brand-classic-gold">
+                      <span className="text-2xl font-bold text-brand-classic-gold">
                         {property.price}
-                      </div>
-                      {property.originalPrice !== property.price && (
-                        <div className="text-sm text-brand-grey line-through">
+                      </span>
+                      {property.originalPrice && (
+                        <span className="text-sm text-brand-grey line-through ml-2">
                           {property.originalPrice}
-                        </div>
+                        </span>
                       )}
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm text-brand-grey">by</div>
-                      <div className="text-sm font-medium text-primary">
-                        {property.developer}
-                      </div>
+                    <div className="text-sm text-brand-grey">
+                      by {property.developer}
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between mb-4 text-sm text-brand-grey">
-                    <div className="flex items-center">
-                      <BedDouble className="h-4 w-4 mr-1" />
-                      <span>{property.bedrooms} Bed</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Bath className="h-4 w-4 mr-1" />
-                      <span>{property.bathrooms} Bath</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Square className="h-4 w-4 mr-1" />
-                      <span>{property.area}</span>
+                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center">
+                        <BedDouble className="h-4 w-4 mr-1" />
+                        {property.bedrooms > 0 ? `${property.bedrooms} Bed` : 'Office'}
+                      </div>
+                      <div className="flex items-center">
+                        <Bath className="h-4 w-4 mr-1" />
+                        {property.bathrooms} Bath
+                      </div>
+                      <div className="flex items-center">
+                        <Square className="h-4 w-4 mr-1" />
+                        {property.area}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {property.features.slice(0, 3).map((feature, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
-                        {feature}
-                      </Badge>
-                    ))}
-                    {property.features.length > 3 && (
-                      <Badge variant="secondary" className="text-xs">
-                        +{property.features.length - 3} more
-                      </Badge>
-                    )}
+                  <div className="mb-4">
+                    <div className="flex flex-wrap gap-2">
+                      {property.features.slice(0, 3).map((feature, index) => (
+                        <Badge key={index} variant="outline" className="text-xs border-brand-classic-gold text-brand-classic-gold">
+                          {feature}
+                        </Badge>
+                      ))}
+                      {property.features.length > 3 && (
+                        <Badge variant="outline" className="text-xs">
+                          +{property.features.length - 3} more
+                        </Badge>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex space-x-2">
@@ -340,17 +348,10 @@ export default function Properties() {
               </Card>
             ))}
           </div>
-
-          {/* Load More */}
-          <div className="text-center mt-12">
-            <Button variant="outline" size="lg" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
-              Load More Properties
-            </Button>
-          </div>
         </div>
       </section>
 
-      {/* Featured Developers */}
+      {/* Partner Developers */}
       <section className="py-16 bg-secondary/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -358,20 +359,20 @@ export default function Properties() {
               Our Partner Developers
             </h2>
             <p className="text-xl text-brand-grey">
-              Trusted partnerships with premium developers
+              Trusted partnerships with Mumbai's leading developers
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
-            {["Prestige Group", "Brigade Group", "Sobha Limited", "Godrej Properties", "Puravankara", "Total Environment"].map((developer, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+            {partnerDevelopers.map((developer, index) => (
               <Card key={index} className="p-6 text-center hover:shadow-gold transition-all duration-300">
                 <CardContent className="p-0">
-                  <div className="h-16 bg-gradient-accent rounded-lg flex items-center justify-center mb-4">
-                    <span className="text-primary font-bold text-lg">
-                      {developer.split(' ').map(word => word[0]).join('')}
+                  <div className="h-16 bg-gradient-accent rounded-lg mb-4 flex items-center justify-center">
+                    <span className="text-lg font-semibold text-primary">
+                      {developer.split(' ')[0]}
                     </span>
                   </div>
-                  <h3 className="text-sm font-medium text-primary">
+                  <h3 className="font-semibold text-primary text-sm">
                     {developer}
                   </h3>
                 </CardContent>
@@ -384,19 +385,19 @@ export default function Properties() {
       {/* CTA Section */}
       <section className="py-16 bg-brand-classic-gold">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">
-            Can't Find What You're Looking For?
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+            Didn't Find What You're Looking For?
           </h2>
-          <p className="text-xl text-primary/80 mb-8">
-            Let our experts help you find the perfect property that matches your requirements and budget.
+          <p className="text-lg text-primary/80 mb-8">
+            Our property experts can help you find the perfect property that matches your exact requirements.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-primary text-white hover:bg-brand-navy">
               <Phone className="mr-2 h-5 w-5" />
-              Speak to Expert
+              Call: +91 99031 88690
             </Button>
             <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-white">
-              Schedule Site Visit
+              Custom Property Search
             </Button>
           </div>
         </div>

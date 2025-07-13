@@ -73,13 +73,13 @@ export default function Contact() {
     {
       icon: Mail,
       title: "Email Us",
-      details: ["info@estatenexus.com", "sales@estatenexus.com"],
-      action: "mailto:info@estatenexus.com"
+      details: ["info@regalestate.com", "sales@regalestate.com"],
+      action: "mailto:info@regalestate.com"
     },
     {
       icon: MapPin,
       title: "Visit Our Office",
-      details: ["123 Business District", "Bangalore, Karnataka 560001"],
+      details: ["Andheri Business District", "Mumbai, Maharashtra 400058"],
       action: "https://maps.google.com"
     },
     {
@@ -92,10 +92,10 @@ export default function Contact() {
 
   const officeLocations = [
     {
-      city: "Bangalore",
-      address: "123 Business District, MG Road",
-      phone: "+91 99031 88690",
-      email: "bangalore@estatenexus.com"
+      city: "Mumbai",
+      address: "Andheri Business District, Western Express Highway",
+      phone: "+91 99031 88690", 
+      email: "mumbai@regalestate.com"
     }
   ];
 
@@ -331,7 +331,7 @@ export default function Contact() {
                       WhatsApp
                     </a>
                     <a
-                      href="mailto:info@estatenexus.com"
+                      href="mailto:info@regalestate.com"
                       className="flex items-center justify-center w-full p-4 bg-brand-classic-gold text-primary rounded-lg hover:bg-brand-soft-gold transition-colors"
                     >
                       <Mail className="mr-2 h-5 w-5" />
@@ -385,7 +385,7 @@ export default function Contact() {
               Our Office Locations
             </h2>
             <p className="text-xl text-brand-grey">
-              Visit us at any of our premium locations across South India
+              Visit us at our premium location in the heart of Mumbai
             </p>
           </div>
 

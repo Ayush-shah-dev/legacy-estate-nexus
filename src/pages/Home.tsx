@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Building2, Users, Award, Star, ArrowRight, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import heroImage from '@/assets/hero-background.jpg';
+import heroImage from '@/assets/mumbai-skyline.jpg';
 
 export default function Home() {
   const highlights = [
@@ -39,27 +39,27 @@ export default function Home() {
   const featuredProperties = [
     {
       id: 1,
-      title: "Luxury Villa in Whitefield",
-      location: "Bangalore",
-      price: "₹2.5 Cr",
+      title: "Luxury Villa in Juhu",
+      location: "Mumbai West",
+      price: "₹8.5 Cr",
       type: "Villa",
       bedrooms: "4 BHK",
       image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop"
     },
     {
       id: 2,
-      title: "Premium Apartment",
-      location: "Koramangala",
-      price: "₹1.8 Cr",
+      title: "Premium Apartment in Bandra",
+      location: "Mumbai West", 
+      price: "₹4.2 Cr",
       type: "Apartment",
       bedrooms: "3 BHK",
       image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop"
     },
     {
       id: 3,
-      title: "Penthouse Suite",
-      location: "Indiranagar",
-      price: "₹3.2 Cr",
+      title: "Sea View Penthouse",
+      location: "Worli",
+      price: "₹12.5 Cr",
       type: "Penthouse",
       bedrooms: "4 BHK",
       image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop"
@@ -114,7 +114,7 @@ export default function Home() {
             <Link to="/contact">
               <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
                 <Phone className="mr-2 h-5 w-5" />
-                Schedule Consultation
+                Enquiry Form
               </Button>
             </Link>
           </div>
@@ -144,7 +144,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-              Why Choose EstateNexus
+              Why Choose Regal Estate Consultants
             </h2>
             <p className="text-xl text-brand-grey max-w-3xl mx-auto">
               Building trust through excellence, connecting you with premium properties 
@@ -279,9 +279,11 @@ export default function Home() {
               <Phone className="mr-2 h-5 w-5" />
               Call Now: +91 99031 88690
             </Button>
-            <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-white">
-              Schedule Consultation
-            </Button>
+            <Link to="/contact">
+              <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-white">
+                Enquiry Form
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
