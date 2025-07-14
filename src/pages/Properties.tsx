@@ -205,6 +205,34 @@ export default function Properties() {
     {
       name: "Mahindra Lifespaces",
       logo: "/lovable-uploads/21130215-bbef-4e37-9770-dd46a8ea2827.png"
+    },
+    {
+      name: "Raymond Realty",
+      logo: "/lovable-uploads/eb1fbf42-c0b7-4f68-af28-edcd93568ada.png"
+    },
+    {
+      name: "LT Realty",
+      logo: "/lovable-uploads/594a0e4e-9fef-4e00-88f4-e9cd0698c215.png"
+    },
+    {
+      name: "Puravankara",
+      logo: "/lovable-uploads/888552f8-946e-4445-ad47-66981c5b31d0.png"
+    },
+    {
+      name: "Piramal Realty",
+      logo: "/lovable-uploads/4ed064eb-f738-485d-aa48-053127a32861.png"
+    },
+    {
+      name: "Prestige Group",
+      logo: "/lovable-uploads/d9370150-8032-48d8-82a2-582414316240.png"
+    },
+    {
+      name: "Kalpa-Taru",
+      logo: "/lovable-uploads/d2e1e974-9d14-4cbe-98fd-8eb89583d4fb.png"
+    },
+    {
+      name: "Adcore Developers",
+      logo: "/lovable-uploads/5d203cd5-e8c4-43eb-8a23-5af9d173df85.png"
     }
   ];
 
