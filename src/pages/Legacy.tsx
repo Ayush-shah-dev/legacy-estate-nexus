@@ -16,57 +16,57 @@ import {
 export default function Legacy() {
   const milestones = [
     {
-      year: "1999",
+      year: "1987",
       title: "Foundation",
-      description: "EstateNexus was founded with a vision to transform the real estate landscape in India."
+      description: "REGAL ESTATE CONSULTANTS began in a humble room at Sunil Niwas, near Four Bungalows, Andheri West."
     },
     {
-      year: "2005",
-      title: "First Major Project",
-      description: "Delivered our first luxury residential complex, setting new standards for quality and design."
+      year: "1988",
+      title: "Lokhandwala Move",
+      description: "The firm moved to Lokhandwala Complex, where it firmly took root and established its presence."
     },
     {
-      year: "2010",
-      title: "Market Expansion",
-      description: "Expanded operations to 5 major cities across South India."
+      year: "1990s",
+      title: "Building Reputation",
+      description: "Selling landmark projects like Nishant and Sagar Tarang during challenging infrastructure times."
     },
     {
-      year: "2015",
-      title: "Digital Innovation",
-      description: "Launched India's first AI-powered property recommendation platform."
+      year: "2000s",
+      title: "Channel Partnerships",
+      description: "Established partnerships with top developers like DLF, Godrej Properties, and Lodha."
     },
     {
-      year: "2020",
-      title: "Sustainable Development",
-      description: "Pioneered green building initiatives with LEED certified projects."
+      year: "2010s",
+      title: "Next Generation",
+      description: "Ajay Punjabi, third-generation realtor with 20 years of experience, joined the family business."
     },
     {
       year: "2024",
       title: "Market Leadership",
-      description: "Achieved ₹500Cr+ in cumulative property value delivered to clients."
+      description: "Continuing the legacy as Mumbai's trusted partner in premium real estate with unmatched dedication."
     }
   ];
 
   const values = [
     {
       icon: Shield,
-      title: "Integrity",
-      description: "Transparent dealings and honest communication form the foundation of every transaction."
+      title: "Trust",
+      description: "Built on trust, emotion, and deep market knowledge, serving clients with unmatched dedication."
     },
     {
       icon: Target,
       title: "Excellence",
-      description: "Commitment to delivering exceptional quality in every project and service we provide."
+      description: "Specializing in both primary and secondary real estate with expertise and reliability."
     },
     {
       icon: Users,
-      title: "Client-Centric",
-      description: "Your dreams and aspirations drive our mission to find the perfect property solutions."
+      title: "Legacy",
+      description: "Three generations of real estate expertise carrying forward the family legacy."
     },
     {
       icon: TrendingUp,
-      title: "Innovation",
-      description: "Leveraging cutting-edge technology to enhance the real estate experience."
+      title: "Market Knowledge",
+      description: "Deep understanding of Mumbai's real estate market with decades of experience."
     }
   ];
 
@@ -95,28 +95,16 @@ export default function Legacy() {
 
   const team = [
     {
-      name: "Rajesh Kumar",
-      role: "Founder & Chairman",
-      experience: "25+ Years",
-      specialization: "Strategic Planning & Market Development"
+      name: "Mr. Narendra Punjabi",
+      role: "Founder & Visionary",
+      experience: "37+ Years",
+      specialization: "Real Estate Pioneer & Market Development"
     },
     {
-      name: "Priya Sharma",
-      role: "Managing Director",
+      name: "Ajay Punjabi",
+      role: "Managing Partner",
       experience: "20+ Years",
-      specialization: "Luxury Properties & Client Relations"
-    },
-    {
-      name: "Amit Patel",
-      role: "Head of Operations",
-      experience: "15+ Years",
-      specialization: "Project Management & Quality Assurance"
-    },
-    {
-      name: "Sneha Reddy",
-      role: "Head of Sales",
-      experience: "12+ Years",
-      specialization: "Investment Advisory & Market Analysis"
+      specialization: "Third-Generation Realtor & Client Relations"
     }
   ];
 
@@ -130,21 +118,21 @@ export default function Legacy() {
               Our <span className="text-brand-classic-gold">Legacy</span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto mb-8 animate-slide-up">
-              25 years of excellence, innovation, and trust in real estate. 
-              Building dreams, creating communities, and establishing lasting relationships.
+              37 years of excellence, trust, and dedication in Mumbai's real estate. 
+              <br />Mumbai's Real Estate, The Regal Way.
             </p>
             <div className="flex justify-center space-x-8 text-center">
               <div>
-                <div className="text-3xl font-bold text-brand-classic-gold">25+</div>
+                <div className="text-3xl font-bold text-brand-classic-gold">37+</div>
                 <div className="text-white/80">Years Legacy</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-brand-classic-gold">5000+</div>
-                <div className="text-white/80">Happy Families</div>
+                <div className="text-3xl font-bold text-brand-classic-gold">3</div>
+                <div className="text-white/80">Generations</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-brand-classic-gold">₹500Cr+</div>
-                <div className="text-white/80">Value Delivered</div>
+                <div className="text-3xl font-bold text-brand-classic-gold">1000+</div>
+                <div className="text-white/80">Properties Sold</div>
               </div>
             </div>
           </div>
@@ -161,20 +149,13 @@ export default function Legacy() {
               </h2>
               <div className="space-y-6 text-lg text-brand-grey">
                 <p>
-                  EstateNexus began in 1999 with a simple yet powerful vision: to revolutionize 
-                  the real estate industry through trust, transparency, and unmatched service excellence. 
-                  What started as a small firm with big dreams has grown into one of India's most 
-                  respected real estate companies.
+                  The journey of REGAL ESTATE CONSULTANTS began in a humble room at Sunil Niwas, near Four Bungalows, Andheri West, in 1987. Founded by Mr. Narendra Punjabi, a visionary who started his real estate career in Versova, he built his reputation brick by brick—selling landmark projects like Nishant and Sagar Tarang during times when even basic infrastructure was a challenge.
                 </p>
                 <p>
-                  Our founder, Rajesh Kumar, recognized the need for a client-centric approach 
-                  in an industry often marked by opacity. With this vision, we built EstateNexus 
-                  on the pillars of integrity, innovation, and unwavering commitment to our clients' dreams.
+                  In 1988, the firm moved to Lokhandwala Complex, where it firmly took root. Today, joined by his son Ajay Punjabi, a third-generation realtor with 20 years of experience—the father-son duo continues to carry forward this legacy.
                 </p>
                 <p>
-                  Today, we stand proud as market leaders, having facilitated over ₹500 crores worth 
-                  of property transactions while maintaining our core values that have defined us for 
-                  over two decades.
+                  Built on trust, emotion, and deep market knowledge, they specialize in both primary and secondary real estate, serving clients with unmatched dedication and confidence as channel partners to top developers.
                 </p>
               </div>
               <Button className="mt-8 bg-brand-classic-gold text-primary hover:bg-brand-soft-gold">
@@ -184,12 +165,12 @@ export default function Legacy() {
             </div>
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop"
-                alt="Modern Architecture"
+                src="/lovable-uploads/b88aa17c-332e-4ce1-ab94-1d1bbf9f561c.png"
+                alt="Mr. Narendra Punjabi and Ajay Punjabi - Father and Son Legacy"
                 className="rounded-lg shadow-luxury"
               />
               <div className="absolute -bottom-6 -left-6 bg-brand-classic-gold text-primary p-6 rounded-lg shadow-gold">
-                <div className="text-2xl font-bold">25+</div>
+                <div className="text-2xl font-bold">37+</div>
                 <div className="text-sm">Years of Excellence</div>
               </div>
             </div>
@@ -314,7 +295,7 @@ export default function Legacy() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {team.map((member, index) => (
               <Card key={index} className="text-center overflow-hidden hover:shadow-gold transition-all duration-300">
                 <div className="h-64 bg-gradient-accent flex items-center justify-center">

@@ -56,11 +56,11 @@ export const Layout = () => {
             {/* Contact Info */}
             <div className="hidden lg:flex items-center space-x-4">
               <a
-                href="tel:+919903188690"
+                href="tel:+919930033056"
                 className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-brand-maroon transition-colors"
               >
                 <Phone className="h-4 w-4" />
-                <span>+91 99031 88690</span>
+                <span>+91 99300 33056</span>
               </a>
               <Button variant="outline" size="sm" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
                 <NavLink to="/contact">Enquiry Form</NavLink>
@@ -101,11 +101,11 @@ export const Layout = () => {
               ))}
               <div className="pt-4 pb-3 border-t">
                 <a
-                  href="tel:+919903188690"
+                  href="tel:+919930033056"
                   className="flex items-center space-x-2 px-3 py-2 text-sm text-muted-foreground"
                 >
                   <Phone className="h-4 w-4" />
-                  <span>+91 99031 88690</span>
+                  <span>+91 99300 33056</span>
                 </a>
               </div>
             </div>
@@ -120,7 +120,7 @@ export const Layout = () => {
 
       {/* WhatsApp Floating Button */}
       <a
-        href="https://wa.me/919903188690?text=Hi, I'm interested in your real estate services"
+        href="https://wa.me/919930033056?text=Hi, I'm interested in your real estate services"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-luxury transition-all duration-300 hover:scale-110 z-50"
@@ -140,13 +140,16 @@ export const Layout = () => {
                 Mumbai's trusted partner in premium real estate. Connecting dreams with reality through 
                 exceptional properties and unmatched service across the city.
               </p>
-              <div className="flex space-x-4">
-                <a href="tel:+919903188690" className="text-brand-classic-gold hover:text-secondary transition-colors">
-                  +91 99031 88690
+              <div className="flex flex-col space-y-2">
+                <a href="tel:+919930033056" className="text-brand-classic-gold hover:text-secondary transition-colors">
+                  +91 99300 33056
                 </a>
-                <a href="mailto:info@regalestate.com" className="text-brand-classic-gold hover:text-secondary transition-colors">
-                  info@regalestate.com
+                <a href="mailto:sales.regalestate@gmail.com" className="text-brand-classic-gold hover:text-secondary transition-colors">
+                  sales.regalestate@gmail.com
                 </a>
+                <p className="text-primary-foreground/80 text-sm">
+                  Shop No. 3, Bharat Altavistas, next to ICICI Bank, Lokhandwala Complex, Andheri West, Mumbai, Maharashtra 400053
+                </p>
               </div>
             </div>
             
