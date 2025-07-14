@@ -188,7 +188,7 @@ export default function Properties() {
     },
     {
       name: "Godrej Properties",
-      logo: "/lovable-uploads/84e06a40-cc48-4041-a0a6-2259dd178e35.png"
+      logo: "/lovable-uploads/fe7d22c8-cddb-4f93-a0b2-743ace22bb8a.png"
     },
     {
       name: "Lodha",
