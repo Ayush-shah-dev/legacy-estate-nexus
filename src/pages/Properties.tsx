@@ -182,12 +182,30 @@ export default function Properties() {
   ];
 
   const partnerDevelopers = [
-    "Lodha Group",
-    "Godrej Properties", 
-    "Oberoi Realty",
-    "Hiranandani Group",
-    "Palladium Group",
-    "Industrial Realty"
+    {
+      name: "DLF",
+      logo: "/lovable-uploads/a101aae9-2526-4b11-bf6b-62834c10f05a.png"
+    },
+    {
+      name: "Godrej Properties",
+      logo: "/lovable-uploads/84e06a40-cc48-4041-a0a6-2259dd178e35.png"
+    },
+    {
+      name: "Lodha",
+      logo: "/lovable-uploads/2f60dc4d-2374-4ea6-bcda-23a90e3fda86.png"
+    },
+    {
+      name: "Adani Realty",
+      logo: "/lovable-uploads/f398b657-ec1a-45cd-8f06-db3ea42e86c6.png"
+    },
+    {
+      name: "Rustomjee",
+      logo: "/lovable-uploads/2c394c2f-1d8f-47e6-87ef-bc538d3881a8.png"
+    },
+    {
+      name: "Mahindra Lifespaces",
+      logo: "/lovable-uploads/21130215-bbef-4e37-9770-dd46a8ea2827.png"
+    }
   ];
 
   const filteredProperties = properties.filter(property => {
@@ -464,15 +482,17 @@ export default function Properties() {
 
           <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
             {partnerDevelopers.map((developer, index) => (
-              <Card key={index} className="p-6 text-center hover:shadow-gold transition-all duration-300">
+              <Card key={index} className="p-4 text-center hover:shadow-gold transition-all duration-300 bg-white">
                 <CardContent className="p-0">
-                  <div className="h-16 bg-gradient-accent rounded-lg mb-4 flex items-center justify-center">
-                    <span className="text-lg font-semibold text-primary">
-                      {developer.split(' ')[0]}
-                    </span>
+                  <div className="h-20 flex items-center justify-center mb-3">
+                    <img 
+                      src={developer.logo} 
+                      alt={`${developer.name} logo`}
+                      className="max-h-16 max-w-full object-contain"
+                    />
                   </div>
                   <h3 className="font-semibold text-primary text-sm">
-                    {developer}
+                    {developer.name}
                   </h3>
                 </CardContent>
               </Card>
