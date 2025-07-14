@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { OTPVerification } from '@/components/OTPVerification';
 import { 
   Phone, 
   Mail, 
@@ -29,6 +31,8 @@ export default function Contact() {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showOTPVerification, setShowOTPVerification] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({
@@ -37,12 +41,81 @@ export default function Contact() {
     }));
   };
 
+  const handleVerifyPhone = async () => {
+    if (!formData.phone) {
+      toast({
+        title: "Phone number required",
+        description: "Please enter your phone number first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        phone: formData.phone
+      });
+
+      if (error) {
+        toast({
+          title: "Failed to send OTP",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        setShowOTPVerification(true);
+        toast({
+          title: "OTP Sent",
+          description: "Please check your phone for the verification code",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send OTP. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleOTPVerified = () => {
+    setPhoneVerified(true);
+    setShowOTPVerification(false);
+    toast({
+      title: "Phone Verified",
+      description: "Your phone number has been verified successfully!",
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!phoneVerified) {
+      toast({
+        title: "Phone verification required",
+        description: "Please verify your phone number before submitting the form",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: `Property: ${formData.propertyType}, Budget: ${formData.budget}, Location: ${formData.location}, Message: ${formData.message}`,
+          phone_verified: phoneVerified
+        }]);
+
+      if (error) {
+        throw error;
+      }
+      
       toast({
         title: "Enquiry Submitted Successfully!",
         description: "Our team will contact you within 24 hours.",
@@ -58,9 +131,16 @@ export default function Contact() {
         location: '',
         message: ''
       });
-      
+      setPhoneVerified(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   const contactInfo = [
@@ -116,6 +196,18 @@ export default function Contact() {
       description: "Dedicated support throughout your property journey"
     }
   ];
+
+  if (showOTPVerification) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 flex items-center justify-center px-4">
+        <OTPVerification
+          phoneNumber={formData.phone}
+          onVerified={handleOTPVerified}
+          onCancel={() => setShowOTPVerification(false)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -182,12 +274,30 @@ export default function Contact() {
                         <label className="block text-sm font-medium text-primary mb-2">
                           Phone Number *
                         </label>
-                        <Input
-                          placeholder="Enter your phone number"
-                          value={formData.phone}
-                          onChange={(e) => handleInputChange('phone', e.target.value)}
-                          required
-                        />
+                        <div className="space-y-2">
+                          <Input
+                            placeholder="Enter your phone number"
+                            value={formData.phone}
+                            onChange={(e) => handleInputChange('phone', e.target.value)}
+                            required
+                            disabled={phoneVerified}
+                          />
+                          {!phoneVerified ? (
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              onClick={handleVerifyPhone}
+                              disabled={!formData.phone}
+                              className="w-full"
+                            >
+                              Verify Phone Number
+                            </Button>
+                          ) : (
+                            <div className="flex items-center text-green-600 text-sm">
+                              ✓ Phone number verified
+                            </div>
+                          )}
+                        </div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-primary mb-2">

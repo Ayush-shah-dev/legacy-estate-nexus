@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Legacy from "./pages/Legacy";
 import Properties from "./pages/Properties";
 import Contact from "./pages/Contact";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="properties" element={<Properties />} />
             <Route path="contact" element={<Contact />} />
           </Route>
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
