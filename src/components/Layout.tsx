@@ -4,11 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Menu, X, Phone, MessageCircle, LogIn, LogOut, Settings } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
+import { useVisitorTracking } from '@/hooks/useVisitorTracking';
 
 export const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { user, isAdmin, signOut } = useAuth();
+  
+  // Track visitor analytics
+  useVisitorTracking();
 
   const navItems = [
     { name: 'Home', path: '/' },

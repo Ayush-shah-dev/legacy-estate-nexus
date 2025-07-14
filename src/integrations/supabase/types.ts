@@ -68,6 +68,36 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          created_at: string
+          id: string
+          page_path: string
+          time_entered: string
+          time_left: string | null
+          time_spent_seconds: number | null
+          visitor_session_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          page_path: string
+          time_entered?: string
+          time_left?: string | null
+          time_spent_seconds?: number | null
+          visitor_session_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          page_path?: string
+          time_entered?: string
+          time_left?: string | null
+          time_spent_seconds?: number | null
+          visitor_session_id?: string
+        }
+        Relationships: []
+      }
       properties: {
         Row: {
           area_sqft: number | null
@@ -146,6 +176,42 @@ export type Database = {
           rating?: number | null
           review_text?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      visitors: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: string | null
+          page_visited: string
+          referrer: string | null
+          session_id: string
+          time_spent_seconds: number | null
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          page_visited: string
+          referrer?: string | null
+          session_id: string
+          time_spent_seconds?: number | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          page_visited?: string
+          referrer?: string | null
+          session_id?: string
+          time_spent_seconds?: number | null
+          updated_at?: string
+          user_agent?: string | null
         }
         Relationships: []
       }
