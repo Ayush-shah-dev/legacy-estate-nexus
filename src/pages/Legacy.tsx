@@ -283,43 +283,6 @@ export default function Legacy() {
         </div>
       </section>
 
-      {/* Leadership Team */}
-      <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-              Leadership Team
-            </h2>
-            <p className="text-xl text-brand-grey">
-              Experienced professionals leading our mission forward
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {team.map((member, index) => (
-              <Card key={index} className="text-center overflow-hidden hover:shadow-gold transition-all duration-300">
-                <div className="h-64 bg-gradient-accent flex items-center justify-center">
-                  <Users className="h-20 w-20 text-brand-classic-gold" />
-                </div>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-primary mb-1">
-                    {member.name}
-                  </h3>
-                  <p className="text-brand-maroon font-medium mb-2">
-                    {member.role}
-                  </p>
-                  <Badge variant="outline" className="mb-3 border-brand-classic-gold text-brand-classic-gold">
-                    {member.experience}
-                  </Badge>
-                  <p className="text-sm text-brand-grey">
-                    {member.specialization}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-premium text-white">
