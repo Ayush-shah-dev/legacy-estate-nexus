@@ -277,7 +277,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-primary text-white hover:bg-brand-navy">
               <Phone className="mr-2 h-5 w-5" />
-              Call Now: +91 99031 88690
+              Call Now: +91 99300 33056
             </Button>
             <Link to="/contact">
               <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-white">
