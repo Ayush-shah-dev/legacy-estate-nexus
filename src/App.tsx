@@ -27,7 +27,6 @@ const App = () => (
             <Route path="contact" element={<Contact />} />
           </Route>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
