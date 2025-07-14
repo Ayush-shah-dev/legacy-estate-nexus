@@ -67,20 +67,20 @@ export default function Contact() {
     {
       icon: Phone,
       title: "Call Us",
-      details: ["+91 99031 88690"],
-      action: "tel:+919903188690"
+      details: ["+91 99300 33056"],
+      action: "tel:+919930033056"
     },
     {
       icon: Mail,
       title: "Email Us",
-      details: ["info@regalestate.com", "sales@regalestate.com"],
-      action: "mailto:info@regalestate.com"
+      details: ["sales.regalestate@gmail.com"],
+      action: "mailto:sales.regalestate@gmail.com"
     },
     {
       icon: MapPin,
       title: "Visit Our Office",
-      details: ["Andheri Business District", "Mumbai, Maharashtra 400058"],
-      action: "https://maps.google.com"
+      details: ["Shop No. 3, Bharat Altavistas, next to ICICI Bank", "Lokhandwala Complex, Andheri West", "Mumbai, Maharashtra 400053"],
+      action: "https://maps.google.com/?q=Shop+No.+3,+Bharat+Altavistas,+next+to+ICICI+Bank,+Lokhandwala+Complex,+Andheri+West,+Mumbai,+Maharashtra+400053"
     },
     {
       icon: Clock,
@@ -93,9 +93,9 @@ export default function Contact() {
   const officeLocations = [
     {
       city: "Mumbai",
-      address: "Andheri Business District, Western Express Highway",
-      phone: "+91 99031 88690", 
-      email: "mumbai@regalestate.com"
+      address: "Shop No. 3, Bharat Altavistas, next to ICICI Bank, Lokhandwala Complex, Andheri West, Mumbai, Maharashtra 400053",
+      phone: "+91 99300 33056", 
+      email: "sales.regalestate@gmail.com"
     }
   ];
 
@@ -315,14 +315,14 @@ export default function Contact() {
                   </h3>
                   <div className="space-y-4">
                     <a
-                      href="tel:+919903188690"
+                      href="tel:+919930033056"
                       className="flex items-center justify-center w-full p-4 bg-brand-maroon text-white rounded-lg hover:bg-brand-maroon/90 transition-colors"
                     >
                       <Phone className="mr-2 h-5 w-5" />
                       Call Now
                     </a>
                     <a
-                      href="https://wa.me/919903188690?text=Hi, I'm interested in your real estate services"
+                      href="https://wa.me/919930033056?text=Hi, I'm interested in your real estate services"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-center w-full p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
@@ -331,7 +331,7 @@ export default function Contact() {
                       WhatsApp
                     </a>
                     <a
-                      href="mailto:info@regalestate.com"
+                      href="mailto:sales.regalestate@gmail.com"
                       className="flex items-center justify-center w-full p-4 bg-brand-classic-gold text-primary rounded-lg hover:bg-brand-soft-gold transition-colors"
                     >
                       <Mail className="mr-2 h-5 w-5" />
