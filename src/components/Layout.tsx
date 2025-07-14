@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Phone, MessageCircle } from 'lucide-react';
+import { Menu, X, Phone, MessageCircle, LogIn, LogOut, Settings } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 
 export const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, isAdmin, signOut } = useAuth();
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -65,6 +67,35 @@ export const Layout = () => {
               <Button variant="outline" size="sm" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
                 <NavLink to="/contact">Enquiry Form</NavLink>
               </Button>
+              
+              {user ? (
+                <div className="flex items-center space-x-2">
+                  {isAdmin && (
+                    <NavLink to="/admin-dashboard">
+                      <Button variant="outline" size="sm">
+                        <Settings className="w-4 h-4 mr-2" />
+                        Admin
+                      </Button>
+                    </NavLink>
+                  )}
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={signOut}
+                    className="text-destructive hover:text-destructive"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </div>
+              ) : (
+                <NavLink to="/auth">
+                  <Button variant="outline" size="sm">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Sign In
+                  </Button>
+                </NavLink>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -99,7 +130,7 @@ export const Layout = () => {
                   {item.name}
                 </NavLink>
               ))}
-              <div className="pt-4 pb-3 border-t">
+              <div className="pt-4 pb-3 border-t space-y-2">
                 <a
                   href="tel:+919930033056"
                   className="flex items-center space-x-2 px-3 py-2 text-sm text-muted-foreground"
@@ -107,6 +138,36 @@ export const Layout = () => {
                   <Phone className="h-4 w-4" />
                   <span>+91 99300 33056</span>
                 </a>
+                
+                {user ? (
+                  <div className="space-y-2 px-3">
+                    {isAdmin && (
+                      <NavLink to="/admin-dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Button variant="outline" className="w-full">
+                          <Settings className="w-4 h-4 mr-2" />
+                          Admin Dashboard
+                        </Button>
+                      </NavLink>
+                    )}
+                    <Button 
+                      variant="outline" 
+                      className="w-full text-destructive hover:text-destructive"
+                      onClick={signOut}
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="px-3">
+                    <NavLink to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
+                      <Button variant="outline" className="w-full">
+                        <LogIn className="w-4 h-4 mr-2" />
+                        Sign In
+                      </Button>
+                    </NavLink>
+                  </div>
+                )}
               </div>
             </div>
           </div>
