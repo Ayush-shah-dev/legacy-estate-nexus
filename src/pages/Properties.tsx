@@ -233,6 +233,10 @@ export default function Properties() {
     {
       name: "Adcore Developers",
       logo: "/lovable-uploads/5d203cd5-e8c4-43eb-8a23-5af9d173df85.png"
+    },
+    {
+      name: "Platinum Group",
+      logo: "/lovable-uploads/60a5b9f3-4435-464d-8fd5-fc315118cf29.png"
     }
   ];
 
@@ -494,37 +498,77 @@ export default function Properties() {
       </section>
 
       {/* Partner Developers */}
-      <section className="py-16 bg-secondary/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-              Our Partner Developers
+      <section className="py-20 bg-gradient-to-br from-secondary/20 via-background to-secondary/30 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-brand-classic-gold rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-maroon rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center mb-16 animate-fade-in">
+            <div className="inline-block px-4 py-2 bg-brand-classic-gold/10 rounded-full mb-6">
+              <span className="text-brand-classic-gold font-medium">Trusted Partnerships</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-6">
+              Our <span className="text-brand-classic-gold">Channel Partners</span>
             </h2>
-            <p className="text-xl text-brand-grey">
+            <p className="text-xl text-brand-grey max-w-3xl mx-auto leading-relaxed">
               {isCommercialSection 
-                ? 'Trusted partnerships with Mumbai\'s leading commercial developers'
-                : 'Trusted partnerships with Mumbai\'s leading residential developers'
+                ? 'Building trust through partnerships with Mumbai\'s most prestigious commercial developers and industry leaders'
+                : 'Building trust through partnerships with Mumbai\'s most prestigious residential developers and industry leaders'
               }
             </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-brand-classic-gold to-brand-maroon mx-auto mt-6 rounded-full"></div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6">
             {partnerDevelopers.map((developer, index) => (
-              <Card key={index} className="p-4 text-center hover:shadow-gold transition-all duration-300 bg-white">
-                <CardContent className="p-0">
-                  <div className="h-20 flex items-center justify-center mb-3">
-                    <img 
-                      src={developer.logo} 
-                      alt={`${developer.name} logo`}
-                      className="max-h-16 max-w-full object-contain"
-                    />
-                  </div>
-                  <h3 className="font-semibold text-primary text-sm">
-                    {developer.name}
-                  </h3>
-                </CardContent>
-              </Card>
+              <div 
+                key={index} 
+                className="group relative animate-fade-in hover-scale"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <Card className="p-6 text-center hover:shadow-luxury transition-all duration-500 bg-white border-2 border-transparent hover:border-brand-classic-gold/20 relative overflow-hidden group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-brand-classic-gold/5">
+                  {/* Shimmer Effect */}
+                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-brand-classic-gold/10 to-transparent"></div>
+                  
+                  <CardContent className="p-0 relative z-10">
+                    <div className="h-24 flex items-center justify-center mb-4 relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-brand-classic-gold/5 to-brand-maroon/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <img 
+                        src={developer.logo} 
+                        alt={`${developer.name} logo`}
+                        className="max-h-20 max-w-full object-contain relative z-10 transition-all duration-300 group-hover:scale-110 filter grayscale group-hover:grayscale-0"
+                      />
+                    </div>
+                    <h3 className="font-bold text-primary text-sm group-hover:text-brand-classic-gold transition-colors duration-300 leading-tight">
+                      {developer.name}
+                    </h3>
+                    
+                    {/* Decorative Elements */}
+                    <div className="absolute top-2 right-2 w-2 h-2 bg-brand-classic-gold rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+                    <div className="absolute bottom-2 left-2 w-1 h-1 bg-brand-maroon rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
+          </div>
+
+          {/* Trust Indicators */}
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in" style={{ animationDelay: '1s' }}>
+            <div className="text-center p-6 rounded-lg bg-white/50 backdrop-blur-sm border border-brand-classic-gold/20">
+              <div className="text-3xl font-bold text-brand-classic-gold mb-2">14+</div>
+              <div className="text-brand-grey">Trusted Partners</div>
+            </div>
+            <div className="text-center p-6 rounded-lg bg-white/50 backdrop-blur-sm border border-brand-classic-gold/20">
+              <div className="text-3xl font-bold text-brand-classic-gold mb-2">500+</div>
+              <div className="text-brand-grey">Projects Delivered</div>
+            </div>
+            <div className="text-center p-6 rounded-lg bg-white/50 backdrop-blur-sm border border-brand-classic-gold/20">
+              <div className="text-3xl font-bold text-brand-classic-gold mb-2">25+</div>
+              <div className="text-brand-grey">Years Combined Experience</div>
+            </div>
           </div>
         </div>
       </section>
