@@ -163,15 +163,52 @@ export default function Home() {
 
           {/* Trusted by Section */}
           <div className="text-center mb-12">
-            <h3 className="text-2xl font-semibold text-primary mb-6">
+            <h3 className="text-2xl font-semibold text-primary mb-8">
               Trusted by India's Leading Developers
             </h3>
-            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-              <img src="/lovable-uploads/2c394c2f-1d8f-47e6-87ef-bc538d3881a8.png" alt="Adani" className="h-20 w-auto" />
-              <img src="/lovable-uploads/2f60dc4d-2374-4ea6-bcda-23a90e3fda86.png" alt="Godrej" className="h-20 w-auto" />
-              <img src="/lovable-uploads/594a0e4e-9fef-4e00-88f4-e9cd0698c215.png" alt="Raymond Realty" className="h-20 w-auto" />
-              <img src="/lovable-uploads/21130215-bbef-4e37-9770-dd46a8ea2827.png" alt="Lodha" className="h-20 w-auto" />
-              <img src="/lovable-uploads/4ed064eb-f738-485d-aa48-053127a32861.png" alt="DLF" className="h-20 w-auto" />
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+              <div className="group cursor-pointer">
+                <img 
+                  src="/lovable-uploads/3068d3a3-f113-4a53-81e7-7e7be23345e3.png" 
+                  alt="Adani Realty" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                />
+              </div>
+              <div className="group cursor-pointer">
+                <img 
+                  src="/lovable-uploads/b00d9894-3524-4d9b-8f50-33f2f333dcb5.png" 
+                  alt="Godrej Properties" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                />
+              </div>
+              <div className="group cursor-pointer">
+                <img 
+                  src="/lovable-uploads/ad219bbd-a8e8-4e82-889c-30db765fb5ab.png" 
+                  alt="Raymond Realty" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                />
+              </div>
+              <div className="group cursor-pointer">
+                <img 
+                  src="/lovable-uploads/e21683e6-14b6-4729-828e-36c7d5923146.png" 
+                  alt="Lodha" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                />
+              </div>
+              <div className="group cursor-pointer">
+                <img 
+                  src="/lovable-uploads/0fe0702e-fe06-4a24-bb96-5325dbd4863c.png" 
+                  alt="DLF" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                />
+              </div>
+              <div className="group cursor-pointer">
+                <img 
+                  src="/lovable-uploads/b9583c92-6074-4562-8a9f-a0a811a39d7e.png" 
+                  alt="LT Realty" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                />
+              </div>
             </div>
           </div>
 
