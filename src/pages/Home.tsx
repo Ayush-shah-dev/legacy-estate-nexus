@@ -167,11 +167,11 @@ export default function Home() {
               Trusted by India's Leading Developers
             </h3>
             <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-              <img src="/lovable-uploads/21130215-bbef-4e37-9770-dd46a8ea2827.png" alt="Lodha" className="h-20 w-auto" />
               <img src="/lovable-uploads/2c394c2f-1d8f-47e6-87ef-bc538d3881a8.png" alt="Adani" className="h-20 w-auto" />
               <img src="/lovable-uploads/2f60dc4d-2374-4ea6-bcda-23a90e3fda86.png" alt="Godrej" className="h-20 w-auto" />
+              <img src="/lovable-uploads/594a0e4e-9fef-4e00-88f4-e9cd0698c215.png" alt="Raymond Realty" className="h-20 w-auto" />
+              <img src="/lovable-uploads/21130215-bbef-4e37-9770-dd46a8ea2827.png" alt="Lodha" className="h-20 w-auto" />
               <img src="/lovable-uploads/4ed064eb-f738-485d-aa48-053127a32861.png" alt="DLF" className="h-20 w-auto" />
-              <img src="/lovable-uploads/594a0e4e-9fef-4e00-88f4-e9cd0698c215.png" alt="Raymond" className="h-20 w-auto" />
             </div>
           </div>
 
