@@ -14,7 +14,8 @@ import {
   Heart,
   Phone,
   Eye,
-  Star
+  Star,
+  ExternalLink
 } from 'lucide-react';
 
 export default function Properties() {
@@ -261,17 +262,31 @@ export default function Properties() {
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
               {isCommercialSection ? 'Commercial' : isResidentialSection ? 'Residential' : 'Premium'} <span className="text-brand-classic-gold">Properties</span>
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
-              {isCommercialSection 
-                ? 'Discover prime commercial spaces and investment opportunities in Mumbai\'s business districts'
-                : isResidentialSection
-                ? 'Find your dream home with our curated collection of luxury residential properties in Mumbai'
-                : 'Discover luxury living with our curated collection of premium properties in Mumbai'
-              }
-            </p>
-          </div>
+             <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
+               {isCommercialSection 
+                 ? 'Discover prime commercial spaces and investment opportunities in Mumbai\'s business districts'
+                 : isResidentialSection
+                 ? 'Find your dream home with our curated collection of luxury residential properties in Mumbai'
+                 : 'Discover luxury living with our curated collection of premium properties in Mumbai'
+               }
+             </p>
+             
+             {/* Google Drive Button for Residential/Commercial */}
+             {(isResidentialSection || isCommercialSection) && (
+               <div className="mt-8 text-center">
+                 <Button 
+                   size="lg" 
+                   className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300"
+                   onClick={() => window.open('https://drive.google.com/drive/folders/1d8lRTL3PrYJY51OOcxH-y1ot9qSnK-wc?usp=sharing', '_blank')}
+                 >
+                   <ExternalLink className="mr-2 h-5 w-5" />
+                   View All {isCommercialSection ? 'Commercial' : 'Residential'} Properties
+                 </Button>
+               </div>
+             )}
+           </div>
 
-          {/* Search and Filters */}
+           {/* Search and Filters */}
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="md:col-span-2 relative">
