@@ -39,30 +39,33 @@ export default function Home() {
   const featuredProperties = [
     {
       id: 1,
-      title: "Luxury Villa in Juhu",
-      location: "Mumbai West",
-      price: "₹8.5 Cr",
-      type: "Villa",
-      bedrooms: "4 BHK",
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop"
+      title: "Adcore Tower - Premium Commercial Space",
+      location: "Business District, Mumbai",
+      description: "Modern commercial tower with state-of-the-art facilities and premium office spaces in the heart of Mumbai's business district.",
+      sqft: "500-5000 sq ft",
+      amenities: ["24x7 Security", "High-Speed Elevators", "Power Backup", "Parking", "Food Court"],
+      type: "Commercial",
+      image: "/lovable-uploads/b9bc318e-2fb5-480d-8ee8-3cdd6f790a65.png"
     },
     {
       id: 2,
-      title: "Premium Apartment in Bandra",
-      location: "Mumbai West", 
-      price: "₹4.2 Cr",
-      type: "Apartment",
-      bedrooms: "3 BHK",
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop"
+      title: "Westwood Heights - Luxury Residential",
+      location: "Andheri West, Mumbai",
+      description: "Premium residential complex offering modern amenities and luxurious living spaces with excellent connectivity.",
+      sqft: "800-1500 sq ft",
+      amenities: ["Swimming Pool", "Gym", "Children's Play Area", "Landscaped Gardens", "Club House"],
+      type: "Residential",
+      image: "/lovable-uploads/d2696bbb-2641-41bb-aa4f-23c280f24ea7.png"
     },
     {
       id: 3,
-      title: "Sea View Penthouse",
-      location: "Worli",
-      price: "₹12.5 Cr",
-      type: "Penthouse",
-      bedrooms: "4 BHK",
-      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=500&h=300&fit=crop"
+      title: "Sky Gardens - Premium Twin Towers",
+      location: "Goregaon East, Mumbai",
+      description: "Stunning twin tower development featuring spacious apartments with panoramic city views and world-class amenities.",
+      sqft: "900-2000 sq ft",
+      amenities: ["Sky Garden", "Infinity Pool", "Fitness Center", "Concierge Service", "Smart Home Features"],
+      type: "Residential",
+      image: "/lovable-uploads/54d3e00b-85c8-49e0-830b-b268e2e83865.png"
     }
   ];
 
@@ -164,11 +167,11 @@ export default function Home() {
               Trusted by India's Leading Developers
             </h3>
             <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-              <img src="/lovable-uploads/21130215-bbef-4e37-9770-dd46a8ea2827.png" alt="Developer Logo" className="h-16 w-auto" />
-              <img src="/lovable-uploads/2c394c2f-1d8f-47e6-87ef-bc538d3881a8.png" alt="Developer Logo" className="h-16 w-auto" />
-              <img src="/lovable-uploads/2f60dc4d-2374-4ea6-bcda-23a90e3fda86.png" alt="Developer Logo" className="h-16 w-auto" />
-              <img src="/lovable-uploads/4ed064eb-f738-485d-aa48-053127a32861.png" alt="Developer Logo" className="h-16 w-auto" />
-              <img src="/lovable-uploads/594a0e4e-9fef-4e00-88f4-e9cd0698c215.png" alt="Developer Logo" className="h-16 w-auto" />
+              <img src="/lovable-uploads/21130215-bbef-4e37-9770-dd46a8ea2827.png" alt="Lodha" className="h-20 w-auto" />
+              <img src="/lovable-uploads/2c394c2f-1d8f-47e6-87ef-bc538d3881a8.png" alt="Adani" className="h-20 w-auto" />
+              <img src="/lovable-uploads/2f60dc4d-2374-4ea6-bcda-23a90e3fda86.png" alt="Godrej" className="h-20 w-auto" />
+              <img src="/lovable-uploads/4ed064eb-f738-485d-aa48-053127a32861.png" alt="DLF" className="h-20 w-auto" />
+              <img src="/lovable-uploads/594a0e4e-9fef-4e00-88f4-e9cd0698c215.png" alt="Raymond" className="h-20 w-auto" />
             </div>
           </div>
 
@@ -221,17 +224,40 @@ export default function Home() {
                   <h3 className="text-xl font-semibold text-primary mb-2">
                     {property.title}
                   </h3>
-                  <p className="text-brand-grey mb-3">{property.location}</p>
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-2xl font-bold text-brand-classic-gold">
-                      {property.price}
-                    </span>
-                    <Badge variant="outline" className="border-brand-classic-gold text-brand-classic-gold">
-                      {property.bedrooms}
-                    </Badge>
+                  <p className="text-brand-grey mb-2">{property.location}</p>
+                  <p className="text-sm text-brand-grey mb-3">{property.description}</p>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-primary">Area:</span>
+                      <span className="text-sm text-brand-grey">{property.sqft}</span>
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium text-primary mb-1">Amenities:</span>
+                      <div className="flex flex-wrap gap-1">
+                        {property.amenities.slice(0, 3).map((amenity, index) => (
+                          <Badge key={index} variant="outline" className="text-xs border-brand-classic-gold/50 text-brand-classic-gold">
+                            {amenity}
+                          </Badge>
+                        ))}
+                        {property.amenities.length > 3 && (
+                          <Badge variant="outline" className="text-xs border-brand-classic-gold/50 text-brand-classic-gold">
+                            +{property.amenities.length - 3} more
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <Button className="w-full bg-primary hover:bg-brand-navy">
-                    View Details
+                  
+                  <Button 
+                    className="w-full bg-primary hover:bg-brand-navy"
+                    onClick={() => {
+                      const message = `Hi, I have an enquiry regarding property: ${property.title}`;
+                      const whatsappUrl = `https://wa.me/919930033056?text=${encodeURIComponent(message)}`;
+                      window.open(whatsappUrl, '_blank');
+                    }}
+                  >
+                    Enquire Now
                   </Button>
                 </CardContent>
               </Card>
