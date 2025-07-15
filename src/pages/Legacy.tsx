@@ -161,7 +161,7 @@ export default function Legacy() {
             </div>
             <div className="relative">
               <img
-                src="/lovable-uploads/b88aa17c-332e-4ce1-ab94-1d1bbf9f561c.png"
+                src="/lovable-uploads/ddbb868c-5a8c-4d6a-b245-40c4e68d276b.png"
                 alt="Mr. Narendra Punjabi and Ajay Punjabi - Father and Son Legacy"
                 className="rounded-lg shadow-luxury"
               />
