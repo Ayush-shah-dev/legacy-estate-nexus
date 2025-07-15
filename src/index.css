@@ -6,6 +6,22 @@
 All colors MUST be HSL.
 */
 
+/* Custom Animations */
+@keyframes moveBackground {
+  0%, 100% { 
+    transform: scale(1) translateX(0px) translateY(0px); 
+  }
+  25% { 
+    transform: scale(1.05) translateX(-10px) translateY(-5px); 
+  }
+  50% { 
+    transform: scale(1.1) translateX(5px) translateY(-10px); 
+  }
+  75% { 
+    transform: scale(1.05) translateX(10px) translateY(5px); 
+  }
+}
+
 @layer base {
   :root {
     /* Real Estate Brand Colors */

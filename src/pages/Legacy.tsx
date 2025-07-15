@@ -158,10 +158,6 @@ export default function Legacy() {
                   Built on trust, emotion, and deep market knowledge, they specialize in both primary and secondary real estate, serving clients with unmatched dedication and confidence as channel partners to top developers.
                 </p>
               </div>
-              <Button className="mt-8 bg-brand-classic-gold text-primary hover:bg-brand-soft-gold">
-                Learn More About Our Journey
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
             </div>
             <div className="relative">
               <img

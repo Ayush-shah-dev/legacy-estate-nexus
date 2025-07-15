@@ -117,7 +117,7 @@ export default function Contact() {
       }
       
       toast({
-        title: "Enquiry Submitted Successfully!",
+        title: "Inquiry Submitted Successfully!",
         description: "Our team will contact you within 24 hours.",
       });
       
@@ -165,7 +165,7 @@ export default function Contact() {
     {
       icon: Clock,
       title: "Business Hours",
-      details: ["Mon - Sat: 9:00 AM - 7:00 PM", "Sun: 10:00 AM - 5:00 PM"],
+      details: ["Monday - Saturday: 10am - 6pm", "Sunday: 10am - 4pm"],
       action: null
     }
   ];
@@ -235,7 +235,7 @@ export default function Contact() {
                 <CardContent className="p-8">
                   <div className="mb-8">
                     <h2 className="text-3xl font-bold text-primary mb-4">
-                      Send Us Your Enquiry
+                      Send Us Your Inquiry
                     </h2>
                     <p className="text-brand-grey">
                       Fill out the form below and our property experts will get back to you within 24 hours.
@@ -371,7 +371,7 @@ export default function Contact() {
                       ) : (
                         <>
                           <Send className="mr-2 h-5 w-5" />
-                          Send Enquiry
+                          Send Inquiry
                         </>
                       )}
                     </Button>

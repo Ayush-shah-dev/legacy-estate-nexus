@@ -9,8 +9,8 @@ export default function Home() {
   const highlights = [
     {
       icon: Award,
-      title: "Legacy",
-      description: "25+ years of excellence in real estate development and investment guidance."
+      title: "30+ Years Legacy",
+      description: "30+ years of excellence in real estate development and investment guidance with 3rd generation realtors."
     },
     {
       icon: Building2,
@@ -30,10 +30,10 @@ export default function Home() {
   ];
 
   const stats = [
-    { number: "25+", label: "Years Experience" },
+    { number: "30+", label: "Years Experience" },
     { number: "5000+", label: "Happy Clients" },
     { number: "₹500Cr+", label: "Worth Delivered" },
-    { number: "100+", label: "Premium Projects" }
+    { number: "3rd Gen", label: "Realtors" }
   ];
 
   const featuredProperties = [
@@ -91,18 +91,24 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section
-        className="relative h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+        className="relative h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat overflow-hidden"
         style={{ backgroundImage: `url(${heroImage})` }}
       >
         <div className="absolute inset-0 bg-primary/70"></div>
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-pulse opacity-20"
+          style={{ 
+            backgroundImage: `url(${heroImage})`,
+            animation: 'moveBackground 20s ease-in-out infinite'
+          }}
+        ></div>
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
-            Premium Real Estate
-            <span className="block text-brand-classic-gold">Excellence</span>
+            Mumbai Real Estate,
+            <span className="block text-brand-classic-gold">The Regal Way</span>
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-white/90 animate-slide-up">
-            Discover luxury living with our curated collection of premium properties 
-            and unmatched service excellence.
+            Beyond homes. We curate lifestyles.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in">
             <Link to="/properties">
@@ -114,7 +120,7 @@ export default function Home() {
             <Link to="/contact">
               <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
                 <Phone className="mr-2 h-5 w-5" />
-                Enquiry Form
+                Inquiry Form
               </Button>
             </Link>
           </div>
@@ -150,6 +156,20 @@ export default function Home() {
               Building trust through excellence, connecting you with premium properties 
               and investment opportunities.
             </p>
+          </div>
+
+          {/* Trusted by Section */}
+          <div className="text-center mb-12">
+            <h3 className="text-2xl font-semibold text-primary mb-6">
+              Trusted by India's Leading Developers
+            </h3>
+            <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
+              <img src="/lovable-uploads/21130215-bbef-4e37-9770-dd46a8ea2827.png" alt="Developer Logo" className="h-16 w-auto" />
+              <img src="/lovable-uploads/2c394c2f-1d8f-47e6-87ef-bc538d3881a8.png" alt="Developer Logo" className="h-16 w-auto" />
+              <img src="/lovable-uploads/2f60dc4d-2374-4ea6-bcda-23a90e3fda86.png" alt="Developer Logo" className="h-16 w-auto" />
+              <img src="/lovable-uploads/4ed064eb-f738-485d-aa48-053127a32861.png" alt="Developer Logo" className="h-16 w-auto" />
+              <img src="/lovable-uploads/594a0e4e-9fef-4e00-88f4-e9cd0698c215.png" alt="Developer Logo" className="h-16 w-auto" />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -281,7 +301,7 @@ export default function Home() {
             </Button>
             <Link to="/contact">
               <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-white">
-                Enquiry Form
+                Inquiry Form
               </Button>
             </Link>
           </div>
