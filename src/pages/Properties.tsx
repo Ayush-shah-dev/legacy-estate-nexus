@@ -289,69 +289,7 @@ export default function Properties() {
                  </Button>
                </div>
              )}
-           </div>
-
-           {/* Search and Filters */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              <div className="md:col-span-2 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                <Input
-                  placeholder="Search properties..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-white/90"
-                />
-              </div>
-              
-              <Select value={propertyType} onValueChange={setPropertyType}>
-                <SelectTrigger className="bg-white/90">
-                  <SelectValue placeholder="Property Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  {isCommercialSection ? (
-                    <>
-                      <SelectItem value="Commercial">All Commercial</SelectItem>
-                      <SelectItem value="Office Space">Office Space</SelectItem>
-                      <SelectItem value="Retail Space">Retail Space</SelectItem>
-                      <SelectItem value="Warehouse">Warehouse</SelectItem>
-                      <SelectItem value="Medical Space">Medical Space</SelectItem>
-                    </>
-                  ) : (
-                    <>
-                      <SelectItem value="Residential">All Residential</SelectItem>
-                      <SelectItem value="Villa">Villa</SelectItem>
-                      <SelectItem value="Apartment">Apartment</SelectItem>
-                      <SelectItem value="Penthouse">Penthouse</SelectItem>
-                    </>
-                  )}
-                </SelectContent>
-              </Select>
-
-              <Select value={location} onValueChange={setLocation}>
-                <SelectTrigger className="bg-white/90">
-                  <SelectValue placeholder="Location" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Locations</SelectItem>
-                  <SelectItem value="Juhu">Juhu</SelectItem>
-                  <SelectItem value="Bandra">Bandra</SelectItem>
-                  <SelectItem value="Worli">Worli</SelectItem>
-                  <SelectItem value="Andheri">Andheri</SelectItem>
-                  <SelectItem value="Powai">Powai</SelectItem>
-                  <SelectItem value="Bandra Kurla Complex">BKC</SelectItem>
-                  <SelectItem value="Lower Parel">Lower Parel</SelectItem>
-                  <SelectItem value="Bhiwandi">Bhiwandi</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Button className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold">
-                <Filter className="mr-2 h-4 w-4" />
-                Filter
-              </Button>
             </div>
-          </div>
         </div>
       </section>
 
