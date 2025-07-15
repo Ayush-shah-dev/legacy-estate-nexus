@@ -454,10 +454,12 @@ Partner with Regal Estate Consultants to leverage infrastructure-driven growth o
                       </Badge>
                     ))}
                   </div>
-                  <Button className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold">
-                    Read Full Article
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
+                  <Link to={`/blogs/${featuredPost.id}`}>
+                    <Button className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold">
+                      Read Full Article
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             </div>
@@ -503,10 +505,12 @@ Partner with Regal Estate Consultants to leverage infrastructure-driven growth o
                           </Badge>
                         ))}
                       </div>
-                      <Button variant="outline" size="sm" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
-                        Read More
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
+                      <Link to={`/blogs/${post.id}`}>
+                        <Button variant="outline" size="sm" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
+                          Read More
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
                     </CardContent>
                   </Card>
                 ))}

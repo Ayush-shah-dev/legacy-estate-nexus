@@ -11,6 +11,7 @@ import Legacy from "./pages/Legacy";
 import Properties from "./pages/Properties";
 import Contact from "./pages/Contact";
 import Blogs from "./pages/Blogs";
+import BlogPost from "./pages/BlogPost";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="legacy" element={<Legacy />} />
               <Route path="properties" element={<Properties />} />
               <Route path="blogs" element={<Blogs />} />
+              <Route path="blogs/:id" element={<BlogPost />} />
               <Route path="contact" element={<Contact />} />
             </Route>
             <Route path="/auth" element={<Auth />} />
