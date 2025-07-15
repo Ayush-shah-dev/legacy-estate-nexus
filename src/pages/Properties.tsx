@@ -377,17 +377,7 @@ export default function Properties() {
                     <span className="text-sm">{property.location}</span>
                   </div>
 
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <span className="text-2xl font-bold text-brand-classic-gold">
-                        {property.price}
-                      </span>
-                      {property.originalPrice && (
-                        <span className="text-sm text-brand-grey line-through ml-2">
-                          {property.originalPrice}
-                        </span>
-                      )}
-                    </div>
+                  <div className="mb-3">
                     <div className="text-sm text-brand-grey">
                       by {property.developer}
                     </div>
@@ -441,8 +431,15 @@ export default function Properties() {
                   </div>
 
                   <div className="flex space-x-2">
-                    <Button className="flex-1 bg-primary hover:bg-brand-navy">
-                      View Details
+                    <Button 
+                      className="flex-1 bg-primary hover:bg-brand-navy"
+                      onClick={() => {
+                        const message = `Hi, I have an enquiry regarding property: ${property.title}`;
+                        const whatsappUrl = `https://wa.me/919930033056?text=${encodeURIComponent(message)}`;
+                        window.open(whatsappUrl, '_blank');
+                      }}
+                    >
+                      Enquire Now
                     </Button>
                     <Button variant="outline" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
                       <Phone className="h-4 w-4" />
