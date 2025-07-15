@@ -469,7 +469,7 @@ export default function Properties() {
               <span className="text-brand-classic-gold font-medium">Trusted Partnerships</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-6">
-              Our <span className="text-brand-classic-gold">Channel Partners</span>
+              Our <span className="text-brand-classic-gold">Leading Developers</span>
             </h2>
             <p className="text-xl text-brand-grey max-w-3xl mx-auto leading-relaxed">
               {isCommercialSection 
