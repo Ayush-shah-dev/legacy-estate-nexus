@@ -18,6 +18,7 @@ export const Layout = () => {
     { name: 'Home', path: '/' },
     { name: 'Residential', path: '/properties?type=residential' },
     { name: 'Commercial', path: '/properties?type=commercial' },
+    { name: 'Explore Our Properties', path: '/properties' },
     { name: 'Legacy', path: '/legacy' },
     { name: 'Blogs', path: '/blogs' },
     { name: 'Contact', path: '/contact' }

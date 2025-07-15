@@ -113,7 +113,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in">
             <Link to="/properties">
               <Button size="lg" className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300">
-                Explore Properties
+                Explore Our Properties
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -241,7 +241,7 @@ export default function Home() {
           <div className="text-center mt-12">
             <Link to="/properties">
               <Button variant="outline" size="lg" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
-                View All Properties
+                Explore Our Properties
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
