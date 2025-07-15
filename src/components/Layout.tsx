@@ -32,11 +32,11 @@ export const Layout = () => {
       {/* Navigation */}
       <nav className="bg-background/95 backdrop-blur-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-18">
+          <div className="flex justify-between items-center h-22">
             {/* Logo */}
             <div className="flex-shrink-0">
               <NavLink to="/" className="flex items-center">
-                <img src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png" alt="Regal Estate Consultants" className="h-16 w-auto" />
+                <img src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png" alt="Regal Estate Consultants" className="h-20 w-auto" />
               </NavLink>
             </div>
 
@@ -202,7 +202,7 @@ export const Layout = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center mb-4">
-                <img src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png" alt="Regal Estate Consultants" className="h-20 w-auto" />
+                <img src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png" alt="Regal Estate Consultants" className="h-24 w-auto" />
               </div>
               <p className="text-primary-foreground/80 mb-4">
                 Mumbai's trusted partner in premium real estate. Connecting dreams with reality through 
