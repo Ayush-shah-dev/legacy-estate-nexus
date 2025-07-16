@@ -256,40 +256,83 @@ export default function Properties() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-hero text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className={`relative overflow-hidden text-white py-20 ${
+        isCommercialSection ? 'bg-gradient-to-br from-brand-navy via-brand-grey to-brand-beige-dark' : 
+        isResidentialSection ? 'bg-gradient-to-br from-brand-beige-dark via-brand-beige to-brand-cream' : 
+        'bg-gradient-hero'
+      }`}>
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {isCommercialSection && (
+            <>
+              <div className="absolute top-10 left-10 w-32 h-32 bg-brand-classic-gold/20 rounded-full animate-bounce [animation-delay:0s] [animation-duration:3s]"></div>
+              <div className="absolute top-20 right-20 w-24 h-24 bg-brand-navy/30 rounded-full animate-bounce [animation-delay:1s] [animation-duration:4s]"></div>
+              <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-brand-beige/40 rounded-full animate-bounce [animation-delay:2s] [animation-duration:3.5s]"></div>
+              {/* Commercial building silhouettes */}
+              <div className="absolute bottom-0 right-0 w-64 h-64 opacity-10">
+                <img 
+                  src="https://images.unsplash.com/photo-1527576539890-dfa815648363?w=256&h=256&fit=crop" 
+                  alt="Commercial building" 
+                  className="w-full h-full object-cover rotate-12 animate-pulse"
+                />
+              </div>
+            </>
+          )}
+          {isResidentialSection && (
+            <>
+              <div className="absolute top-10 right-10 w-28 h-28 bg-brand-cream/30 rounded-full animate-pulse [animation-duration:2s]"></div>
+              <div className="absolute top-32 left-16 w-20 h-20 bg-brand-beige-warm/40 rounded-full animate-pulse [animation-delay:1s] [animation-duration:2.5s]"></div>
+              <div className="absolute bottom-16 right-1/3 w-24 h-24 bg-brand-beige/50 rounded-full animate-pulse [animation-delay:0.5s] [animation-duration:3s]"></div>
+              {/* Residential building silhouettes */}
+              <div className="absolute bottom-0 left-0 w-48 h-48 opacity-10">
+                <img 
+                  src="https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?w=192&h=192&fit=crop" 
+                  alt="Residential building" 
+                  className="w-full h-full object-cover -rotate-12 animate-pulse"
+                />
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              {isCommercialSection ? 'Commercial' : isResidentialSection ? 'Residential' : 'Premium'} <span className="text-brand-classic-gold">Properties</span>
+            <h1 className={`text-4xl md:text-6xl font-bold mb-4 animate-slide-down ${
+              (isResidentialSection || isCommercialSection) ? 'text-brand-navy' : 'text-white'
+            }`}>
+              {isCommercialSection ? 'Commercial' : isResidentialSection ? 'Residential' : 'Premium'} 
+              <span className="text-brand-classic-gold animate-pulse"> Properties</span>
             </h1>
-             <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
-               {isCommercialSection 
-                 ? 'Discover prime commercial spaces and investment opportunities in Mumbai\'s business districts'
-                 : isResidentialSection
-                 ? 'Find your dream home with our curated collection of luxury residential properties in Mumbai'
-                 : 'Discover luxury living with our curated collection of premium properties in Mumbai'
-               }
-             </p>
+            <p className={`text-xl md:text-2xl max-w-3xl mx-auto animate-slide-up [animation-delay:300ms] ${
+              (isResidentialSection || isCommercialSection) ? 'text-brand-beige-dark' : 'text-white/90'
+            }`}>
+              {isCommercialSection 
+                ? 'Discover prime commercial spaces and investment opportunities in Mumbai\'s business districts'
+                : isResidentialSection
+                ? 'Find your dream home with our curated collection of luxury residential properties in Mumbai'
+                : 'Discover luxury living with our curated collection of premium properties in Mumbai'
+              }
+            </p>
              
-             {/* Google Drive Button for Residential/Commercial */}
-             {(isResidentialSection || isCommercialSection) && (
-               <div className="mt-8 text-center">
-                 <Button 
-                   size="lg" 
-                   className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300"
-                    onClick={() => window.open(
-                      isCommercialSection 
-                        ? 'https://drive.google.com/drive/folders/1UjBtSHp8QBLNc-28MZzO4ehgPwQ9oFRX' 
-                        : 'https://drive.google.com/drive/folders/1d8lRTL3PrYJY51OOcxH-y1ot9qSnK-wc?usp=sharing', 
-                      '_blank'
-                   )}
-                 >
-                   <ExternalLink className="mr-2 h-5 w-5" />
-                   View All {isCommercialSection ? 'Commercial' : 'Residential'} Properties
-                 </Button>
-               </div>
-             )}
-            </div>
+            {/* Google Drive Button for Residential/Commercial */}
+            {(isResidentialSection || isCommercialSection) && (
+              <div className="mt-8 text-center animate-fade-in [animation-delay:600ms]">
+                <Button 
+                  size="lg" 
+                  className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300 hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-xl"
+                  onClick={() => window.open(
+                    isCommercialSection 
+                      ? 'https://drive.google.com/drive/folders/1UjBtSHp8QBLNc-28MZzO4ehgPwQ9oFRX' 
+                      : 'https://drive.google.com/drive/folders/1d8lRTL3PrYJY51OOcxH-y1ot9qSnK-wc?usp=sharing', 
+                    '_blank'
+                  )}
+                >
+                  <ExternalLink className="mr-2 h-5 w-5 animate-bounce" />
+                  View All {isCommercialSection ? 'Commercial' : 'Residential'} Properties
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
