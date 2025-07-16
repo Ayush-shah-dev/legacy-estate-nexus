@@ -277,11 +277,11 @@ export default function Properties() {
                  <Button 
                    size="lg" 
                    className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300"
-                   onClick={() => window.open(
-                     isCommercialSection 
-                       ? 'https://drive.google.com/drive/folders/1UjBtSHp8QBLNc-28MZzO4ehgPwQ9oFRX' 
-                       : 'https://drive.google.com/drive/folders/1d8lRTL3PrYJY51OOcxH-y1ot9qSnK-wc?usp=sharing', 
-                     '_blank'
+                    onClick={() => window.open(
+                      isCommercialSection 
+                        ? 'https://drive.google.com/drive/folders/1UjBtSHp8QBLNc-28MZzO4ehgPwQ9oFRX' 
+                        : 'https://drive.google.com/drive/folders/1d8lRTL3PrYJY51OOcxH-y1ot9qSnK-wc?usp=sharing', 
+                      '_blank'
                    )}
                  >
                    <ExternalLink className="mr-2 h-5 w-5" />
