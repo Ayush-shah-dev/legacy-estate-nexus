@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -22,18 +23,19 @@ export default function Properties() {
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState('');
   const [propertyType, setPropertyType] = useState('');
-  const [location, setLocation] = useState('');
+  const [locationFilter, setLocationFilter] = useState('');
+  const location = useLocation();
   
   // Get URL parameters to determine if showing residential or commercial
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(location.search);
     const typeParam = urlParams.get('type');
     if (typeParam === 'residential') {
       setPropertyType('Residential');
     } else if (typeParam === 'commercial') {
       setPropertyType('Commercial');
     }
-  }, []);
+  }, [location.search]);
 
   const properties = [
     {
@@ -245,7 +247,7 @@ export default function Properties() {
     const matchesSearch = property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          property.location.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = !propertyType || propertyType === 'all' || property.type === propertyType || property.subType === propertyType;
-    const matchesLocation = !location || location === 'all' || property.location.includes(location);
+    const matchesLocation = !locationFilter || locationFilter === 'all' || property.location.includes(locationFilter);
     
     return matchesSearch && matchesType && matchesLocation;
   });
