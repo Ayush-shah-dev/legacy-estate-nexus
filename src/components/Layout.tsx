@@ -24,6 +24,10 @@ export const Layout = () => {
   ];
 
   const isActive = (path: string) => {
+    // Handle query parameters for properties pages
+    if (path.includes('?')) {
+      return location.pathname + location.search === path;
+    }
     return location.pathname === path;
   };
 
