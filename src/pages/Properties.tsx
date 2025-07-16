@@ -258,7 +258,7 @@ export default function Properties() {
       {/* Hero Section */}
       <section className={`relative overflow-hidden text-white py-20 ${
         isCommercialSection ? 'bg-gradient-to-br from-brand-navy via-brand-grey to-brand-beige-dark' : 
-        isResidentialSection ? 'bg-gradient-to-br from-brand-beige-dark via-brand-beige to-brand-cream' : 
+        isResidentialSection ? 'bg-gradient-beige min-h-[70vh] flex items-center' : 
         'bg-gradient-hero'
       }`}>
         {/* Animated Background Elements */}
@@ -337,7 +337,11 @@ export default function Properties() {
       </section>
 
       {/* Properties Grid */}
-      <section className={`py-16 ${(isResidentialSection || isCommercialSection) ? 'bg-gradient-beige-warm' : 'bg-background'} transition-all duration-700`}>
+      <section className={`py-16 ${
+        isCommercialSection ? 'bg-gradient-to-br from-brand-beige-light to-brand-cream' :
+        isResidentialSection ? 'bg-gradient-to-br from-brand-cream via-brand-beige-light to-brand-beige' : 
+        'bg-background'
+      } transition-all duration-700`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-8 animate-fade-in">
             <div>
