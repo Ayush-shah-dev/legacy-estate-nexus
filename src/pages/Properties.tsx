@@ -294,14 +294,14 @@ export default function Properties() {
       </section>
 
       {/* Properties Grid */}
-      <section className="py-16 bg-background">
+      <section className={`py-16 ${(isResidentialSection || isCommercialSection) ? 'bg-gradient-beige-warm' : 'bg-background'} transition-all duration-700`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex justify-between items-center mb-8 animate-fade-in">
             <div>
-              <h2 className="text-2xl font-bold text-primary">
+              <h2 className={`text-2xl font-bold ${(isResidentialSection || isCommercialSection) ? 'text-brand-navy' : 'text-primary'} animate-slide-up`}>
                 {filteredProperties.length} Properties Found
               </h2>
-              <p className="text-brand-grey">
+              <p className={`${(isResidentialSection || isCommercialSection) ? 'text-brand-beige-dark' : 'text-brand-grey'} animate-slide-up [animation-delay:200ms]`}>
                 {isCommercialSection 
                   ? 'Showing commercial properties and investment opportunities in Mumbai'
                   : isResidentialSection
@@ -325,8 +325,16 @@ export default function Properties() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProperties.map((property) => (
-              <Card key={property.id} className="overflow-hidden hover:shadow-luxury transition-all duration-300 group">
+            {filteredProperties.map((property, index) => (
+              <Card 
+                key={property.id} 
+                className={`overflow-hidden hover:shadow-luxury transition-all duration-300 group animate-fade-in ${
+                  (isResidentialSection || isCommercialSection) 
+                    ? 'bg-brand-cream border-brand-beige hover:border-brand-beige-dark' 
+                    : 'bg-card'
+                } hover:scale-105 hover:-translate-y-2`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
                 <div className="relative">
                   <img
                     src={property.image}
@@ -334,20 +342,33 @@ export default function Properties() {
                     className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute top-4 left-4">
-                    <Badge className="bg-brand-maroon text-white">
+                    <Badge 
+                      className={`${
+                        (isResidentialSection || isCommercialSection)
+                          ? 'bg-brand-beige text-brand-navy animate-pulse'
+                          : 'bg-brand-maroon text-white'
+                      }`}
+                    >
                       {property.status}
                     </Badge>
                   </div>
                   <div className="absolute top-4 right-4 flex space-x-2">
-                    <Button size="sm" variant="outline" className="bg-white/90 border-white hover:bg-white">
+                    <Button size="sm" variant="outline" className="bg-white/90 border-white hover:bg-white hover:scale-110 transition-all duration-200">
                       <Heart className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant="outline" className="bg-white/90 border-white hover:bg-white">
+                    <Button size="sm" variant="outline" className="bg-white/90 border-white hover:bg-white hover:scale-110 transition-all duration-200">
                       <Eye className="h-4 w-4" />
                     </Button>
                   </div>
                   <div className="absolute bottom-4 left-4">
-                    <Badge variant="outline" className="bg-white text-primary border-white">
+                    <Badge 
+                      variant="outline" 
+                      className={`${
+                        (isResidentialSection || isCommercialSection)
+                          ? 'bg-brand-cream text-brand-navy border-brand-beige'
+                          : 'bg-white text-primary border-white'
+                      } animate-slide-up`}
+                    >
                       {property.subType || property.type}
                     </Badge>
                   </div>

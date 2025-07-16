@@ -58,7 +58,12 @@ export default {
 					grey: 'hsl(var(--brand-grey))',
 					navy: 'hsl(var(--brand-navy))',
 					'soft-gold': 'hsl(var(--brand-soft-gold))',
-					'classic-gold': 'hsl(var(--brand-classic-gold))'
+					'classic-gold': 'hsl(var(--brand-classic-gold))',
+					'beige-light': 'hsl(var(--brand-beige-light))',
+					'beige': 'hsl(var(--brand-beige))',
+					'beige-warm': 'hsl(var(--brand-beige-warm))',
+					'beige-dark': 'hsl(var(--brand-beige-dark))',
+					'cream': 'hsl(var(--brand-cream))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -134,7 +139,9 @@ export default {
 			backgroundImage: {
 				'gradient-hero': 'var(--gradient-hero)',
 				'gradient-accent': 'var(--gradient-accent)',
-				'gradient-premium': 'var(--gradient-premium)'
+				'gradient-premium': 'var(--gradient-premium)',
+				'gradient-beige': 'var(--gradient-beige)',
+				'gradient-beige-warm': 'var(--gradient-beige-warm)'
 			},
 			boxShadow: {
 				'luxury': 'var(--shadow-luxury)',

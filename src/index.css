@@ -64,11 +64,20 @@ All colors MUST be HSL.
     --brand-navy: 222 64% 13%;
     --brand-soft-gold: 44 70% 87%;
     --brand-classic-gold: 42 52% 52%;
+    
+    /* Beige Color Palette */
+    --brand-beige-light: 35 25% 88%;
+    --brand-beige: 35 20% 78%;
+    --brand-beige-warm: 30 25% 75%;
+    --brand-beige-dark: 25 20% 65%;
+    --brand-cream: 40 30% 92%;
 
     /* Gradients */
     --gradient-hero: linear-gradient(135deg, hsl(222 64% 13%), hsl(201 17% 47%));
     --gradient-accent: linear-gradient(135deg, hsl(42 52% 52%), hsl(44 70% 87%));
     --gradient-premium: linear-gradient(135deg, hsl(0 82% 41%), hsl(222 64% 13%));
+    --gradient-beige: linear-gradient(135deg, hsl(35 25% 88%), hsl(30 25% 75%));
+    --gradient-beige-warm: linear-gradient(135deg, hsl(40 30% 92%), hsl(35 20% 78%));
 
     /* Shadows */
     --shadow-luxury: 0 25px 50px -12px hsl(222 64% 13% / 0.25);
