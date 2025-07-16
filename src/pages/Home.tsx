@@ -3,14 +3,36 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Building2, Users, Award, Star, ArrowRight, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
 import heroImage from '@/assets/mumbai-skyline.jpg';
+import cinematicImage from '@/assets/mumbai-skyline-cinematic.jpg';
 
 export default function Home() {
+  const sectionsRef = useRef<(HTMLElement | null)[]>([]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-slide-up');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    sectionsRef.current.forEach((section) => {
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, []);
   const highlights = [
     {
       icon: Award,
-      title: "30+ Years Legacy",
-      description: "30+ years of excellence in real estate development and investment guidance with 3rd generation realtors."
+      title: "37+ Years Legacy",
+      description: "37+ years of excellence in real estate development and investment guidance with 3rd generation realtors."
     },
     {
       icon: Building2,
@@ -30,7 +52,7 @@ export default function Home() {
   ];
 
   const stats = [
-    { number: "30+", label: "Years Experience" },
+    { number: "37+", label: "Years Experience" },
     { number: "5000+", label: "Happy Clients" },
     { number: "₹500Cr+", label: "Worth Delivered" },
     { number: "3rd Gen", label: "Realtors" }
@@ -95,14 +117,14 @@ export default function Home() {
       {/* Hero Section */}
       <section
         className="relative h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat overflow-hidden"
-        style={{ backgroundImage: `url(${heroImage})` }}
+        style={{ backgroundImage: `url(${cinematicImage})` }}
       >
-        <div className="absolute inset-0 bg-primary/70"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-brand-maroon/60 to-primary/80"></div>
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-pulse opacity-20"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
           style={{ 
             backgroundImage: `url(${heroImage})`,
-            animation: 'moveBackground 20s ease-in-out infinite'
+            animation: 'moveBackground 25s ease-in-out infinite'
           }}
         ></div>
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
@@ -131,15 +153,19 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-gradient-accent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section 
+        className="py-20 bg-gradient-accent relative overflow-hidden"
+        ref={(el) => el && (sectionsRef.current[0] = el)}
+      >
+        <div className="absolute inset-0 bg-brand-maroon/5"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-5xl font-bold text-primary mb-2">
+              <div key={index} className="text-center transform hover:scale-105 transition-all duration-300">
+                <div className="text-4xl md:text-6xl font-bold text-primary mb-4 bg-gradient-to-r from-brand-maroon to-primary bg-clip-text text-transparent">
                   {stat.number}
                 </div>
-                <div className="text-brand-grey font-medium">
+                <div className="text-brand-grey font-semibold text-lg">
                   {stat.label}
                 </div>
               </div>
@@ -149,7 +175,10 @@ export default function Home() {
       </section>
 
       {/* Highlights Section */}
-      <section className="py-20 bg-background">
+      <section 
+        className="py-20 bg-background"
+        ref={(el) => el && (sectionsRef.current[1] = el)}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
@@ -171,42 +200,42 @@ export default function Home() {
                 <img 
                   src="/lovable-uploads/3068d3a3-f113-4a53-81e7-7e7be23345e3.png" 
                   alt="Adani Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/b00d9894-3524-4d9b-8f50-33f2f333dcb5.png" 
                   alt="Godrej Properties" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/ad219bbd-a8e8-4e82-889c-30db765fb5ab.png" 
                   alt="Raymond Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/e21683e6-14b6-4729-828e-36c7d5923146.png" 
                   alt="Lodha" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/0fe0702e-fe06-4a24-bb96-5325dbd4863c.png" 
                   alt="DLF" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/b9583c92-6074-4562-8a9f-a0a811a39d7e.png" 
                   alt="LT Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
                 />
               </div>
             </div>
@@ -233,7 +262,10 @@ export default function Home() {
       </section>
 
       {/* Featured Properties */}
-      <section className="py-20 bg-secondary/30">
+      <section 
+        className="py-20 bg-secondary/30"
+        ref={(el) => el && (sectionsRef.current[2] = el)}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
@@ -312,8 +344,90 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Recognition and Awards */}
+      <section 
+        className="py-20 bg-background"
+        ref={(el) => el && (sectionsRef.current[3] = el)}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
+              Recognition & Awards
+            </h2>
+            <p className="text-xl text-brand-grey">
+              Celebrating excellence in real estate with industry recognition
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
+              <div className="relative">
+                <img
+                  src="/lovable-uploads/99682767-ed37-4fb6-977f-72742d568258.png"
+                  alt="ADCORE Developers Recognition"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold">ADCORE Partnership</h3>
+                  <p className="text-sm text-white/80">Developer Collaboration</p>
+                </div>
+              </div>
+            </Card>
+            
+            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
+              <div className="relative">
+                <img
+                  src="/lovable-uploads/2b1cae59-7af3-4cf0-ab36-fb6eebbf72e9.png"
+                  alt="Paranjape Award Recognition"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold">Excellence Award</h3>
+                  <p className="text-sm text-white/80">Paranjape Recognition</p>
+                </div>
+              </div>
+            </Card>
+            
+            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
+              <div className="relative">
+                <img
+                  src="/lovable-uploads/81becc39-07c6-4115-b1fc-ba74122c8561.png"
+                  alt="Industry Achievement Award"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold">Industry Achievement</h3>
+                  <p className="text-sm text-white/80">Professional Excellence</p>
+                </div>
+              </div>
+            </Card>
+            
+            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
+              <div className="relative">
+                <img
+                  src="/lovable-uploads/37bf2cc1-1729-4cbb-bec7-87df5c333ea1.png"
+                  alt="Real Estate Excellence Award"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold">Real Estate Excellence</h3>
+                  <p className="text-sm text-white/80">Industry Leadership</p>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* Client Reviews */}
-      <section className="py-20 bg-gradient-hero text-white">
+      <section 
+        className="py-20 bg-gradient-hero text-white"
+        ref={(el) => el && (sectionsRef.current[4] = el)}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">

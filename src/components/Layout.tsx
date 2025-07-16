@@ -40,7 +40,7 @@ export const Layout = () => {
             {/* Logo */}
             <div className="flex-shrink-0">
               <NavLink to="/" className="flex items-center">
-                <img src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png" alt="Regal Estate Consultants" className="h-20 w-auto" />
+                <img src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png" alt="Regal Estate Consultants" className="h-24 w-auto" />
               </NavLink>
             </div>
 
@@ -52,7 +52,7 @@ export const Layout = () => {
                     key={item.name}
                     to={item.path}
                     className={cn(
-                      "px-3 py-2 text-sm font-medium transition-colors duration-200",
+                      "px-3 py-2 text-lg font-semibold transition-colors duration-200",
                       isActive(item.path)
                         ? "text-brand-maroon border-b-2 border-brand-maroon"
                         : "text-foreground hover:text-brand-maroon"
@@ -64,8 +64,13 @@ export const Layout = () => {
               </div>
             </div>
 
-            {/* Contact Info */}
+            {/* Contact Info & RERA */}
             <div className="hidden lg:flex items-center space-x-4">
+              <div className="text-xs text-muted-foreground text-right">
+                <div className="font-semibold text-brand-maroon">A51800000663</div>
+                <div>MahaRERA</div>
+                <div>Ajay Punjabi</div>
+              </div>
               <a
                 href="tel:+919930033056"
                 className="flex items-center space-x-2 text-sm text-muted-foreground hover:text-brand-maroon transition-colors"

@@ -62,6 +62,32 @@ All colors MUST be HSL.
   }
 }
 
+@keyframes fade-in-scale {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes book-page-turn {
+  0% {
+    opacity: 0;
+    transform: rotateY(-90deg) scale(0.8);
+  }
+  50% {
+    opacity: 0.5;
+    transform: rotateY(-45deg) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg) scale(1);
+  }
+}
+
 @layer base {
   :root {
     /* Real Estate Brand Colors */
@@ -189,5 +215,35 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  .animate-slide-up {
+    animation: book-page-turn 0.8s ease-out forwards;
+  }
+
+  .animate-fade-in-scale {
+    animation: fade-in-scale 0.6s ease-out forwards;
+  }
+
+  /* Smooth scrolling behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar with maroon accent */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-secondary;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-maroon rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-brand-maroon/80;
   }
 }
