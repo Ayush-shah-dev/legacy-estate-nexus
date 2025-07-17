@@ -78,7 +78,7 @@ export const Layout = () => {
                 <Phone className="h-4 w-4" />
                 <span>+91 99300 33056</span>
               </a>
-              <Button variant="outline" size="sm" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
+              <Button variant="outline" size="sm" className="border-brand-classic-gold text-primary hover:bg-brand-classic-gold hover:text-primary">
                 <NavLink to="/contact">Inquiry Form</NavLink>
               </Button>
               

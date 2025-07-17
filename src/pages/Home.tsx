@@ -147,7 +147,7 @@ export default function Home() {
               </Button>
             </Link>
             <Link to="/contact">
-              <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
+              <Button variant="outline" size="lg" className="border-white text-primary hover:bg-brand-classic-gold hover:text-primary">
                 <Phone className="mr-2 h-5 w-5" />
                 Inquiry Form
               </Button>
