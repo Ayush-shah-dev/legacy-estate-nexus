@@ -163,7 +163,7 @@ export default function Home() {
       >
         <div className="absolute inset-0 bg-brand-maroon/5"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-0 animate-slide-in-left" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
             {stats.map((stat, index) => (
               <div key={index} className="text-center transform hover:scale-105 transition-all duration-300">
                 <div className="text-4xl md:text-6xl font-bold text-primary mb-4 bg-gradient-to-r from-brand-maroon to-primary bg-clip-text text-transparent">
@@ -184,7 +184,7 @@ export default function Home() {
         ref={(el) => el && (sectionsRef.current[1] = el)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 opacity-0 animate-zoom-in" style={{animationDelay: '0.1s', animationFillMode: 'forwards'}}>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Why Choose Regal Estate Consultants
             </h2>
@@ -195,7 +195,7 @@ export default function Home() {
           </div>
 
           {/* Trusted by Section */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 opacity-0 animate-slide-in-right" style={{animationDelay: '0.4s', animationFillMode: 'forwards'}}>
             <h3 className="text-2xl font-semibold text-primary mb-8">
               Trusted by India's Leading Developers
             </h3>
@@ -245,7 +245,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.3s', animationFillMode: 'forwards'}}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-left" style={{animationDelay: '0.6s', animationFillMode: 'forwards'}}>
             {highlights.map((highlight, index) => (
               <Card key={index} className="text-center p-6 hover:shadow-gold transition-all duration-300 border-brand-soft-gold/20">
                 <CardContent className="p-0">
@@ -271,7 +271,7 @@ export default function Home() {
         ref={(el) => el && (sectionsRef.current[2] = el)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 opacity-0 animate-slide-in-right" style={{animationDelay: '0.1s', animationFillMode: 'forwards'}}>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Featured Properties
             </h2>
@@ -280,7 +280,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 animate-slide-up" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 animate-zoom-in" style={{animationDelay: '0.3s', animationFillMode: 'forwards'}}>
             {featuredProperties.map((property) => (
               <Card key={property.id} className="overflow-hidden hover:shadow-luxury transition-all duration-300">
                 <div className="relative">
@@ -354,7 +354,7 @@ export default function Home() {
         ref={(el) => el && (sectionsRef.current[3] = el)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 opacity-0 animate-slide-in-left" style={{animationDelay: '0.1s', animationFillMode: 'forwards'}}>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Recognition & Awards
             </h2>
@@ -363,7 +363,7 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.4s', animationFillMode: 'forwards'}}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-right" style={{animationDelay: '0.3s', animationFillMode: 'forwards'}}>
             <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
               <div className="relative">
                 <img
