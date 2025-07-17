@@ -204,42 +204,42 @@ export default function Home() {
                 <img 
                   src="/lovable-uploads/3068d3a3-f113-4a53-81e7-7e7be23345e3.png" 
                   alt="Adani Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/b00d9894-3524-4d9b-8f50-33f2f333dcb5.png" 
                   alt="Godrej Properties" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/ad219bbd-a8e8-4e82-889c-30db765fb5ab.png" 
                   alt="Raymond Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/e21683e6-14b6-4729-828e-36c7d5923146.png" 
                   alt="Lodha" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/0fe0702e-fe06-4a24-bb96-5325dbd4863c.png" 
                   alt="DLF" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/b9583c92-6074-4562-8a9f-a0a811a39d7e.png" 
                   alt="LT Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
                 />
               </div>
             </div>
