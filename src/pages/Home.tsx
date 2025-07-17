@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import heroImage from '@/assets/mumbai-skyline.jpg';
 import cinematicImage from '@/assets/mumbai-skyline-cinematic.jpg';
+import videoBackground from '@/assets/mumbai-skyline-video.mp4';
 
 export default function Home() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
@@ -115,18 +116,17 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section
-        className="relative h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat overflow-hidden"
-        style={{ backgroundImage: `url(${cinematicImage})` }}
-      >
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={videoBackground} type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-brand-maroon/60 to-primary/80"></div>
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
-          style={{ 
-            backgroundImage: `url(${heroImage})`,
-            animation: 'moveBackground 25s ease-in-out infinite'
-          }}
-        ></div>
         <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
             Mumbai Real Estate,
