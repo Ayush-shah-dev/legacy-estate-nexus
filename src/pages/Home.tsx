@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import heroImage from '@/assets/mumbai-skyline.jpg';
 import cinematicImage from '@/assets/mumbai-skyline-cinematic.jpg';
-import videoBackground from '@/assets/mumbai-skyline-video.mp4';
+import videoBackground from '../assets/mumbai-skyline-video.mp4';
 
 export default function Home() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
@@ -130,7 +130,7 @@ export default function Home() {
           <source src={videoBackground} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/70 via-brand-maroon/50 to-primary/70 z-10"></div>
+        <div className="absolute inset-0 "></div>
         <div className="relative z-20 text-center text-white max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
             Mumbai Real Estate,
@@ -147,7 +147,7 @@ export default function Home() {
               </Button>
             </Link>
             <Link to="/contact">
-              <Button variant="outline" size="lg" className="border-white text-primary hover:bg-brand-classic-gold hover:text-primary">
+              <Button variant="outline" size="lg" className="border-white text-primary hover:bg-brand-classic-gold hover:text-white">
                 <Phone className="mr-2 h-5 w-5" />
                 Inquiry Form
               </Button>
@@ -157,13 +157,13 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section 
+      <section
         className="py-20 bg-gradient-accent relative overflow-hidden"
         ref={(el) => el && (sectionsRef.current[0] = el)}
       >
         <div className="absolute inset-0 bg-brand-maroon/5"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-0 animate-slide-in-left" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-0 animate-slide-in-left" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
             {stats.map((stat, index) => (
               <div key={index} className="text-center transform hover:scale-105 transition-all duration-300">
                 <div className="text-4xl md:text-6xl font-bold text-primary mb-4 bg-gradient-to-r from-brand-maroon to-primary bg-clip-text text-transparent">
@@ -179,73 +179,73 @@ export default function Home() {
       </section>
 
       {/* Highlights Section */}
-      <section 
+      <section
         className="py-20 bg-background"
         ref={(el) => el && (sectionsRef.current[1] = el)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 opacity-0 animate-zoom-in" style={{animationDelay: '0.1s', animationFillMode: 'forwards'}}>
+          <div className="text-center mb-16 opacity-0 animate-zoom-in" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Why Choose Regal Estate Consultants
             </h2>
             <p className="text-xl text-brand-grey max-w-3xl mx-auto">
-              Building trust through excellence, connecting you with premium properties 
+              Building trust through excellence, connecting you with premium properties
               and investment opportunities.
             </p>
           </div>
 
           {/* Trusted by Section */}
-          <div className="text-center mb-12 opacity-0 animate-slide-in-right" style={{animationDelay: '0.4s', animationFillMode: 'forwards'}}>
+          <div className="text-center mb-12 opacity-0 animate-slide-in-right" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
             <h3 className="text-2xl font-semibold text-primary mb-8">
               Trusted by India's Leading Developers
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
               <div className="group cursor-pointer">
-                <img 
-                  src="/lovable-uploads/3068d3a3-f113-4a53-81e7-7e7be23345e3.png" 
-                  alt="Adani Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
+                <img
+                  src="/lovable-uploads/3068d3a3-f113-4a53-81e7-7e7be23345e3.png"
+                  alt="Adani Realty"
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
                 />
               </div>
               <div className="group cursor-pointer">
-                <img 
-                  src="/lovable-uploads/b00d9894-3524-4d9b-8f50-33f2f333dcb5.png" 
-                  alt="Godrej Properties" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
+                <img
+                  src="/lovable-uploads/b00d9894-3524-4d9b-8f50-33f2f333dcb5.png"
+                  alt="Godrej Properties"
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
                 />
               </div>
               <div className="group cursor-pointer">
-                <img 
-                  src="/lovable-uploads/ad219bbd-a8e8-4e82-889c-30db765fb5ab.png" 
-                  alt="Raymond Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
+                <img
+                  src="/lovable-uploads/ad219bbd-a8e8-4e82-889c-30db765fb5ab.png"
+                  alt="Raymond Realty"
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
                 />
               </div>
               <div className="group cursor-pointer">
-                <img 
-                  src="/lovable-uploads/e21683e6-14b6-4729-828e-36c7d5923146.png" 
-                  alt="Lodha" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
+                <img
+                  src="/lovable-uploads/e21683e6-14b6-4729-828e-36c7d5923146.png"
+                  alt="Lodha"
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
                 />
               </div>
               <div className="group cursor-pointer">
-                <img 
-                  src="/lovable-uploads/0fe0702e-fe06-4a24-bb96-5325dbd4863c.png" 
-                  alt="DLF" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
+                <img
+                  src="/lovable-uploads/0fe0702e-fe06-4a24-bb96-5325dbd4863c.png"
+                  alt="DLF"
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
                 />
               </div>
               <div className="group cursor-pointer">
-                <img 
-                  src="/lovable-uploads/b9583c92-6074-4562-8a9f-a0a811a39d7e.png" 
-                  alt="LT Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold" 
+                <img
+                  src="/lovable-uploads/b9583c92-6074-4562-8a9f-a0a811a39d7e.png"
+                  alt="LT Realty"
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
                 />
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-left" style={{animationDelay: '0.6s', animationFillMode: 'forwards'}}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-left" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
             {highlights.map((highlight, index) => (
               <Card key={index} className="text-center p-6 hover:shadow-gold transition-all duration-300 border-brand-soft-gold/20">
                 <CardContent className="p-0">
@@ -266,12 +266,12 @@ export default function Home() {
       </section>
 
       {/* Featured Properties */}
-      <section 
+      <section
         className="py-20 bg-secondary/30"
         ref={(el) => el && (sectionsRef.current[2] = el)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 opacity-0 animate-slide-in-right" style={{animationDelay: '0.1s', animationFillMode: 'forwards'}}>
+          <div className="text-center mb-16 opacity-0 animate-slide-in-right" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Featured Properties
             </h2>
@@ -280,7 +280,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 animate-zoom-in" style={{animationDelay: '0.3s', animationFillMode: 'forwards'}}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 animate-zoom-in" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
             {featuredProperties.map((property) => (
               <Card key={property.id} className="overflow-hidden hover:shadow-luxury transition-all duration-300">
                 <div className="relative">
@@ -299,7 +299,7 @@ export default function Home() {
                   </h3>
                   <p className="text-brand-grey mb-2">{property.location}</p>
                   <p className="text-sm text-brand-grey mb-3">{property.description}</p>
-                  
+
                   <div className="space-y-2 mb-4">
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-primary">Area:</span>
@@ -321,8 +321,8 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  
-                  <Button 
+
+                  <Button
                     className="w-full bg-primary hover:bg-brand-navy"
                     onClick={() => {
                       const message = `Hi, I have an enquiry regarding property: ${property.title}`;
@@ -349,12 +349,12 @@ export default function Home() {
       </section>
 
       {/* Recognition and Awards */}
-      <section 
+      <section
         className="py-20 bg-background"
         ref={(el) => el && (sectionsRef.current[3] = el)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 opacity-0 animate-slide-in-left" style={{animationDelay: '0.1s', animationFillMode: 'forwards'}}>
+          <div className="text-center mb-16 opacity-0 animate-slide-in-left" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Recognition & Awards
             </h2>
@@ -362,8 +362,8 @@ export default function Home() {
               Celebrating excellence in real estate with industry recognition
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-right" style={{animationDelay: '0.3s', animationFillMode: 'forwards'}}>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-right" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
             <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
               <div className="relative">
                 <img
@@ -378,7 +378,7 @@ export default function Home() {
                 </div>
               </div>
             </Card>
-            
+
             <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
               <div className="relative">
                 <img
@@ -393,7 +393,7 @@ export default function Home() {
                 </div>
               </div>
             </Card>
-            
+
             <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
               <div className="relative">
                 <img
@@ -408,7 +408,7 @@ export default function Home() {
                 </div>
               </div>
             </Card>
-            
+
             <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
               <div className="relative">
                 <img
@@ -428,7 +428,7 @@ export default function Home() {
       </section>
 
       {/* Client Reviews */}
-      <section 
+      <section
         className="py-20 bg-gradient-hero text-white"
         ref={(el) => el && (sectionsRef.current[4] = el)}
       >
@@ -472,7 +472,7 @@ export default function Home() {
             Ready to Find Your Dream Property?
           </h2>
           <p className="text-xl text-primary/80 mb-8">
-            Connect with our experts today and discover premium real estate opportunities 
+            Connect with our experts today and discover premium real estate opportunities
             tailored to your needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
