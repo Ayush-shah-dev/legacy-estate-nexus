@@ -204,48 +204,48 @@ export default function Home() {
                 <img 
                   src="/lovable-uploads/3068d3a3-f113-4a53-81e7-7e7be23345e3.png" 
                   alt="Adani Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/b00d9894-3524-4d9b-8f50-33f2f333dcb5.png" 
                   alt="Godrej Properties" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/ad219bbd-a8e8-4e82-889c-30db765fb5ab.png" 
                   alt="Raymond Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/e21683e6-14b6-4729-828e-36c7d5923146.png" 
                   alt="Lodha" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/0fe0702e-fe06-4a24-bb96-5325dbd4863c.png" 
                   alt="DLF" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
                 />
               </div>
               <div className="group cursor-pointer">
                 <img 
                   src="/lovable-uploads/b9583c92-6074-4562-8a9f-a0a811a39d7e.png" 
                   alt="LT Realty" 
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-40 hover:opacity-80" 
+                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-70 hover:opacity-100" 
                 />
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.3s', animationFillMode: 'forwards'}}>
             {highlights.map((highlight, index) => (
               <Card key={index} className="text-center p-6 hover:shadow-gold transition-all duration-300 border-brand-soft-gold/20">
                 <CardContent className="p-0">
@@ -280,7 +280,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 animate-slide-up" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
             {featuredProperties.map((property) => (
               <Card key={property.id} className="overflow-hidden hover:shadow-luxury transition-all duration-300">
                 <div className="relative">
@@ -363,7 +363,7 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.4s', animationFillMode: 'forwards'}}>
             <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
               <div className="relative">
                 <img
