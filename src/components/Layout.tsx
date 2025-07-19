@@ -43,9 +43,6 @@ export const Layout = () => {
                 <div className="flex items-center">
                   MahaRERA
                 </div>
-                <div className="flex items-center">
-                  Ajay Punjabi
-                </div>
               </div>
             </div>
             <div className="flex-shrink-0">
