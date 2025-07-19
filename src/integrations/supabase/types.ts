@@ -35,6 +35,39 @@ export type Database = {
         }
         Relationships: []
       }
+      client_users: {
+        Row: {
+          company_name: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_name?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_name?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string
@@ -103,6 +136,7 @@ export type Database = {
           area_sqft: number | null
           bathrooms: number | null
           bedrooms: number | null
+          client_user_id: string | null
           created_at: string
           description: string | null
           featured: boolean | null
@@ -119,6 +153,7 @@ export type Database = {
           area_sqft?: number | null
           bathrooms?: number | null
           bedrooms?: number | null
+          client_user_id?: string | null
           created_at?: string
           description?: string | null
           featured?: boolean | null
@@ -135,6 +170,7 @@ export type Database = {
           area_sqft?: number | null
           bathrooms?: number | null
           bedrooms?: number | null
+          client_user_id?: string | null
           created_at?: string
           description?: string | null
           featured?: boolean | null
@@ -147,7 +183,15 @@ export type Database = {
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "properties_client_user_id_fkey"
+            columns: ["client_user_id"]
+            isOneToOne: false
+            referencedRelation: "client_users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reviews: {
         Row: {

@@ -9,11 +9,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Legacy from "./pages/Legacy";
 import Properties from "./pages/Properties";
+import PropertiesDatabase from "./pages/PropertiesDatabase";
 import Contact from "./pages/Contact";
 import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
 import Auth from "./pages/Auth";
 import AdminDashboard from "./pages/AdminDashboard";
+import ClientDashboard from "./pages/ClientDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,7 +31,7 @@ const App = () => (
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="legacy" element={<Legacy />} />
-              <Route path="properties" element={<Properties />} />
+              <Route path="properties" element={<PropertiesDatabase />} />
               <Route path="blogs" element={<Blogs />} />
               <Route path="blogs/:id" element={<BlogPost />} />
               <Route path="contact" element={<Contact />} />
@@ -40,6 +42,14 @@ const App = () => (
               element={
                 <ProtectedRoute requireAdmin={true}>
                   <AdminDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/client-dashboard" 
+              element={
+                <ProtectedRoute requireAdmin={false}>
+                  <ClientDashboard />
                 </ProtectedRoute>
               } 
             />
