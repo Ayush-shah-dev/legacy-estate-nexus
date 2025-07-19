@@ -94,22 +94,22 @@ export default function Home() {
 
   const reviews = [
     {
-      name: "Rajesh Sharma",
-      role: "Business Owner",
-      review: "Exceptional service and premium properties. EstateNexus helped me find my dream home with complete transparency.",
+      name: "Kinny Gidwani",
+      role: "Hong Kong Business Owner",
+      review: "Working with Regal Estate Consultants, under the leadership of Ajay Punjabi, has been a refreshing experience. As someone in the hospitality industry, I deeply appreciate their attention to detail, discretion, and premium property curation. Ajay's expertise and guidance made my investment journey in India extremely smooth and rewarding. A class apart.",
+      rating: 4
+    },
+    {
+      name: "Amit Kukreja",
+      role: "Dubai Business Owner",
+      review: "Real estate transactions require trust and clarity — both of which I found in abundance with Ajay Punjabi and Regal Estate Consultants. From the first call to the final signing, their team was proactive, insightful, and always aligned with my vision. For NRIs like me looking for smart investments back home, they are a blessing.",
       rating: 5
     },
     {
-      name: "Priya Nair",
-      role: "Investment Banker",
-      review: "Professional approach and excellent market insights. Highly recommend for serious property investments.",
-      rating: 5
-    },
-    {
-      name: "Amit Patel",
-      role: "Tech Executive",
-      review: "Smooth process from start to finish. The team's expertise in luxury properties is unmatched.",
-      rating: 5
+      name: "Sadanand Pujari",
+      role: "Restaurant Owner", 
+      review: "Ajay Punjabi is more than a consultant — he's an advisor you can count on. Regal Estate Consultants brings professionalism, sharp market sense, and above all, a commitment to client satisfaction. Their guidance helped me make a confident real estate investment in Mumbai. I look forward to many more.",
+      rating: 4.5
     }
   ];
 
@@ -447,8 +447,19 @@ export default function Home() {
               <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
                 <CardContent className="p-6">
                   <div className="flex mb-4">
-                    {[...Array(review.rating)].map((_, i) => (
+                    {[...Array(Math.floor(review.rating))].map((_, i) => (
                       <Star key={i} className="h-5 w-5 text-brand-classic-gold fill-current" />
+                    ))}
+                    {review.rating % 1 !== 0 && (
+                      <div className="relative">
+                        <Star className="h-5 w-5 text-gray-300" />
+                        <div className="absolute inset-0 overflow-hidden w-1/2">
+                          <Star className="h-5 w-5 text-brand-classic-gold fill-current" />
+                        </div>
+                      </div>
+                    )}
+                    {[...Array(5 - Math.ceil(review.rating))].map((_, i) => (
+                      <Star key={i + Math.ceil(review.rating)} className="h-5 w-5 text-gray-300" />
                     ))}
                   </div>
                   <p className="text-white/90 mb-4 italic">
