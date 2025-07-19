@@ -230,7 +230,9 @@ className = "fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white p
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="col-span-1 md:col-span-2">
           <div className="flex items-center mb-4">
-            <img src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png" alt="Regal Estate Consultants" className="h-24 w-auto" />
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg">
+              <img src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png" alt="Regal Estate Consultants" className="h-20 w-auto" />
+            </div>
           </div>
           <p className="text-primary-foreground/80 mb-4">
             Mumbai's trusted partner in premium real estate. Connecting dreams with reality through
