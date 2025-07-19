@@ -136,10 +136,7 @@ export default function Home() {
             Mumbai Real Estate,
             <span className="block text-brand-classic-gold">The Regal Way</span>
           </h1>
-          <p className="text-xl md:text-2xl mb-8 text-white/90 animate-slide-up">
-            Beyond homes. We curate lifestyles.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in mt-8">
             <Link to="/properties">
               <Button size="lg" className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300">
                 Explore Our Properties
