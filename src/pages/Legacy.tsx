@@ -279,6 +279,118 @@ export default function Legacy() {
         </div>
       </section>
 
+      {/* Professional Certificates */}
+      <section className="py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
+              Professional Certificates & Partnerships
+            </h2>
+            <p className="text-xl text-brand-grey">
+              Industry certifications and partnerships that validate our expertise and commitment
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Certificate 1 - Andheri West Estate Agent's Association Appreciation */}
+            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
+              <div className="relative">
+                <img
+                  src="/lovable-uploads/12493c0b-3f8c-4441-bf08-4e07ceceac85.png"
+                  alt="Certificate of Appreciation from Andheri West Estate Agent's Association"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold text-sm">Certificate of Appreciation</h3>
+                  <p className="text-xs text-white/80">AWEAA Recognition</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Certificate 2 - DLF Partnership */}
+            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
+              <div className="relative">
+                <img
+                  src="/lovable-uploads/4232ab82-271b-4d7c-99cb-e5ea49d1203a.png"
+                  alt="DLF Certificate of Partnership - Authorized Channel Partner"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold text-sm">DLF Partnership</h3>
+                  <p className="text-xs text-white/80">Authorized Channel Partner</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Certificate 3 - RICS Professional Development */}
+            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
+              <div className="relative">
+                <img
+                  src="/lovable-uploads/a82fbd5c-cfca-4f6a-8a32-cb392a5b160f.png"
+                  alt="RICS Management Development Program Certificate"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold text-sm">RICS Certification</h3>
+                  <p className="text-xs text-white/80">Professional Development</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Certificate 4 - Chandak Group Appreciation */}
+            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
+              <div className="relative">
+                <img
+                  src="/lovable-uploads/90c13836-623a-4b2a-82d7-c7d60d5045de.png"
+                  alt="Chandak Group Certificate of Appreciation"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold text-sm">Chandak Group</h3>
+                  <p className="text-xs text-white/80">Partner Appreciation</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Certificate 5 - AWEAA Silver Tray */}
+            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
+              <div className="relative">
+                <img
+                  src="/lovable-uploads/470e3a57-3b84-4823-a54c-a55dd20eb262.png"
+                  alt="AWEAA Silver Tray Award"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold text-sm">AWEAA Award</h3>
+                  <p className="text-xs text-white/80">Community Recognition</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Certificate 6 - Additional AWEAA Certificate */}
+            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
+              <div className="relative">
+                <img
+                  src="/lovable-uploads/5e945b9e-9120-4342-99ef-f542ec2b6765.png"
+                  alt="Additional AWEAA Certificate of Appreciation"
+                  className="w-full h-64 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="font-semibold text-sm">AWEAA Recognition</h3>
+                  <p className="text-xs text-white/80">Professional Excellence</p>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-premium text-white">
