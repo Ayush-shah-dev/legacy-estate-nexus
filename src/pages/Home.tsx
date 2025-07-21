@@ -123,6 +123,7 @@ export default function Home() {
           loop
           playsInline
           preload="auto"
+          controls={false}
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{ 
             clipPath: 'inset(0 0 15% 0)',
@@ -132,7 +133,8 @@ export default function Home() {
             top: '-10%',
             left: '0',
             width: '100%',
-            height: '120%'
+            height: '120%',
+            pointerEvents: 'none'
           }}
           onLoadedData={() => console.log('Video loaded')}
           onError={(e) => console.error('Video error:', e)}
