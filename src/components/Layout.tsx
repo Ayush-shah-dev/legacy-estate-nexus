@@ -34,9 +34,9 @@ export const Layout = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="bg-background/95 backdrop-blur-sm border-b sticky top-0 z-50">
+      <nav className="bg-background backdrop-blur-sm border-b sticky top-0 z-50 pt-4">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-22">
+          <div className="flex justify-between items-center h-22 pb-2">
             {/* Logo */}
             <div className="text-xs text-muted-foreground text-right">
               <div className="font-semibold text-brand-maroon">A51800000663
