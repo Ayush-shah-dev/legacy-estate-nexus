@@ -127,7 +127,7 @@ export default function Home() {
           style={{ 
             clipPath: 'inset(0 0 15% 0)',
             transform: 'scale(1.2)',
-            transformOrigin: 'center top'
+            transformOrigin: 'center center',
           }}
           onLoadedData={() => console.log('Video loaded')}
           onError={(e) => console.error('Video error:', e)}
