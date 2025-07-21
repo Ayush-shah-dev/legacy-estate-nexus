@@ -124,6 +124,11 @@ export default function Home() {
           playsInline
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover z-0"
+          style={{ 
+            clipPath: 'inset(0 0 8% 0)',
+            transform: 'scale(1.1)',
+            transformOrigin: 'center top'
+          }}
           onLoadedData={() => console.log('Video loaded')}
           onError={(e) => console.error('Video error:', e)}
         >
