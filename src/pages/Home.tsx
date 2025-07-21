@@ -125,8 +125,8 @@ export default function Home() {
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{ 
-            clipPath: 'inset(0 0 8% 0)',
-            transform: 'scale(1.1)',
+            clipPath: 'inset(0 0 15% 0)',
+            transform: 'scale(1.15)',
             transformOrigin: 'center top'
           }}
           onLoadedData={() => console.log('Video loaded')}
