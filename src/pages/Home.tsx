@@ -126,7 +126,7 @@ export default function Home() {
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{ 
             clipPath: 'inset(0 0 15% 0)',
-            transform: 'scale(1.15)',
+            transform: 'scale(1.2)',
             transformOrigin: 'center top'
           }}
           onLoadedData={() => console.log('Video loaded')}
