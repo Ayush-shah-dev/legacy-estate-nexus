@@ -1,13 +1,12 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Building2, Users, Award, Star, ArrowRight, Phone } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
-import heroImage from '@/assets/mumbai-skyline.jpg';
-import cinematicImage from '@/assets/mumbai-skyline-cinematic.jpg';
-import videoBackground from '../assets/BG_VID.mp4';
-
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Building2, Users, Award, Star, ArrowRight, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import heroImage from "@/assets/mumbai-skyline.jpg";
+import cinematicImage from "@/assets/mumbai-skyline-cinematic.jpg";
+ 
 export default function Home() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
@@ -16,7 +15,7 @@ export default function Home() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('animate-slide-up');
+            entry.target.classList.add("animate-slide-up");
           }
         });
       },
@@ -33,30 +32,34 @@ export default function Home() {
     {
       icon: Award,
       title: "37+ Years Legacy",
-      description: "37+ years of excellence in real estate development and investment guidance with 3rd generation realtors."
+      description:
+        "37+ years of excellence in real estate development and investment guidance with 3rd generation realtors.",
     },
     {
       icon: Building2,
       title: "Developer Connect",
-      description: "Direct partnerships with premium developers for exclusive pre-launch opportunities."
+      description:
+        "Direct partnerships with premium developers for exclusive pre-launch opportunities.",
     },
     {
       icon: Users,
       title: "Trust",
-      description: "5000+ satisfied clients and a track record of transparent dealings."
+      description:
+        "5000+ satisfied clients and a track record of transparent dealings.",
     },
     {
       icon: Star,
       title: "Premium Inventory",
-      description: "Curated collection of luxury properties in prime locations."
-    }
+      description:
+        "Curated collection of luxury properties in prime locations.",
+    },
   ];
 
   const stats = [
     { number: "37+", label: "Years Experience" },
     { number: "5000+", label: "Happy Clients" },
     { number: "₹500Cr+", label: "Worth Delivered" },
-    { number: "3rd Gen", label: "Realtors" }
+    { number: "3rd Gen", label: "Realtors" },
   ];
 
   const featuredProperties = [
@@ -64,84 +67,106 @@ export default function Home() {
       id: 1,
       title: "Adcore Tower - Premium Commercial Space",
       location: "Business District, Mumbai",
-      description: "Modern commercial tower with state-of-the-art facilities and premium office spaces in the heart of Mumbai's business district.",
+      description:
+        "Modern commercial tower with state-of-the-art facilities and premium office spaces in the heart of Mumbai's business district.",
       sqft: "500-5000 sq ft",
-      amenities: ["24x7 Security", "High-Speed Elevators", "Power Backup", "Parking", "Food Court"],
+      amenities: [
+        "24x7 Security",
+        "High-Speed Elevators",
+        "Power Backup",
+        "Parking",
+        "Food Court",
+      ],
       type: "Commercial",
-      image: "/lovable-uploads/b9bc318e-2fb5-480d-8ee8-3cdd6f790a65.png"
+      image: "/lovable-uploads/b9bc318e-2fb5-480d-8ee8-3cdd6f790a65.png",
     },
     {
       id: 2,
       title: "Westwood Heights - Luxury Residential",
       location: "Andheri West, Mumbai",
-      description: "Premium residential complex offering modern amenities and luxurious living spaces with excellent connectivity.",
+      description:
+        "Premium residential complex offering modern amenities and luxurious living spaces with excellent connectivity.",
       sqft: "800-1500 sq ft",
-      amenities: ["Swimming Pool", "Gym", "Children's Play Area", "Landscaped Gardens", "Club House"],
+      amenities: [
+        "Swimming Pool",
+        "Gym",
+        "Children's Play Area",
+        "Landscaped Gardens",
+        "Club House",
+      ],
       type: "Residential",
-      image: "/lovable-uploads/d2696bbb-2641-41bb-aa4f-23c280f24ea7.png"
+      image: "/lovable-uploads/d2696bbb-2641-41bb-aa4f-23c280f24ea7.png",
     },
     {
       id: 3,
       title: "Sky Gardens - Premium Twin Towers",
       location: "Goregaon East, Mumbai",
-      description: "Stunning twin tower development featuring spacious apartments with panoramic city views and world-class amenities.",
+      description:
+        "Stunning twin tower development featuring spacious apartments with panoramic city views and world-class amenities.",
       sqft: "900-2000 sq ft",
-      amenities: ["Sky Garden", "Infinity Pool", "Fitness Center", "Concierge Service", "Smart Home Features"],
+      amenities: [
+        "Sky Garden",
+        "Infinity Pool",
+        "Fitness Center",
+        "Concierge Service",
+        "Smart Home Features",
+      ],
       type: "Residential",
-      image: "/lovable-uploads/54d3e00b-85c8-49e0-830b-b268e2e83865.png"
-    }
+      image: "/lovable-uploads/54d3e00b-85c8-49e0-830b-b268e2e83865.png",
+    },
   ];
 
   const reviews = [
     {
       name: "Kinny Gidwani",
       role: "Hong Kong Business Owner",
-      review: "Working with Regal Estate Consultants, under the leadership of Ajay Punjabi, has been a refreshing experience. As someone in the hospitality industry, I deeply appreciate their attention to detail, discretion, and premium property curation. Ajay's expertise and guidance made my investment journey in India extremely smooth and rewarding. A class apart.",
-      rating: 4
+      review:
+        "Working with Regal Estate Consultants, under the leadership of Ajay Punjabi, has been a refreshing experience. As someone in the hospitality industry, I deeply appreciate their attention to detail, discretion, and premium property curation. Ajay's expertise and guidance made my investment journey in India extremely smooth and rewarding. A class apart.",
+      rating: 4,
     },
     {
       name: "Amit Kukreja",
       role: "Dubai Business Owner",
-      review: "Real estate transactions require trust and clarity — both of which I found in abundance with Ajay Punjabi and Regal Estate Consultants. From the first call to the final signing, their team was proactive, insightful, and always aligned with my vision. For NRIs like me looking for smart investments back home, they are a blessing.",
-      rating: 5
+      review:
+        "Real estate transactions require trust and clarity — both of which I found in abundance with Ajay Punjabi and Regal Estate Consultants. From the first call to the final signing, their team was proactive, insightful, and always aligned with my vision. For NRIs like me looking for smart investments back home, they are a blessing.",
+      rating: 5,
     },
     {
       name: "Sadanand Pujari",
-      role: "Restaurant Owner", 
-      review: "Ajay Punjabi is more than a consultant — he's an advisor you can count on. Regal Estate Consultants brings professionalism, sharp market sense, and above all, a commitment to client satisfaction. Their guidance helped me make a confident real estate investment in Mumbai. I look forward to many more.",
-      rating: 4.5
-    }
+      role: "Restaurant Owner",
+      review:
+        "Ajay Punjabi is more than a consultant — he's an advisor you can count on. Regal Estate Consultants brings professionalism, sharp market sense, and above all, a commitment to client satisfaction. Their guidance helped me make a confident real estate investment in Mumbai. I look forward to many more.",
+      rating: 4.5,
+    },
   ];
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          controls={false}
+        <iframe
+          src="https://player.vimeo.com/video/1103782919?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479&muted=1"
+          width="3840"
+          height="2160"
+          frameBorder="0"
+          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+          referrerPolicy="strict-origin-when-cross-origin"
+          title="BG_VID (1)"
           className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{ 
-            clipPath: 'inset(0 0 15% 0)',
-            transform: 'scale(1.25)',
-            transformOrigin: 'center top',
-            position: 'absolute',
-            top: '-10%',
-            left: '0',
-            width: '100%',
-            height: '120%',
-            pointerEvents: 'none'
+          style={{
+            clipPath: "inset(0 0 15% 0)",
+            transform: "scale(1.25)",
+            transformOrigin: "center top",
+            position: "absolute",
+            top: "-10%",
+            left: "0",
+            width: "100%",
+            height: "120%",
+            pointerEvents: "none",
           }}
-          onLoadedData={() => console.log('Video loaded')}
-          onError={(e) => console.error('Video error:', e)}
-        >
-          <source src={videoBackground} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+          onLoad={() => console.log("Iframe loaded")}
+          onError={(e) => console.error("Iframe error:", e)}
+        ></iframe>
         <div className="absolute inset-0 "></div>
         <div className="relative z-20 text-center text-white max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
@@ -150,13 +175,20 @@ export default function Home() {
           </h1>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in mt-8">
             <Link to="/properties">
-              <Button size="lg" className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300">
+              <Button
+                size="lg"
+                className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300"
+              >
                 Explore Our Properties
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
             <Link to="/contact">
-              <Button variant="outline" size="lg" className="border-white text-primary hover:bg-brand-classic-gold hover:text-white">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-white text-primary hover:bg-brand-classic-gold hover:text-white"
+              >
                 <Phone className="mr-2 h-5 w-5" />
                 Inquiry Form
               </Button>
@@ -172,9 +204,15 @@ export default function Home() {
       >
         <div className="absolute inset-0 bg-brand-maroon/5"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-0 animate-slide-in-left" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
+          <div
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-0 animate-slide-in-left"
+            style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
+          >
             {stats.map((stat, index) => (
-              <div key={index} className="text-center transform hover:scale-105 transition-all duration-300">
+              <div
+                key={index}
+                className="text-center transform hover:scale-105 transition-all duration-300"
+              >
                 <div className="text-4xl md:text-6xl font-bold text-primary mb-4 bg-gradient-to-r from-brand-maroon to-primary bg-clip-text text-transparent">
                   {stat.number}
                 </div>
@@ -193,18 +231,24 @@ export default function Home() {
         ref={(el) => el && (sectionsRef.current[1] = el)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 opacity-0 animate-zoom-in" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
+          <div
+            className="text-center mb-16 opacity-0 animate-zoom-in"
+            style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}
+          >
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Why Choose Regal Estate Consultants
             </h2>
             <p className="text-xl text-brand-grey max-w-3xl mx-auto">
-              Building trust through excellence, connecting you with premium properties
-              and investment opportunities.
+              Building trust through excellence, connecting you with premium
+              properties and investment opportunities.
             </p>
           </div>
 
           {/* Trusted by Section */}
-          <div className="text-center mb-12 opacity-0 animate-slide-in-right" style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}>
+          <div
+            className="text-center mb-12 opacity-0 animate-slide-in-right"
+            style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
+          >
             <h3 className="text-2xl font-semibold text-primary mb-8">
               Trusted by India's Leading Developers
             </h3>
@@ -254,9 +298,15 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-left" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-left"
+            style={{ animationDelay: "0.6s", animationFillMode: "forwards" }}
+          >
             {highlights.map((highlight, index) => (
-              <Card key={index} className="text-center p-6 hover:shadow-gold transition-all duration-300 border-brand-soft-gold/20">
+              <Card
+                key={index}
+                className="text-center p-6 hover:shadow-gold transition-all duration-300 border-brand-soft-gold/20"
+              >
                 <CardContent className="p-0">
                   <div className="mb-4">
                     <highlight.icon className="h-12 w-12 text-brand-classic-gold mx-auto" />
@@ -264,9 +314,7 @@ export default function Home() {
                   <h3 className="text-xl font-semibold text-primary mb-3">
                     {highlight.title}
                   </h3>
-                  <p className="text-brand-grey">
-                    {highlight.description}
-                  </p>
+                  <p className="text-brand-grey">{highlight.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -280,7 +328,10 @@ export default function Home() {
         ref={(el) => el && (sectionsRef.current[2] = el)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 opacity-0 animate-slide-in-right" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
+          <div
+            className="text-center mb-16 opacity-0 animate-slide-in-right"
+            style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}
+          >
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Featured Properties
             </h2>
@@ -289,9 +340,15 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 animate-zoom-in" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
+          <div
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 animate-zoom-in"
+            style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
+          >
             {featuredProperties.map((property) => (
-              <Card key={property.id} className="overflow-hidden hover:shadow-luxury transition-all duration-300">
+              <Card
+                key={property.id}
+                className="overflow-hidden hover:shadow-luxury transition-all duration-300"
+              >
                 <div className="relative">
                   <img
                     src={property.image}
@@ -307,23 +364,40 @@ export default function Home() {
                     {property.title}
                   </h3>
                   <p className="text-brand-grey mb-2">{property.location}</p>
-                  <p className="text-sm text-brand-grey mb-3">{property.description}</p>
+                  <p className="text-sm text-brand-grey mb-3">
+                    {property.description}
+                  </p>
 
                   <div className="space-y-2 mb-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-primary">Area:</span>
-                      <span className="text-sm text-brand-grey">{property.sqft}</span>
+                      <span className="text-sm font-medium text-primary">
+                        Area:
+                      </span>
+                      <span className="text-sm text-brand-grey">
+                        {property.sqft}
+                      </span>
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-sm font-medium text-primary mb-1">Amenities:</span>
+                      <span className="text-sm font-medium text-primary mb-1">
+                        Amenities:
+                      </span>
                       <div className="flex flex-wrap gap-1">
-                        {property.amenities.slice(0, 3).map((amenity, index) => (
-                          <Badge key={index} variant="outline" className="text-xs border-brand-classic-gold/50 text-brand-classic-gold">
-                            {amenity}
-                          </Badge>
-                        ))}
+                        {property.amenities
+                          .slice(0, 3)
+                          .map((amenity, index) => (
+                            <Badge
+                              key={index}
+                              variant="outline"
+                              className="text-xs border-brand-classic-gold/50 text-brand-classic-gold"
+                            >
+                              {amenity}
+                            </Badge>
+                          ))}
                         {property.amenities.length > 3 && (
-                          <Badge variant="outline" className="text-xs border-brand-classic-gold/50 text-brand-classic-gold">
+                          <Badge
+                            variant="outline"
+                            className="text-xs border-brand-classic-gold/50 text-brand-classic-gold"
+                          >
                             +{property.amenities.length - 3} more
                           </Badge>
                         )}
@@ -335,8 +409,10 @@ export default function Home() {
                     className="w-full bg-primary hover:bg-brand-navy"
                     onClick={() => {
                       const message = `Hi, I have an enquiry regarding property: ${property.title}`;
-                      const whatsappUrl = `https://wa.me/919930033056?text=${encodeURIComponent(message)}`;
-                      window.open(whatsappUrl, '_blank');
+                      const whatsappUrl = `https://wa.me/919930033056?text=${encodeURIComponent(
+                        message
+                      )}`;
+                      window.open(whatsappUrl, "_blank");
                     }}
                   >
                     Enquire Now
@@ -348,7 +424,11 @@ export default function Home() {
 
           <div className="text-center mt-12">
             <Link to="/properties">
-              <Button variant="outline" size="lg" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary"
+              >
                 Explore Our Properties
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -363,7 +443,10 @@ export default function Home() {
         ref={(el) => el && (sectionsRef.current[3] = el)}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 opacity-0 animate-slide-in-left" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
+          <div
+            className="text-center mb-16 opacity-0 animate-slide-in-left"
+            style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}
+          >
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
               Recognition & Awards
             </h2>
@@ -372,7 +455,10 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-right" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-right"
+            style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
+          >
             <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
               <div className="relative">
                 <img
@@ -383,7 +469,9 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 text-white">
                   <h3 className="font-semibold">ADCORE Partnership</h3>
-                  <p className="text-sm text-white/80">Developer Collaboration</p>
+                  <p className="text-sm text-white/80">
+                    Developer Collaboration
+                  </p>
                 </div>
               </div>
             </Card>
@@ -413,7 +501,9 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 text-white">
                   <h3 className="font-semibold">Industry Achievement</h3>
-                  <p className="text-sm text-white/80">Professional Excellence</p>
+                  <p className="text-sm text-white/80">
+                    Professional Excellence
+                  </p>
                 </div>
               </div>
             </Card>
@@ -453,11 +543,17 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {reviews.map((review, index) => (
-              <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
+              <Card
+                key={index}
+                className="bg-white/10 backdrop-blur-sm border-white/20 text-white"
+              >
                 <CardContent className="p-6">
                   <div className="flex mb-4">
                     {[...Array(Math.floor(review.rating))].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-brand-classic-gold fill-current" />
+                      <Star
+                        key={i}
+                        className="h-5 w-5 text-brand-classic-gold fill-current"
+                      />
                     ))}
                     {review.rating % 1 !== 0 && (
                       <div className="relative">
@@ -468,12 +564,13 @@ export default function Home() {
                       </div>
                     )}
                     {[...Array(5 - Math.ceil(review.rating))].map((_, i) => (
-                      <Star key={i + Math.ceil(review.rating)} className="h-5 w-5 text-gray-300" />
+                      <Star
+                        key={i + Math.ceil(review.rating)}
+                        className="h-5 w-5 text-gray-300"
+                      />
                     ))}
                   </div>
-                  <p className="text-white/90 mb-4 italic">
-                    "{review.review}"
-                  </p>
+                  <p className="text-white/90 mb-4 italic">"{review.review}"</p>
                   <div>
                     <div className="font-semibold">{review.name}</div>
                     <div className="text-white/70 text-sm">{review.role}</div>
@@ -492,16 +589,23 @@ export default function Home() {
             Ready to Find Your Dream Property?
           </h2>
           <p className="text-xl text-primary/80 mb-8">
-            Connect with our experts today and discover premium real estate opportunities
-            tailored to your needs.
+            Connect with our experts today and discover premium real estate
+            opportunities tailored to your needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary text-white hover:bg-brand-navy">
+            <Button
+              size="lg"
+              className="bg-primary text-white hover:bg-brand-navy"
+            >
               <Phone className="mr-2 h-5 w-5" />
               Call Now: +91 99300 33056
             </Button>
             <Link to="/contact">
-              <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-white">
+              <Button
+                variant="outline"
+                size="lg"
+                className="border-primary text-primary hover:bg-primary hover:text-white"
+              >
                 Inquiry Form
               </Button>
             </Link>
