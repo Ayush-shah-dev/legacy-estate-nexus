@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import heroImage from "@/assets/mumbai-skyline.jpg";
 import cinematicImage from "@/assets/mumbai-skyline-cinematic.jpg";
- 
+ import "./Home.css";
 export default function Home() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
@@ -143,35 +143,21 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <iframe
-          src="https://player.vimeo.com/video/1103782919?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0&background=1"
-          width="3840"
-          height="2160"
-          frameBorder="0"
-          allow="fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          title="BG_VID (1)"
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{
-            clipPath: "inset(0 0 15% 0)",
-            transform: "scale(1.25)",
-            transformOrigin: "center top",
-            position: "absolute",
-            top: "-10%",
-            left: "0",
-            width: "100%",
-            height: "120%",
-            pointerEvents: "none",
-          }}
-          onLoad={() => console.log("Iframe loaded")}
-          onError={(e) => console.error("Iframe error:", e)}
-        ></iframe>
-        <div className="absolute inset-0 "></div>
-        <div className="relative z-20 text-center text-white max-w-4xl mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
+      <section className="relative md:h-screen sm:h-800px flex items-center justify-center overflow-hidden">
+ <iframe
+        src="https://player.vimeo.com/video/1103782919?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0&background=1"
+        frameBorder="0"
+        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        title="BG_VID (1)"
+        className="hero-iframe"
+      ></iframe>
+      <div className="hero-overlay"></div>
+      <div className="hero-content">
+        <div>
+          <h1 className="animate-fade-in">
             Mumbai Real Estate,
-            <span className="block text-brand-classic-gold">The Regal Way</span>
+            <span>The Regal Way</span>
           </h1>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in mt-8">
             <Link to="/properties">
@@ -195,35 +181,8 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
-
-      {/* Stats Section */}
-      <section
-        className="py-20 bg-gradient-accent relative overflow-hidden"
-        ref={(el) => el && (sectionsRef.current[0] = el)}
-      >
-        <div className="absolute inset-0 bg-brand-maroon/5"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 opacity-0 animate-slide-in-left"
-            style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
-          >
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                className="text-center transform hover:scale-105 transition-all duration-300"
-              >
-                <div className="text-4xl md:text-6xl font-bold text-primary mb-4 bg-gradient-to-r from-brand-maroon to-primary bg-clip-text text-transparent">
-                  {stat.number}
-                </div>
-                <div className="text-brand-grey font-semibold text-lg">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      </div>
+</section>
 
       {/* Highlights Section */}
       <section

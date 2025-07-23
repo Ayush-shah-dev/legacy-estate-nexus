@@ -1,0 +1,74 @@
+.hero-section {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-iframe {
+  position: absolute;
+  top: -20%;
+  left: 0;
+  width: 90%;
+  height: 120%;
+  clip-path: inset(0 0 0 0); /* Full coverage */
+  transform: scale(1.2);
+  transform-origin: center top;
+  pointer-events: none;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Overlay for text readability */
+}
+
+.hero-content {
+  position: relative;
+  z-index: 20;
+  text-align: center;
+  color: white;
+  max-width: 64rem; /* Equivalent to max-w-4xl */
+  margin-inline: auto;
+  padding-inline: 1rem;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.hero-content h1 {
+  font-size: 3.75rem; /* text-5xl */
+  font-size: 4.5rem; /* md:text-7xl */
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  animation: fade-in 0.5s ease-in;
+}
+
+.hero-content h1 span {
+  display: block;
+  color: #d4af37; /* brand-classic-gold */
+}
+
+@media (max-width: 768px) {
+   
+  .hero-iframe {
+    transform: scale(2.5); /* Increased zoom for mobile */
+    top: 0%; /* Adjusted to center vertically */
+    height: 200px; /* Practical height for mobile coverage */
+  }
+
+  .hero-content {
+    min-height: auto; /* Remove fixed height to adapt to content */
+    padding-top: 20%; /* Add padding to ensure content isn't too close to top */
+    padding-bottom: 20%; /* Add padding to ensure content isn't too close to bottom */
+  }
+
+  .hero-content h1 {
+    font-size: 1.875rem; /* text-3xl */
+    font-size: 2.25rem; /* md:text-5xl */
+  }
+
+
+ 
+}
+
