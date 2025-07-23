@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import heroImage from '@/assets/mumbai-skyline.jpg';
 import cinematicImage from '@/assets/mumbai-skyline-cinematic.jpg';
-import videoBackground from '../assets/mumbai-skyline-new.mp4';
+import videoBackground from '../assets/BG_VID.mp4';
 
 export default function Home() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);

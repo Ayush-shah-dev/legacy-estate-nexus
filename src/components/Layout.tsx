@@ -1,10 +1,19 @@
-import { useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Menu, X, Phone, MessageCircle, LogIn, LogOut, Settings, Building } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
-import { cn } from '@/lib/utils';
-import { useVisitorTracking } from '@/hooks/useVisitorTracking';
+import { useState } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Menu,
+  X,
+  Phone,
+  MessageCircle,
+  LogIn,
+  LogOut,
+  Settings,
+  Building,
+} from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { cn } from "@/lib/utils";
+import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 
 export const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -15,17 +24,17 @@ export const Layout = () => {
   useVisitorTracking();
 
   const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Residential', path: '/properties?type=residential' },
-    { name: 'Commercial', path: '/properties?type=commercial' },
-    { name: 'Legacy', path: '/legacy' },
-    { name: 'Blogs', path: '/blogs' },
-    { name: 'Contact', path: '/contact' }
+    { name: "Home", path: "/" },
+    { name: "Residential", path: "/properties?type=residential" },
+    { name: "Commercial", path: "/properties?type=commercial" },
+    { name: "Legacy", path: "/legacy" },
+    { name: "Blogs", path: "/blogs" },
+    { name: "Contact", path: "/contact" },
   ];
 
   const isActive = (path: string) => {
     // Handle query parameters for properties pages
-    if (path.includes('?')) {
+    if (path.includes("?")) {
       return location.pathname + location.search === path;
     }
     return location.pathname === path;
@@ -39,15 +48,18 @@ export const Layout = () => {
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <div className="text-xs text-white/80 text-right">
-              <div className="font-semibold text-brand-classic-gold">A51800000663
-                <div className="flex items-center">
-                  MahaRERA
-                </div>
+              <div className="font-semibold text-brand-classic-gold">
+                A51800000663
+                <div className="flex items-center">MahaRERA</div>
               </div>
             </div>
             <div className="flex-shrink-0">
               <NavLink to="/" className="flex items-center">
-                <img src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png" alt="Regal Estate Consultants" className="h-24 w-auto" />
+                <img
+                  src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png"
+                  alt="Regal Estate Consultants"
+                  className="h-24 w-auto"
+                />
               </NavLink>
             </div>
 
@@ -80,7 +92,11 @@ export const Layout = () => {
                 <Phone className="h-4 w-4" />
                 <span>+91 99300 33056</span>
               </a>
-              <Button variant="outline" size="sm" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-black">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-black"
+              >
                 <NavLink to="/contact">Inquiry Form</NavLink>
               </Button>
 
@@ -95,7 +111,11 @@ export const Layout = () => {
                     </NavLink>
                   )}
                   <NavLink to="/client-dashboard">
-                    <Button variant="outline" size="sm" className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-white">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-white"
+                    >
                       <Building className="w-4 h-4 mr-2" />
                       Dashboard
                     </Button>
@@ -127,7 +147,11 @@ export const Layout = () => {
                 size="sm"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                {isMobileMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
               </Button>
             </div>
           </div>
@@ -165,15 +189,27 @@ export const Layout = () => {
                 {user ? (
                   <div className="space-y-2 px-3">
                     {isAdmin && (
-                      <NavLink to="/admin-dashboard" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Button variant="outline" className="w-full border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-black">
+                      <NavLink
+                        to="/admin-dashboard"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <Button
+                          variant="outline"
+                          className="w-full border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-black"
+                        >
                           <Settings className="w-4 h-4 mr-2" />
                           Admin Dashboard
                         </Button>
                       </NavLink>
                     )}
-                    <NavLink to="/client-dashboard" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="outline" className="w-full border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-black">
+                    <NavLink
+                      to="/client-dashboard"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Button
+                        variant="outline"
+                        className="w-full border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-black"
+                      >
                         <Building className="w-4 h-4 mr-2" />
                         Client Dashboard
                       </Button>
@@ -189,8 +225,14 @@ export const Layout = () => {
                   </div>
                 ) : (
                   <div className="px-3">
-                    <NavLink to="/auth" onClick={() => setIsMobileMenuOpen(false)}>
-                      <Button variant="outline" className="w-full border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-black">
+                    <NavLink
+                      to="/auth"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Button
+                        variant="outline"
+                        className="w-full border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-black"
+                      >
                         <LogIn className="w-4 h-4 mr-2" />
                         Sign In
                       </Button>
@@ -227,26 +269,40 @@ export const Layout = () => {
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center mb-4">
                 <div className="bg-white/95 backdrop-blur-sm rounded-lg p-3 shadow-lg">
-                  <img src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png" alt="Regal Estate Consultants" className="h-20 w-auto" />
+                  <img
+                    src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png"
+                    alt="Regal Estate Consultants"
+                    className="h-20 w-auto"
+                  />
                 </div>
               </div>
               <p className="text-primary-foreground/80 mb-4">
-                Mumbai's trusted partner in premium real estate. Connecting dreams with reality through
-                exceptional properties and unmatched service across the city.
+                Mumbai's trusted partner in premium real estate. Connecting
+                dreams with reality through exceptional properties and unmatched
+                service across the city.
               </p>
               <div className="flex flex-col space-y-2">
-                <a href="tel:+919930033056" className="text-brand-classic-gold hover:text-secondary transition-colors">
+                <a
+                  href="tel:+919930033056"
+                  className="text-brand-classic-gold hover:text-secondary transition-colors"
+                >
                   +91 99300 33056
                 </a>
-                <a href="mailto:sales.regalestate@gmail.com" className="text-brand-classic-gold hover:text-secondary transition-colors">
+                <a
+                  href="mailto:sales.regalestate@gmail.com"
+                  className="text-brand-classic-gold hover:text-secondary transition-colors"
+                >
                   sales.regalestate@gmail.com
                 </a>
                 <p className="text-primary-foreground/80 text-sm">
-                  Shop No. 3, Bharat Altavistas, next to ICICI Bank, Lokhandwala Complex, Andheri West, Mumbai, Maharashtra 400053
+                  Shop No. 3, Bharat Altavistas, next to ICICI Bank, Lokhandwala
+                  Complex, Andheri West, Mumbai, Maharashtra 400053
                 </p>
                 <p className="text-primary-foreground/80 text-sm mt-2">
-                  <strong>Business Hours:</strong><br />
-                  Monday - Saturday: 10am - 6pm<br />
+                  <strong>Business Hours:</strong>
+                  <br />
+                  Monday - Saturday: 10am - 6pm
+                  <br />
                   Sunday: 10am - 4pm
                 </p>
               </div>
