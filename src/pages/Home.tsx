@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import heroImage from "@/assets/mumbai-skyline.jpg";
 import cinematicImage from "@/assets/mumbai-skyline-cinematic.jpg";
- import "./Home.css";
+import "./Home.css";
+import videoBackground from "../assets/BG_MAIN.mp4";
 export default function Home() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
 
@@ -144,45 +145,62 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative md:h-screen sm:h-800px flex items-center justify-center overflow-hidden">
- <iframe
-        src="https://player.vimeo.com/video/1103782919?title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479&autoplay=1&muted=1&loop=1&controls=0&background=1"
-        frameBorder="0"
-        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        title="BG_VID (1)"
-        className="hero-iframe"
-      ></iframe>
-      <div className="hero-overlay"></div>
-      <div className="hero-content">
-        <div>
-          <h1 className="animate-fade-in">
-            Mumbai Real Estate,
-            <span>The Regal Way</span>
-          </h1>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in mt-8">
-            <Link to="/properties">
-              <Button
-                size="lg"
-                className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300"
-              >
-                Explore Our Properties
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Link to="/contact">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-white text-primary hover:bg-brand-classic-gold hover:text-white"
-              >
-                <Phone className="mr-2 h-5 w-5" />
-                Inquiry Form
-              </Button>
-            </Link>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          controls={false}
+          className="absolute inset-0 w-full h-full object-cover z-0"
+          style={{
+            clipPath: "inset(0 0 15% 0)",
+            transform: "scale(1.25)",
+            transformOrigin: "center top",
+            position: "absolute",
+            top: "-10%",
+            left: "0",
+            width: "100%",
+            height: "120%",
+            pointerEvents: "none",
+          }}
+          onLoadedData={() => console.log("Video loaded")}
+          onError={(e) => console.error("Video error:", e)}
+        >
+          <source src={videoBackground} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <div>
+            <h1 className="animate-fade-in">
+              Mumbai Real Estate,
+              <span>The Regal Way</span>
+            </h1>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in mt-8">
+              <Link to="/properties">
+                <Button
+                  size="lg"
+                  className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300"
+                >
+                  Explore Our Properties
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link to="/contact">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-white text-primary hover:bg-brand-classic-gold hover:text-white"
+                >
+                  <Phone className="mr-2 h-5 w-5" />
+                  Inquiry Form
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-</section>
+      </section>
 
       {/* Highlights Section */}
       <section
