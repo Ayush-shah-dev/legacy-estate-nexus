@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { OTPVerification } from '@/components/OTPVerification';
+import Map from '@/components/Map';
 import { 
   Phone, 
   Mail, 
@@ -541,19 +542,16 @@ export default function Contact() {
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
               Find Us on Map
             </h2>
+            <p className="text-xl text-brand-grey">
+              Interactive map showing our office location in Lokhandwala Complex
+            </p>
           </div>
           
-          <div className="bg-gradient-accent rounded-lg h-96 flex items-center justify-center">
-            <div className="text-center">
-              <MapPin className="h-16 w-16 text-brand-classic-gold mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-primary mb-2">
-                Interactive Map Coming Soon
-              </h3>
-              <p className="text-brand-grey">
-                Explore our office locations with detailed directions
-              </p>
-            </div>
-          </div>
+          <Map 
+            center={[72.8347, 19.1136]} 
+            zoom={15}
+            address="Regal Estate Consultants"
+          />
         </div>
       </section>
     </div>
