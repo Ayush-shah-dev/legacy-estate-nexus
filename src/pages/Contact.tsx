@@ -547,11 +547,7 @@ export default function Contact() {
             </p>
           </div>
           
-          <Map 
-            center={[72.8347, 19.1136]} 
-            zoom={15}
-            address="Regal Estate Consultants"
-          />
+          <Map />
         </div>
       </section>
     </div>
