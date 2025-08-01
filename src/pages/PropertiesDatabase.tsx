@@ -149,7 +149,7 @@ export default function PropertiesDatabase() {
                 <SelectValue placeholder="Property Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
                 <SelectItem value="Residential">Residential</SelectItem>
                 <SelectItem value="Commercial">Commercial</SelectItem>
                 <SelectItem value="Villa">Villa</SelectItem>
@@ -162,7 +162,7 @@ export default function PropertiesDatabase() {
                 <SelectValue placeholder="Location" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Locations</SelectItem>
+                <SelectItem value="all">All Locations</SelectItem>
                 <SelectItem value="Mumbai">Mumbai</SelectItem>
                 <SelectItem value="Andheri">Andheri</SelectItem>
                 <SelectItem value="Bandra">Bandra</SelectItem>
@@ -223,8 +223,8 @@ export default function PropertiesDatabase() {
               <Button 
                 onClick={() => {
                   setSearchTerm('');
-                  setPropertyType('');
-                  setLocationFilter('');
+                  setPropertyType('all');
+                  setLocationFilter('all');
                 }}
                 className="bg-brand-classic-gold hover:bg-brand-soft-gold text-white"
               >
