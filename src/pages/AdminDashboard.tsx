@@ -23,6 +23,7 @@ import {
   ArrowDownRight
 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell } from 'recharts';
+import PropertyManagement from "@/components/PropertyManagement";
 
 interface ContactSubmission {
   id: string;
@@ -514,51 +515,7 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="properties">
-            <Card className="bg-black/20 border-orange-500/20 backdrop-blur-xl">
-              <CardHeader>
-                <CardTitle className="text-orange-100 flex items-center">
-                  <Home className="w-5 h-5 mr-2 text-orange-400" />
-                  Properties ({properties.length})
-                </CardTitle>
-                <CardDescription className="text-gray-400">
-                  Manage property listings
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-gray-700">
-                      <TableHead className="text-gray-300">Title</TableHead>
-                      <TableHead className="text-gray-300">Type</TableHead>
-                      <TableHead className="text-gray-300">Price</TableHead>
-                      <TableHead className="text-gray-300">Location</TableHead>
-                      <TableHead className="text-gray-300">Status</TableHead>
-                      <TableHead className="text-gray-300">Featured</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {properties.map((property) => (
-                      <TableRow key={property.id} className="border-gray-700 hover:bg-white/5">
-                        <TableCell className="text-white font-medium">{property.title}</TableCell>
-                        <TableCell className="text-gray-300 capitalize">{property.property_type}</TableCell>
-                        <TableCell className="text-emerald-400">₹{property.price?.toLocaleString()}</TableCell>
-                        <TableCell className="text-gray-300">{property.location}</TableCell>
-                        <TableCell>
-                          <Badge variant={property.status === 'available' ? "default" : "secondary"}>
-                            {property.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant={property.featured ? "default" : "outline"}>
-                            {property.featured ? "Yes" : "No"}
-                          </Badge>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
+            <PropertyManagement />
           </TabsContent>
 
           <TabsContent value="reviews">
