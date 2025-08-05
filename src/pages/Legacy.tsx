@@ -22,7 +22,7 @@ export default function Legacy() {
     },
     {
       year: "1988",
-      title: "Lokhandwala Move",
+      title: "Lokhandwala Move", 
       description: "The firm moved to Lokhandwala Complex, where it firmly took root and established its presence."
     },
     {
@@ -161,7 +161,7 @@ export default function Legacy() {
             </div>
             <div className="relative">
               <img
-                src="/lovable-uploads/ddbb868c-5a8c-4d6a-b245-40c4e68d276b.png"
+                src="/lovable-uploads/dd4d2925-40db-4f86-ba79-c05c68adc814.png"
                 alt="Mr. Narendra Punjabi and Ajay Punjabi - Father and Son Legacy"
                 className="rounded-lg shadow-luxury"
               />
@@ -390,7 +390,6 @@ export default function Legacy() {
           </div>
         </div>
       </section>
-
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-premium text-white">
