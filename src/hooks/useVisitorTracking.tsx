@@ -10,26 +10,27 @@ export const useVisitorTracking = () => {
 
     const trackVisitor = async () => {
       try {
-        // Check if visitor already exists to avoid 406 error
+        // Check if visitor already exists to avoid duplicate inserts
         const { data: existingVisitor, error: checkError } = await supabase
           .from('visitors')
           .select('id')
-          .eq('session_id', sessionId)
-          .maybeSingle();
+          .eq('session_id', sessionId);
 
-        if (checkError && checkError.code !== 'PGRST116') {
+        if (checkError) {
           console.log('Error checking visitor:', checkError.message);
           return;
         }
 
         // Only insert if visitor doesn't exist
-        if (!existingVisitor) {
+        if (!existingVisitor || existingVisitor.length === 0) {
           const { error: insertError } = await supabase
             .from('visitors')
             .insert({
               session_id: sessionId,
               user_agent: navigator.userAgent,
               ip_address: 'unknown', // We can't get real IP on client side
+              page_visited: currentPath, // Include the required page_visited field
+              referrer: document.referrer || null,
               time_spent_seconds: 0
             });
 
