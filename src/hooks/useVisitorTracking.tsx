@@ -1,125 +1,126 @@
-import { useEffect, useRef } from 'react';
+
+import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-// Generate a unique session ID
-const generateSessionId = () => {
-  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-};
-
-// Get or create session ID
-const getSessionId = () => {
-  let sessionId = sessionStorage.getItem('visitor_session_id');
-  if (!sessionId) {
-    sessionId = generateSessionId();
-    sessionStorage.setItem('visitor_session_id', sessionId);
-  }
-  return sessionId;
-};
-
 export const useVisitorTracking = () => {
-  const startTimeRef = useRef<number>(Date.now());
-  const currentPageRef = useRef<string>('');
-
   useEffect(() => {
-    const sessionId = getSessionId();
-    const startTime = Date.now();
-    startTimeRef.current = startTime;
-    currentPageRef.current = window.location.pathname;
+    const sessionId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    let startTime = Date.now();
+    let currentPath = window.location.pathname;
 
-    // Track page entry
-    const trackPageEntry = async () => {
+    const trackVisitor = async () => {
       try {
-        await supabase.from('page_views').insert({
-          visitor_session_id: sessionId,
-          page_path: window.location.pathname,
-          time_entered: new Date().toISOString(),
-        });
-
-        // Also update/insert visitor record
-        const { data: existingVisitor } = await supabase
+        // Check if visitor already exists to avoid 406 error
+        const { data: existingVisitor, error: checkError } = await supabase
           .from('visitors')
           .select('id')
           .eq('session_id', sessionId)
-          .single();
+          .maybeSingle();
 
+        if (checkError && checkError.code !== 'PGRST116') {
+          console.log('Error checking visitor:', checkError.message);
+          return;
+        }
+
+        // Only insert if visitor doesn't exist
         if (!existingVisitor) {
-          await supabase.from('visitors').insert({
-            session_id: sessionId,
-            ip_address: null, // Will be populated by server if needed
-            user_agent: navigator.userAgent,
-            page_visited: window.location.pathname,
-            referrer: document.referrer || null,
-            time_spent_seconds: 0,
-          });
-        }
-      } catch (error) {
-        console.error('Error tracking page entry:', error);
-      }
-    };
-
-    trackPageEntry();
-
-    // Track page exit
-    const trackPageExit = async () => {
-      const timeSpent = Math.round((Date.now() - startTimeRef.current) / 1000);
-      
-      try {
-        // Update the most recent page view for this session
-        await supabase
-          .from('page_views')
-          .update({
-            time_left: new Date().toISOString(),
-            time_spent_seconds: timeSpent,
-          })
-          .eq('visitor_session_id', sessionId)
-          .eq('page_path', currentPageRef.current)
-          .is('time_left', null);
-
-        // Update total time spent for visitor
-        const { data: visitor } = await supabase
-          .from('visitors')
-          .select('time_spent_seconds')
-          .eq('session_id', sessionId)
-          .single();
-
-        if (visitor) {
-          await supabase
+          const { error: insertError } = await supabase
             .from('visitors')
-            .update({
-              time_spent_seconds: (visitor.time_spent_seconds || 0) + timeSpent,
-            })
-            .eq('session_id', sessionId);
+            .insert({
+              session_id: sessionId,
+              user_agent: navigator.userAgent,
+              ip_address: 'unknown', // We can't get real IP on client side
+              time_spent_seconds: 0
+            });
+
+          if (insertError) {
+            console.log('Error inserting visitor:', insertError.message);
+          }
         }
       } catch (error) {
-        console.error('Error tracking page exit:', error);
+        console.log('Error in trackVisitor:', error);
       }
     };
 
-    // Track visibility changes
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') {
-        trackPageExit();
-      } else {
-        startTimeRef.current = Date.now();
+    const trackPageView = async (path: string) => {
+      try {
+        const { error } = await supabase
+          .from('page_views')
+          .insert({
+            visitor_session_id: sessionId,
+            page_path: path,
+            time_spent_seconds: 0
+          });
+
+        if (error) {
+          console.log('Error tracking page view:', error.message);
+        }
+      } catch (error) {
+        console.log('Error in trackPageView:', error);
       }
     };
 
-    // Track page unload
+    const updateTimeSpent = async () => {
+      try {
+        const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+        
+        // Update visitor time spent
+        const { error: visitorError } = await supabase
+          .from('visitors')
+          .update({ time_spent_seconds: timeSpent })
+          .eq('session_id', sessionId);
+
+        if (visitorError) {
+          console.log('Error updating visitor time:', visitorError.message);
+        }
+
+        // Update current page view time spent
+        const { error: pageError } = await supabase
+          .from('page_views')
+          .update({ time_spent_seconds: timeSpent })
+          .eq('visitor_session_id', sessionId)
+          .eq('page_path', currentPath)
+          .order('created_at', { ascending: false })
+          .limit(1);
+
+        if (pageError) {
+          console.log('Error updating page time:', pageError.message);
+        }
+      } catch (error) {
+        console.log('Error in updateTimeSpent:', error);
+      }
+    };
+
+    // Track initial visitor and page view
+    trackVisitor();
+    trackPageView(currentPath);
+
+    // Update time spent every 30 seconds
+    const timeInterval = setInterval(updateTimeSpent, 30000);
+
+    // Track route changes
+    const handleRouteChange = () => {
+      updateTimeSpent(); // Update time for previous page
+      currentPath = window.location.pathname;
+      startTime = Date.now();
+      trackPageView(currentPath); // Track new page
+    };
+
+    // Listen for route changes (for SPA navigation)
+    window.addEventListener('popstate', handleRouteChange);
+
+    // Update time spent before page unload
     const handleBeforeUnload = () => {
-      trackPageExit();
+      updateTimeSpent();
     };
 
-    // Add event listeners
-    document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('beforeunload', handleBeforeUnload);
 
-    // Cleanup function
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearInterval(timeInterval);
+      window.removeEventListener('popstate', handleRouteChange);
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      trackPageExit();
+      updateTimeSpent(); // Final update
     };
   }, []);
-
-  return null;
 };

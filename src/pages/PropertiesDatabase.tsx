@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -38,9 +39,9 @@ interface Property {
 
 export default function PropertiesDatabase() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [priceRange, setPriceRange] = useState('');
-  const [propertyType, setPropertyType] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
+  const [priceRange, setPriceRange] = useState('all');
+  const [propertyType, setPropertyType] = useState('all');
+  const [locationFilter, setLocationFilter] = useState('all');
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -68,20 +69,26 @@ export default function PropertiesDatabase() {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setProperties(data || []);
+      if (error) {
+        console.error('Supabase error:', error);
+        // Don't throw error, just set empty array
+        setProperties([]);
+      } else {
+        setProperties(data || []);
+      }
     } catch (error) {
       console.error('Error fetching properties:', error);
+      setProperties([]);
     } finally {
       setLoading(false);
     }
   };
 
   const filteredProperties = properties.filter(property => {
-    const matchesSearch = property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = property.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (property.location?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
-    const matchesType = !propertyType || propertyType === 'all' || property.property_type === propertyType;
-    const matchesLocation = !locationFilter || locationFilter === 'all' || (property.location?.includes(locationFilter) || false);
+    const matchesType = propertyType === 'all' || property.property_type === propertyType;
+    const matchesLocation = locationFilter === 'all' || (property.location?.includes(locationFilter) || false);
     
     return matchesSearch && matchesType && matchesLocation;
   });
@@ -201,7 +208,7 @@ export default function PropertiesDatabase() {
               </p>
             </div>
             
-            <Select>
+            <Select defaultValue="newest">
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
