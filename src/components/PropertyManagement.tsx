@@ -7,8 +7,9 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Edit, Trash2, Search, Home } from "lucide-react";
+import { Plus, Search, Home } from "lucide-react";
 import PropertyForm from "./PropertyForm";
+import AdminPropertyActions from "./AdminPropertyActions";
 
 interface Property {
   id: string;
@@ -257,24 +258,11 @@ const PropertyManagement = () => {
                       )}
                     </TableCell>
                     <TableCell>
-                      <div className="flex space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEdit(property)}
-                          className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDelete(property.id)}
-                          className="border-red-500/50 text-red-400 hover:bg-red-500/10"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
+                      <AdminPropertyActions
+                        property={property}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
