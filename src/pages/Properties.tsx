@@ -21,9 +21,9 @@ import {
 
 export default function Properties() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [priceRange, setPriceRange] = useState('');
-  const [propertyType, setPropertyType] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
+  const [priceRange, setPriceRange] = useState('all');
+  const [propertyType, setPropertyType] = useState('all');
+  const [locationFilter, setLocationFilter] = useState('all');
   const location = useLocation();
   
   // Get URL parameters to determine if showing residential or commercial
