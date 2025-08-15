@@ -1,45 +1,42 @@
 
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
-import { Plus, Edit, Trash2, Search, FileText, Upload } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { Plus, Edit, Trash2, Save, X, Upload, Shield } from 'lucide-react';
+import { uploadImageSecurely, validateImageFile, deleteImageSecurely } from '@/utils/secureUpload';
 
 interface Blog {
   id: string;
   title: string;
   short_summary: string;
   content: string;
-  featured_image: string | null;
+  featured_image?: string;
   status: 'published' | 'draft';
-  published_date: string;
+  published_date?: string;
   created_at: string;
   updated_at: string;
 }
 
-const BlogManagement = () => {
+export default function BlogManagement() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [editingBlog, setEditingBlog] = useState<Blog | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
-    title: "",
-    short_summary: "",
-    content: "",
-    status: "draft" as 'published' | 'draft'
+    title: '',
+    short_summary: '',
+    content: '',
+    featured_image: '',
+    status: 'draft' as 'published' | 'draft'
   });
 
   useEffect(() => {
@@ -48,6 +45,7 @@ const BlogManagement = () => {
 
   const fetchBlogs = async () => {
     try {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
@@ -63,56 +61,117 @@ const BlogManagement = () => {
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const uploadImage = async (file: File): Promise<string | null> => {
+  const handleInputChange = (field: string, value: string) => {
+    // Basic XSS prevention - remove script tags and dangerous content
+    const sanitizedValue = value.replace(/<script[^>]*>.*?<\/script>/gi, '');
+    
+    setFormData(prev => ({
+      ...prev,
+      [field]: sanitizedValue
+    }));
+  };
+
+  const handleImageUpload = async (file: File) => {
+    setUploadingImage(true);
+    
     try {
-      setUploading(true);
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      // Validate file first
+      const validation = await validateImageFile(file);
+      if (!validation.valid) {
+        toast({
+          title: "Invalid File",
+          description: validation.error,
+          variant: "destructive",
+        });
+        return;
+      }
 
-      const { error: uploadError } = await supabase.storage
-        .from('blogs')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data } = supabase.storage
-        .from('blogs')
-        .getPublicUrl(filePath);
-
-      return data.publicUrl;
+      const result = await uploadImageSecurely(file, 'blogs');
+      if (result.success && result.url) {
+        setFormData(prev => ({
+          ...prev,
+          featured_image: result.url
+        }));
+        toast({
+          title: "Success",
+          description: "Image uploaded successfully",
+        });
+      } else {
+        toast({
+          title: "Upload Failed",
+          description: result.error || "Failed to upload image",
+          variant: "destructive",
+        });
+      }
     } catch (error) {
-      console.error('Error uploading image:', error);
       toast({
         title: "Error",
         description: "Failed to upload image",
         variant: "destructive",
       });
-      return null;
     } finally {
-      setUploading(false);
+      setUploadingImage(false);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    try {
-      let imageUrl = editingBlog?.featured_image || null;
-      
-      if (imageFile) {
-        imageUrl = await uploadImage(imageFile);
-        if (!imageUrl) return;
-      }
+  const validateForm = (): boolean => {
+    if (!formData.title.trim() || formData.title.length < 3) {
+      toast({
+        title: "Validation Error",
+        description: "Title must be at least 3 characters long",
+        variant: "destructive",
+      });
+      return false;
+    }
 
+    if (!formData.short_summary.trim() || formData.short_summary.length < 10) {
+      toast({
+        title: "Validation Error",
+        description: "Short summary must be at least 10 characters long",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (!formData.content.trim() || formData.content.length < 50) {
+      toast({
+        title: "Validation Error",
+        description: "Content must be at least 50 characters long",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    // Check for potential XSS in content
+    const xssPattern = /<script|javascript:|on\w+=/i;
+    if (xssPattern.test(formData.content)) {
+      toast({
+        title: "Security Error",
+        description: "Content contains potentially dangerous scripts",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+    try {
       const blogData = {
-        ...formData,
-        featured_image: imageUrl,
-        published_date: formData.status === 'published' ? new Date().toISOString() : null
+        title: formData.title.trim(),
+        short_summary: formData.short_summary.trim(),
+        content: formData.content.trim(),
+        featured_image: formData.featured_image || null,
+        status: formData.status,
+        ...(formData.status === 'published' && { published_date: new Date().toISOString() })
       };
 
       if (editingBlog) {
@@ -120,7 +179,7 @@ const BlogManagement = () => {
           .from('blogs')
           .update(blogData)
           .eq('id', editingBlog.id);
-
+        
         if (error) throw error;
         
         toast({
@@ -131,16 +190,15 @@ const BlogManagement = () => {
         const { error } = await supabase
           .from('blogs')
           .insert([blogData]);
-
+        
         if (error) throw error;
-
+        
         toast({
           title: "Success",
           description: "Blog created successfully",
         });
       }
 
-      setDialogOpen(false);
       resetForm();
       fetchBlogs();
     } catch (error) {
@@ -150,17 +208,35 @@ const BlogManagement = () => {
         description: "Failed to save blog",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleEdit = (blog: Blog) => {
+    setEditingBlog(blog);
+    setFormData({
+      title: blog.title,
+      short_summary: blog.short_summary,
+      content: blog.content,
+      featured_image: blog.featured_image || '',
+      status: blog.status
+    });
+  };
+
+  const handleDelete = async (blog: Blog) => {
     if (!confirm('Are you sure you want to delete this blog?')) return;
 
     try {
+      // Delete associated image if exists
+      if (blog.featured_image) {
+        await deleteImageSecurely(blog.featured_image, 'blogs');
+      }
+
       const { error } = await supabase
         .from('blogs')
         .delete()
-        .eq('id', id);
+        .eq('id', blog.id);
 
       if (error) throw error;
 
@@ -168,7 +244,7 @@ const BlogManagement = () => {
         title: "Success",
         description: "Blog deleted successfully",
       });
-
+      
       fetchBlogs();
     } catch (error) {
       console.error('Error deleting blog:', error);
@@ -180,228 +256,203 @@ const BlogManagement = () => {
     }
   };
 
-  const openEditDialog = (blog: Blog) => {
-    setEditingBlog(blog);
-    setFormData({
-      title: blog.title,
-      short_summary: blog.short_summary,
-      content: blog.content,
-      status: blog.status
-    });
-    setDialogOpen(true);
-  };
-
   const resetForm = () => {
-    setEditingBlog(null);
     setFormData({
-      title: "",
-      short_summary: "",
-      content: "",
-      status: "draft"
+      title: '',
+      short_summary: '',
+      content: '',
+      featured_image: '',
+      status: 'draft'
     });
-    setImageFile(null);
+    setEditingBlog(null);
   };
 
   const filteredBlogs = blogs.filter(blog =>
     blog.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-48">
-        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
+  if (isLoading) {
+    return <div className="text-center">Loading blogs...</div>;
   }
 
   return (
-    <Card className="bg-black/20 border-blue-500/20 backdrop-blur-xl">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-blue-100 flex items-center">
-              <FileText className="w-5 h-5 mr-2 text-blue-400" />
-              Blog Management ({blogs.length})
-            </CardTitle>
-            <CardDescription className="text-gray-400">
-              Manage blog posts and articles
-            </CardDescription>
-          </div>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button 
-                onClick={resetForm}
-                className="bg-blue-500/20 border-blue-500/50 text-blue-400 hover:bg-blue-500/30"
+    <div className="space-y-6">
+      {/* Form */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Shield className="h-5 w-5 text-green-600" />
+            <span>{editingBlog ? 'Edit Blog' : 'Create New Blog'}</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Title *</label>
+              <Input
+                placeholder="Enter blog title"
+                value={formData.title}
+                onChange={(e) => handleInputChange('title', e.target.value)}
+                maxLength={200}
+                required
+              />
+              <p className="text-xs text-gray-500 mt-1">{formData.title.length}/200</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Status</label>
+              <Select 
+                value={formData.status} 
+                onValueChange={(value: 'published' | 'draft') => 
+                  setFormData(prev => ({ ...prev, status: value }))
+                }
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Add Blog
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="draft">Draft</SelectItem>
+                  <SelectItem value="published">Published</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Short Summary *</label>
+            <Textarea
+              placeholder="Brief summary of the blog post"
+              value={formData.short_summary}
+              onChange={(e) => handleInputChange('short_summary', e.target.value)}
+              rows={3}
+              maxLength={500}
+              required
+            />
+            <p className="text-xs text-gray-500 mt-1">{formData.short_summary.length}/500</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Featured Image</label>
+            <div className="space-y-2">
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImageUpload(file);
+                }}
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90"
+                disabled={uploadingImage}
+              />
+              {uploadingImage && <p className="text-sm text-blue-600">Uploading...</p>}
+              {formData.featured_image && (
+                <div className="mt-2">
+                  <img 
+                    src={formData.featured_image} 
+                    alt="Preview" 
+                    className="w-32 h-32 object-cover rounded-lg"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setFormData(prev => ({ ...prev, featured_image: '' }))}
+                    className="mt-2"
+                  >
+                    Remove Image
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Content *</label>
+            <Textarea
+              placeholder="Write your blog content here..."
+              value={formData.content}
+              onChange={(e) => handleInputChange('content', e.target.value)}
+              rows={8}
+              maxLength={10000}
+              required
+            />
+            <p className="text-xs text-gray-500 mt-1">{formData.content.length}/10000</p>
+          </div>
+
+          <div className="flex space-x-2">
+            <Button onClick={handleSubmit} disabled={isSubmitting}>
+              <Save className="h-4 w-4 mr-2" />
+              {isSubmitting ? 'Saving...' : editingBlog ? 'Update Blog' : 'Create Blog'}
+            </Button>
+            {editingBlog && (
+              <Button variant="outline" onClick={resetForm}>
+                <X className="h-4 w-4 mr-2" />
+                Cancel
               </Button>
-            </DialogTrigger>
-            <DialogContent className="bg-slate-900 border-blue-500/20 text-white max-w-2xl">
-              <DialogHeader>
-                <DialogTitle className="text-blue-100">
-                  {editingBlog ? 'Edit Blog' : 'Create New Blog'}
-                </DialogTitle>
-                <DialogDescription className="text-gray-400">
-                  {editingBlog ? 'Update blog details' : 'Add a new blog post'}
-                </DialogDescription>
-              </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <Label htmlFor="title" className="text-gray-300">Title</Label>
-                  <Input
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="bg-slate-800 border-gray-600 text-white"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="short_summary" className="text-gray-300">Short Summary</Label>
-                  <Textarea
-                    id="short_summary"
-                    value={formData.short_summary}
-                    onChange={(e) => setFormData({ ...formData, short_summary: e.target.value })}
-                    className="bg-slate-800 border-gray-600 text-white"
-                    rows={2}
-                    required
-                  />
-                </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
-                <div>
-                  <Label htmlFor="content" className="text-gray-300">Content</Label>
-                  <Textarea
-                    id="content"
-                    value={formData.content}
-                    onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                    className="bg-slate-800 border-gray-600 text-white"
-                    rows={6}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="image" className="text-gray-300">Featured Image</Label>
-                  <Input
-                    id="image"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-                    className="bg-slate-800 border-gray-600 text-white"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="status" className="text-gray-300">Status</Label>
-                  <Select value={formData.status} onValueChange={(value: 'published' | 'draft') => setFormData({ ...formData, status: value })}>
-                    <SelectTrigger className="bg-slate-800 border-gray-600 text-white">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-slate-800 border-gray-600">
-                      <SelectItem value="draft">Draft</SelectItem>
-                      <SelectItem value="published">Published</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex justify-end space-x-2">
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={() => setDialogOpen(false)}
-                    className="border-gray-600 text-gray-300"
-                  >
-                    Cancel
-                  </Button>
-                  <Button 
-                    type="submit" 
-                    disabled={uploading}
-                    className="bg-blue-500 hover:bg-blue-600 text-white"
-                  >
-                    {uploading ? (
-                      <>
-                        <Upload className="w-4 h-4 mr-2 animate-spin" />
-                        Uploading...
-                      </>
-                    ) : (
-                      editingBlog ? 'Update' : 'Create'
-                    )}
-                  </Button>
-                </div>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-4">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+      {/* Blog List */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Manage Blogs</CardTitle>
+          <div className="flex justify-between items-center">
             <Input
-              placeholder="Search blogs by title..."
+              placeholder="Search blogs..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-slate-800 border-gray-600 text-white"
+              className="max-w-sm"
             />
           </div>
-        </div>
-
-        <Table>
-          <TableHeader>
-            <TableRow className="border-gray-700">
-              <TableHead className="text-gray-300">Title</TableHead>
-              <TableHead className="text-gray-300">Status</TableHead>
-              <TableHead className="text-gray-300">Published Date</TableHead>
-              <TableHead className="text-gray-300">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
             {filteredBlogs.map((blog) => (
-              <TableRow key={blog.id} className="border-gray-700 hover:bg-white/5">
-                <TableCell className="text-white font-medium">{blog.title}</TableCell>
-                <TableCell>
-                  <Badge variant={blog.status === 'published' ? "default" : "secondary"}>
-                    {blog.status}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-gray-300">
-                  {blog.published_date ? new Date(blog.published_date).toLocaleDateString() : '-'}
-                </TableCell>
-                <TableCell>
+              <div key={blog.id} className="border rounded-lg p-4">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-lg">{blog.title}</h3>
+                    <p className="text-gray-600 text-sm mb-2">{blog.short_summary}</p>
+                    <div className="flex items-center space-x-4 text-sm text-gray-500">
+                      <span className={`px-2 py-1 rounded text-xs ${
+                        blog.status === 'published' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {blog.status}
+                      </span>
+                      <span>Created: {new Date(blog.created_at).toLocaleDateString()}</span>
+                      {blog.published_date && (
+                        <span>Published: {new Date(blog.published_date).toLocaleDateString()}</span>
+                      )}
+                    </div>
+                  </div>
                   <div className="flex space-x-2">
                     <Button
-                      size="sm"
                       variant="outline"
-                      onClick={() => openEditDialog(blog)}
-                      className="border-blue-500/50 text-blue-400 hover:bg-blue-500/20"
+                      size="sm"
+                      onClick={() => handleEdit(blog)}
                     >
-                      <Edit className="w-4 h-4" />
+                      <Edit className="h-4 w-4" />
                     </Button>
                     <Button
+                      variant="destructive"
                       size="sm"
-                      variant="outline"
-                      onClick={() => handleDelete(blog.id)}
-                      className="border-red-500/50 text-red-400 hover:bg-red-500/20"
+                      onClick={() => handleDelete(blog)}
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
-                </TableCell>
-              </TableRow>
+                </div>
+              </div>
             ))}
-          </TableBody>
-        </Table>
-
-        {filteredBlogs.length === 0 && (
-          <div className="text-center py-8 text-gray-400">
-            {searchTerm ? 'No blogs found matching your search.' : 'No blogs found. Create your first blog post!'}
+            {filteredBlogs.length === 0 && (
+              <p className="text-center text-gray-500 py-8">No blogs found</p>
+            )}
           </div>
-        )}
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
-};
-
-export default BlogManagement;
+}
