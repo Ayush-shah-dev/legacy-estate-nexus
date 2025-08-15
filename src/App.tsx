@@ -1,3 +1,4 @@
+
 import {
   BrowserRouter,
   Routes,
@@ -11,13 +12,13 @@ import {
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-import { AuthProvider } from "./context/AuthContext";
-import Layout from "./components/Layout";
+import { AuthProvider } from "./hooks/useAuth";
+import { Layout } from "./components/Layout";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import Properties from "./pages/Properties";
 import AdminDashboard from "./pages/AdminDashboard";
-import Login from "./pages/Login";
+import Auth from "./pages/Auth";
 import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
 
@@ -39,7 +40,7 @@ function App() {
                 <Route path="/blog/:id" element={<BlogPost />} />
               </Route>
               <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/auth" element={<Auth />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
