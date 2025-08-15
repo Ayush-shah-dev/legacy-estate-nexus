@@ -1,15 +1,11 @@
-
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Building2, Users, Award, Star, ArrowRight, Phone } from "lucide-react";
+import { ArrowRight, MapPin, Bed, Bath, Square, Star, MessageSquare, Play, Pause } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import heroImage from "@/assets/mumbai-skyline.jpg";
-import cinematicImage from "@/assets/mumbai-skyline-cinematic.jpg";
-import "./Home.css";
-import videoBackground from "../assets/BG_MAIN.mp4";
+import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 
 interface Testimonial {
   id: string;
@@ -17,30 +13,17 @@ interface Testimonial {
   designation: string | null;
   quote: string;
   profile_image: string | null;
+  status: 'draft' | 'published';
+  created_at: string;
+  updated_at: string;
 }
 
-export default function Home() {
-  const sectionsRef = useRef<(HTMLElement | null)[]>([]);
+const Home = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-slide-up");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    sectionsRef.current.forEach((section) => {
-      if (section) observer.observe(section);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+  
+  useVisitorTracking();
 
   useEffect(() => {
     fetchTestimonials();
@@ -61,346 +44,162 @@ export default function Home() {
     }
   };
 
-  const highlights = [
-    {
-      icon: Award,
-      title: "37+ Years Legacy",
-      description:
-        "37+ years of excellence in real estate development and investment guidance with 3rd generation realtors.",
-    },
-    {
-      icon: Building2,
-      title: "Developer Connect",
-      description:
-        "Direct partnerships with premium developers for exclusive pre-launch opportunities.",
-    },
-    {
-      icon: Users,
-      title: "Trust",
-      description:
-        "5000+ satisfied clients and a track record of transparent dealings.",
-    },
-    {
-      icon: Star,
-      title: "Premium Inventory",
-      description:
-        "Curated collection of luxury properties in prime locations.",
-    },
-  ];
+  // Auto-advance testimonials
+  useEffect(() => {
+    if (testimonials.length > 1) {
+      const timer = setInterval(() => {
+        setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+      }, 5000);
+      return () => clearInterval(timer);
+    }
+  }, [testimonials.length]);
 
-  const stats = [
-    { number: "37+", label: "Years Experience" },
-    { number: "5000+", label: "Happy Clients" },
-    { number: "₹500Cr+", label: "Worth Delivered" },
-    { number: "3rd Gen", label: "Realtors" },
-  ];
+  const toggleVideo = () => {
+    const video = document.querySelector('video');
+    if (video) {
+      if (isVideoPlaying) {
+        video.pause();
+      } else {
+        video.play();
+      }
+      setIsVideoPlaying(!isVideoPlaying);
+    }
+  };
 
   const featuredProperties = [
     {
       id: 1,
-      title: "Adcore Tower - Premium Commercial Space",
-      location: "Business District, Mumbai",
-      description:
-        "Modern commercial tower with state-of-the-art facilities and premium office spaces in the heart of Mumbai's business district.",
-      sqft: "500-5000 sq ft",
-      amenities: [
-        "24x7 Security",
-        "High-Speed Elevators",
-        "Power Backup",
-        "Parking",
-        "Food Court",
-      ],
-      type: "Commercial",
-      image: "/lovable-uploads/b9bc318e-2fb5-480d-8ee8-3cdd6f790a65.png",
+      title: "Luxury Penthouse in Bandra",
+      location: "Bandra West, Mumbai",
+      price: "₹5.2 Cr",
+      bedrooms: 3,
+      bathrooms: 3,
+      area: 2800,
+      image: "/lovable-uploads/2f60dc4d-2374-4ea6-bcda-23a90e3fda86.png",
+      featured: true
     },
     {
       id: 2,
-      title: "Westwood Heights - Luxury Residential",
-      location: "Andheri West, Mumbai",
-      description:
-        "Premium residential complex offering modern amenities and luxurious living spaces with excellent connectivity.",
-      sqft: "800-1500 sq ft",
-      amenities: [
-        "Swimming Pool",
-        "Gym",
-        "Children's Play Area",
-        "Landscaped Gardens",
-        "Club House",
-      ],
-      type: "Residential",
-      image: "/lovable-uploads/d2696bbb-2641-41bb-aa4f-23c280f24ea7.png",
+      title: "Sea View Apartment in Marine Drive",
+      location: "Marine Drive, Mumbai",
+      price: "₹8.5 Cr",
+      bedrooms: 4,
+      bathrooms: 4,
+      area: 3200,
+      image: "/lovable-uploads/37bf2cc1-1729-4cbb-bec7-87df5c333ea1.png",
+      featured: true
     },
     {
       id: 3,
-      title: "Sky Gardens - Premium Twin Towers",
-      location: "Goregaon East, Mumbai",
-      description:
-        "Stunning twin tower development featuring spacious apartments with panoramic city views and world-class amenities.",
-      sqft: "900-2000 sq ft",
-      amenities: [
-        "Sky Garden",
-        "Infinity Pool",
-        "Fitness Center",
-        "Concierge Service",
-        "Smart Home Features",
-      ],
-      type: "Residential",
-      image: "/lovable-uploads/54d3e00b-85c8-49e0-830b-b268e2e83865.png",
-    },
+      title: "Modern Villa in Juhu",
+      location: "Juhu, Mumbai",
+      price: "₹12 Cr",
+      bedrooms: 5,
+      bathrooms: 6,
+      area: 4500,
+      image: "/lovable-uploads/4232ab82-271b-4d7c-99cb-e5ea49d1203a.png",
+      featured: true
+    }
   ];
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative md:h-screen sm:h-800px flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <video
           autoPlay
           muted
           loop
-          playsInline
-          preload="auto"
-          controls={false}
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{
-            clipPath: "inset(0 0 15% 0)",
-            transform: "scale(1.25)",
-            transformOrigin: "center top",
-            position: "absolute",
-            top: "-10%",
-            left: "0",
-            width: "100%",
-            height: "120%",
-            pointerEvents: "none",
-          }}
-          onLoadedData={() => console.log("Video loaded")}
-          onError={(e) => console.error("Video error:", e)}
+          className="absolute inset-0 w-full h-full object-cover"
         >
-          <source src={videoBackground} type="video/mp4" />
-          Your browser does not support the video tag.
+          <source src="/src/assets/BG_MAIN.mp4" type="video/mp4" />
         </video>
-        <div className="hero-overlay"></div>
-        <div className="hero-content">
-          <div>
-            <h1 className="animate-fade-in">
-              Mumbai Real Estate,
-              <span>The Regal Way</span>
-            </h1>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in mt-8">
-              <Link to="/properties">
-                <Button
-                  size="lg"
-                  className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300"
-                >
-                  Explore Our Properties
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+        
+        <div className="absolute inset-0 bg-black/40" />
+        
+        <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
+            Find Your Dream
+            <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              Property
+            </span>
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 text-gray-200 animate-fade-in-delay">
+            Discover premium properties in Mumbai's most prestigious locations
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-delay-2">
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-4">
+              <Link to="/properties" className="flex items-center">
+                Browse Properties
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
-              <Link to="/contact">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-white text-primary hover:bg-brand-classic-gold hover:text-white"
-                >
-                  <Phone className="mr-2 h-5 w-5" />
-                  Inquiry Form
-                </Button>
-              </Link>
-            </div>
+            </Button>
+            <Button size="lg" variant="outline" className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-black">
+              <Link to="/contact">Get Consultation</Link>
+            </Button>
           </div>
         </div>
-      </section>
 
-      {/* Highlights Section */}
-      <section
-        className="py-20 bg-background"
-        ref={(el) => el && (sectionsRef.current[1] = el)}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className="text-center mb-16 opacity-0 animate-zoom-in"
-            style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-              Why Choose Regal Estate Consultants
-            </h2>
-            <p className="text-xl text-brand-grey max-w-3xl mx-auto">
-              Building trust through excellence, connecting you with premium
-              properties and investment opportunities.
-            </p>
-          </div>
-
-          {/* Trusted by Section */}
-          <div
-            className="text-center mb-12 opacity-0 animate-slide-in-right"
-            style={{ animationDelay: "0.4s", animationFillMode: "forwards" }}
-          >
-            <h3 className="text-2xl font-semibold text-primary mb-8">
-              Trusted by India's Leading Developers
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
-              <div className="group cursor-pointer">
-                <img
-                  src="/lovable-uploads/3068d3a3-f113-4a53-81e7-7e7be23345e3.png"
-                  alt="Adani Realty"
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
-                />
-              </div>
-              <div className="group cursor-pointer">
-                <img
-                  src="/lovable-uploads/b00d9894-3524-4d9b-8f50-33f2f333dcb5.png"
-                  alt="Godrej Properties"
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
-                />
-              </div>
-              <div className="group cursor-pointer">
-                <img
-                  src="/lovable-uploads/ad219bbd-a8e8-4e82-889c-30db765fb5ab.png"
-                  alt="Raymond Realty"
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
-                />
-              </div>
-              <div className="group cursor-pointer">
-                <img
-                  src="/lovable-uploads/e21683e6-14b6-4729-828e-36c7d5923146.png"
-                  alt="Lodha"
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
-                />
-              </div>
-              <div className="group cursor-pointer">
-                <img
-                  src="/lovable-uploads/0fe0702e-fe06-4a24-bb96-5325dbd4863c.png"
-                  alt="DLF"
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
-                />
-              </div>
-              <div className="group cursor-pointer">
-                <img
-                  src="/lovable-uploads/b9583c92-6074-4562-8a9f-a0a811a39d7e.png"
-                  alt="LT Realty"
-                  className="h-16 w-auto transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-lg opacity-100 hover:brightness-110 hover:shadow-gold"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-left"
-            style={{ animationDelay: "0.6s", animationFillMode: "forwards" }}
-          >
-            {highlights.map((highlight, index) => (
-              <Card
-                key={index}
-                className="text-center p-6 hover:shadow-gold transition-all duration-300 border-brand-soft-gold/20"
-              >
-                <CardContent className="p-0">
-                  <div className="mb-4">
-                    <highlight.icon className="h-12 w-12 text-brand-classic-gold mx-auto" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-primary mb-3">
-                    {highlight.title}
-                  </h3>
-                  <p className="text-brand-grey">{highlight.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
+        <button
+          onClick={toggleVideo}
+          className="absolute bottom-6 right-6 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-colors"
+        >
+          {isVideoPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+        </button>
       </section>
 
       {/* Featured Properties */}
-      <section
-        className="py-20 bg-secondary/30"
-        ref={(el) => el && (sectionsRef.current[2] = el)}
-      >
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className="text-center mb-16 opacity-0 animate-slide-in-right"
-            style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-              Featured Properties
-            </h2>
-            <p className="text-xl text-brand-grey">
-              Discover our handpicked selection of premium properties
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Featured Properties</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Handpicked premium properties that define luxury living in Mumbai
             </p>
           </div>
 
-          <div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 animate-zoom-in"
-            style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
-          >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {featuredProperties.map((property) => (
-              <Card
-                key={property.id}
-                className="overflow-hidden hover:shadow-luxury transition-all duration-300"
-              >
-                <div className="relative">
+              <Card key={property.id} className="group hover:shadow-2xl transition-all duration-300 border-0 bg-white">
+                <div className="relative overflow-hidden rounded-t-lg">
                   <img
                     src={property.image}
                     alt={property.title}
-                    className="w-full h-64 object-cover"
+                    className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <Badge className="absolute top-4 right-4 bg-brand-maroon text-white">
-                    {property.type}
-                  </Badge>
+                  {property.featured && (
+                    <Badge className="absolute top-4 left-4 bg-blue-600 hover:bg-blue-700">
+                      Featured
+                    </Badge>
+                  )}
+                  <div className="absolute top-4 right-4 bg-black/70 text-white px-3 py-1 rounded-full font-semibold">
+                    {property.price}
+                  </div>
                 </div>
                 <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-primary mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
                     {property.title}
                   </h3>
-                  <p className="text-brand-grey mb-2">{property.location}</p>
-                  <p className="text-sm text-brand-grey mb-3">
-                    {property.description}
+                  <p className="text-gray-600 mb-4 flex items-center">
+                    <MapPin className="h-4 w-4 mr-1" />
+                    {property.location}
                   </p>
-
-                  <div className="space-y-2 mb-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-primary">
-                        Area:
-                      </span>
-                      <span className="text-sm text-brand-grey">
-                        {property.sqft}
-                      </span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium text-primary mb-1">
-                        Amenities:
-                      </span>
-                      <div className="flex flex-wrap gap-1">
-                        {property.amenities
-                          .slice(0, 3)
-                          .map((amenity, index) => (
-                            <Badge
-                              key={index}
-                              variant="outline"
-                              className="text-xs border-brand-classic-gold/50 text-brand-classic-gold"
-                            >
-                              {amenity}
-                            </Badge>
-                          ))}
-                        {property.amenities.length > 3 && (
-                          <Badge
-                            variant="outline"
-                            className="text-xs border-brand-classic-gold/50 text-brand-classic-gold"
-                          >
-                            +{property.amenities.length - 3} more
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
+                  <div className="flex justify-between text-sm text-gray-500 mb-4">
+                    <span className="flex items-center">
+                      <Bed className="h-4 w-4 mr-1" />
+                      {property.bedrooms} Beds
+                    </span>
+                    <span className="flex items-center">
+                      <Bath className="h-4 w-4 mr-1" />
+                      {property.bathrooms} Baths
+                    </span>
+                    <span className="flex items-center">
+                      <Square className="h-4 w-4 mr-1" />
+                      {property.area} sq ft
+                    </span>
                   </div>
-
-                  <Button
-                    className="w-full bg-primary hover:bg-brand-navy"
-                    onClick={() => {
-                      const message = `Hi, I have an enquiry regarding property: ${property.title}`;
-                      const whatsappUrl = `https://wa.me/919930033056?text=${encodeURIComponent(
-                        message
-                      )}`;
-                      window.open(whatsappUrl, "_blank");
-                    }}
-                  >
-                    Enquire Now
+                  <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                    View Details
                   </Button>
                 </CardContent>
               </Card>
@@ -408,199 +207,141 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-12">
-            <Link to="/properties">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-primary"
-              >
-                Explore Our Properties
+            <Button size="lg" variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white">
+              <Link to="/properties" className="flex items-center">
+                View All Properties
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* Recognition and Awards */}
-      <section
-        className="py-20 bg-background"
-        ref={(el) => el && (sectionsRef.current[3] = el)}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            className="text-center mb-16 opacity-0 animate-slide-in-left"
-            style={{ animationDelay: "0.1s", animationFillMode: "forwards" }}
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-              Recognition & Awards
-            </h2>
-            <p className="text-xl text-brand-grey">
-              Celebrating excellence in real estate with industry recognition
-            </p>
-          </div>
-
-          <div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 opacity-0 animate-slide-in-right"
-            style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
-          >
-            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
-              <div className="relative">
-                <img
-                  src="/lovable-uploads/99682767-ed37-4fb6-977f-72742d568258.png"
-                  alt="ADCORE Developers Recognition"
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="font-semibold">ADCORE Partnership</h3>
-                  <p className="text-sm text-white/80">
-                    Developer Collaboration
-                  </p>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
-              <div className="relative">
-                <img
-                  src="/lovable-uploads/2b1cae59-7af3-4cf0-ab36-fb6eebbf72e9.png"
-                  alt="Paranjape Award Recognition"
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="font-semibold">Excellence Award</h3>
-                  <p className="text-sm text-white/80">Paranjape Recognition</p>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
-              <div className="relative">
-                <img
-                  src="/lovable-uploads/81becc39-07c6-4115-b1fc-ba74122c8561.png"
-                  alt="Industry Achievement Award"
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="font-semibold">Industry Achievement</h3>
-                  <p className="text-sm text-white/80">
-                    Professional Excellence
-                  </p>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="overflow-hidden hover:shadow-luxury transition-all duration-300 hover:scale-105">
-              <div className="relative">
-                <img
-                  src="/lovable-uploads/37bf2cc1-1729-4cbb-bec7-87df5c333ea1.png"
-                  alt="Real Estate Excellence Award"
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="font-semibold">Real Estate Excellence</h3>
-                  <p className="text-sm text-white/80">Industry Leadership</p>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Client Reviews - Now Dynamic from Supabase */}
+      {/* Client Testimonials */}
       {testimonials.length > 0 && (
-        <section
-          className="py-20 bg-gradient-hero text-white"
-          ref={(el) => el && (sectionsRef.current[4] = el)}
-        >
+        <section className="py-20 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                Client Testimonials
-              </h2>
-              <p className="text-xl text-white/90">
-                Hear from our satisfied clients about their experience
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Clients Say</h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Real experiences from satisfied property owners and investors
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {testimonials.slice(0, 3).map((testimonial) => (
-                <Card
-                  key={testimonial.id}
-                  className="bg-white/10 backdrop-blur-sm border-white/20 text-white"
-                >
-                  <CardContent className="p-6">
-                    <div className="flex mb-4 justify-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="h-5 w-5 text-brand-classic-gold fill-current"
-                        />
-                      ))}
+            <div className="relative max-w-4xl mx-auto">
+              <div className="bg-gray-50 rounded-2xl p-8 md:p-12">
+                <div className="flex justify-center mb-6">
+                  <div className="flex space-x-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-6 w-6 fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                </div>
+                
+                <blockquote className="text-xl md:text-2xl text-gray-700 text-center mb-8 leading-relaxed">
+                  "{testimonials[currentTestimonial]?.quote}"
+                </blockquote>
+                
+                <div className="flex items-center justify-center space-x-4">
+                  {testimonials[currentTestimonial]?.profile_image && (
+                    <img
+                      src={testimonials[currentTestimonial].profile_image}
+                      alt={testimonials[currentTestimonial].name}
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
+                  )}
+                  <div className="text-center">
+                    <div className="font-semibold text-gray-900 text-lg">
+                      {testimonials[currentTestimonial]?.name}
                     </div>
-                    <p className="text-white/90 mb-4 italic">"{testimonial.quote}"</p>
-                    <div className="flex items-center space-x-3">
-                      {testimonial.profile_image ? (
-                        <img
-                          src={testimonial.profile_image}
-                          alt={testimonial.name}
-                          className="w-12 h-12 rounded-full object-cover"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="w-12 h-12 rounded-full bg-brand-classic-gold/20 flex items-center justify-center">
-                          <Users className="w-6 h-6 text-brand-classic-gold" />
-                        </div>
-                      )}
-                      <div>
-                        <div className="font-semibold">{testimonial.name}</div>
-                        {testimonial.designation && (
-                          <div className="text-white/70 text-sm">{testimonial.designation}</div>
-                        )}
+                    {testimonials[currentTestimonial]?.designation && (
+                      <div className="text-gray-600">
+                        {testimonials[currentTestimonial].designation}
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Testimonial Navigation Dots */}
+              {testimonials.length > 1 && (
+                <div className="flex justify-center mt-8 space-x-2">
+                  {testimonials.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentTestimonial(index)}
+                      className={`w-3 h-3 rounded-full transition-colors ${
+                        index === currentTestimonial ? 'bg-blue-600' : 'bg-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>
       )}
 
+      {/* About Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                25 Years of Excellence in Mumbai Real Estate
+              </h2>
+              <p className="text-lg text-gray-600 mb-6">
+                We've been helping families and investors find their perfect properties in Mumbai for over two decades. Our deep understanding of the local market, combined with personalized service, makes us your trusted partner in real estate.
+              </p>
+              <div className="grid grid-cols-2 gap-6 mb-8">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">500+</div>
+                  <div className="text-gray-600">Properties Sold</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">200+</div>
+                  <div className="text-gray-600">Happy Families</div>
+                </div>
+              </div>
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
+                <Link to="/contact">Schedule Consultation</Link>
+              </Button>
+            </div>
+            <div className="relative">
+              <img
+                src="/lovable-uploads/mumbai-skyline-cinematic.jpg"
+                alt="Mumbai skyline"
+                className="rounded-lg shadow-2xl"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-20 bg-brand-classic-gold">
+      <section className="py-20 bg-blue-600">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-6">
+          <h2 className="text-4xl font-bold text-white mb-6">
             Ready to Find Your Dream Property?
           </h2>
-          <p className="text-xl text-primary/80 mb-8">
-            Connect with our experts today and discover premium real estate
-            opportunities tailored to your needs.
+          <p className="text-xl text-blue-100 mb-8">
+            Let our experienced team guide you through Mumbai's premium real estate market
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-primary text-white hover:bg-brand-navy"
-            >
-              <Phone className="mr-2 h-5 w-5" />
-              Call Now: +91 99300 33056
+            <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
+              <Link to="/properties">Browse Properties</Link>
             </Button>
-            <Link to="/contact">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-primary text-primary hover:bg-primary hover:text-white"
-              >
-                Inquiry Form
-              </Button>
-            </Link>
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+              <Link to="/contact" className="flex items-center">
+                <MessageSquare className="mr-2 h-5 w-5" />
+                Get in Touch
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
     </div>
   );
-}
+};
+
+export default Home;
