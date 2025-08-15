@@ -1,18 +1,149 @@
-import { SecureContactForm } from '@/components/SecureContactForm';
-import Map from '@/components/Map';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { OTPVerification } from '@/components/OTPVerification';
+import Map from '@/components/Map';
 import { 
   Phone, 
   Mail, 
   MapPin, 
   Clock, 
   MessageCircle,
+  Send,
   Building,
   User,
   Calculator
 } from 'lucide-react';
 
 export default function Contact() {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    propertyType: '',
+    budget: '',
+    location: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showOTPVerification, setShowOTPVerification] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleVerifyPhone = async () => {
+    if (!formData.phone) {
+      toast({
+        title: "Phone number required",
+        description: "Please enter your phone number first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        phone: formData.phone
+      });
+
+      if (error) {
+        toast({
+          title: "Failed to send OTP",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        setShowOTPVerification(true);
+        toast({
+          title: "OTP Sent",
+          description: "Please check your phone for the verification code",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send OTP. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleOTPVerified = () => {
+    setPhoneVerified(true);
+    setShowOTPVerification(false);
+    toast({
+      title: "Phone Verified",
+      description: "Your phone number has been verified successfully!",
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!phoneVerified) {
+      toast({
+        title: "Phone verification required",
+        description: "Please verify your phone number before submitting the form",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert([{
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: `Property: ${formData.propertyType}, Budget: ${formData.budget}, Location: ${formData.location}, Message: ${formData.message}`,
+          phone_verified: phoneVerified
+        }]);
+
+      if (error) {
+        throw error;
+      }
+      
+      toast({
+        title: "Inquiry Submitted Successfully!",
+        description: "Our team will contact you within 24 hours.",
+      });
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        propertyType: '',
+        budget: '',
+        location: '',
+        message: ''
+      });
+      setPhoneVerified(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const contactInfo = [
     {
       icon: Phone,
@@ -67,6 +198,18 @@ export default function Contact() {
     }
   ];
 
+  if (showOTPVerification) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 flex items-center justify-center px-4">
+        <OTPVerification
+          phoneNumber={formData.phone}
+          onVerified={handleOTPVerified}
+          onCancel={() => setShowOTPVerification(false)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -87,9 +230,155 @@ export default function Contact() {
       <section className="py-16 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Secure Contact Form */}
+            {/* Contact Form */}
             <div className="lg:col-span-2">
-              <SecureContactForm />
+              <Card className="shadow-luxury">
+                <CardContent className="p-8">
+                  <div className="mb-8">
+                    <h2 className="text-3xl font-bold text-primary mb-4">
+                      Send Us Your Inquiry
+                    </h2>
+                    <p className="text-brand-grey">
+                      Fill out the form below and our property experts will get back to you within 24 hours.
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-primary mb-2">
+                          Full Name *
+                        </label>
+                        <Input
+                          placeholder="Enter your full name"
+                          value={formData.name}
+                          onChange={(e) => handleInputChange('name', e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-primary mb-2">
+                          Email Address *
+                        </label>
+                        <Input
+                          type="email"
+                          placeholder="Enter your email"
+                          value={formData.email}
+                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-primary mb-2">
+                          Phone Number *
+                        </label>
+                        <div className="space-y-2">
+                          <Input
+                            placeholder="Enter your phone number"
+                            value={formData.phone}
+                            onChange={(e) => handleInputChange('phone', e.target.value)}
+                            required
+                            disabled={phoneVerified}
+                          />
+                          {!phoneVerified ? (
+                            <Button 
+                              type="button" 
+                              variant="outline" 
+                              onClick={handleVerifyPhone}
+                              disabled={!formData.phone}
+                              className="w-full"
+                            >
+                              Verify Phone Number
+                            </Button>
+                          ) : (
+                            <div className="flex items-center text-green-600 text-sm">
+                              ✓ Phone number verified
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-primary mb-2">
+                          Property Type
+                        </label>
+                        <Select value={formData.propertyType} onValueChange={(value) => handleInputChange('propertyType', value)}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select property type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="apartment">Apartment</SelectItem>
+                            <SelectItem value="villa">Villa</SelectItem>
+                            <SelectItem value="penthouse">Penthouse</SelectItem>
+                            <SelectItem value="studio">Studio</SelectItem>
+                            <SelectItem value="townhouse">Townhouse</SelectItem>
+                            <SelectItem value="commercial">Commercial</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-primary mb-2">
+                          Budget Range
+                        </label>
+                        <Select value={formData.budget} onValueChange={(value) => handleInputChange('budget', value)}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select budget range" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="under-50l">Under ₹50 Lakhs</SelectItem>
+                            <SelectItem value="50l-1cr">₹50 Lakhs - ₹1 Crore</SelectItem>
+                            <SelectItem value="1cr-2cr">₹1 Crore - ₹2 Crores</SelectItem>
+                            <SelectItem value="2cr-5cr">₹2 Crores - ₹5 Crores</SelectItem>
+                            <SelectItem value="above-5cr">Above ₹5 Crores</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-primary mb-2">
+                          Preferred Location
+                        </label>
+                        <Input
+                          placeholder="Enter preferred location"
+                          value={formData.location}
+                          onChange={(e) => handleInputChange('location', e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-primary mb-2">
+                        Additional Requirements
+                      </label>
+                      <Textarea
+                        placeholder="Tell us about your specific requirements, preferences, or any questions you have..."
+                        value={formData.message}
+                        onChange={(e) => handleInputChange('message', e.target.value)}
+                        rows={4}
+                      />
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-brand-classic-gold text-primary hover:bg-brand-soft-gold"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        "Submitting..."
+                      ) : (
+                        <>
+                          <Send className="mr-2 h-5 w-5" />
+                          Send Inquiry
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Contact Information */}
@@ -236,16 +525,9 @@ export default function Contact() {
                       </a>
                     </div>
                   </div>
-                  <a
-                    href="https://maps.google.com/?q=Shop+No.+3,+Bharat+Altavistas,+next+to+ICICI+Bank,+Lokhandwala+Complex,+Andheri+West,+Mumbai,+Maharashtra+400053"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block w-full mt-4"
-                  >
-                    <button className="w-full bg-primary hover:bg-brand-navy text-white px-4 py-2 rounded-lg">
-                      Get Directions
-                    </button>
-                  </a>
+                  <Button className="w-full mt-4 bg-primary hover:bg-brand-navy">
+                    Get Directions
+                  </Button>
                 </CardContent>
               </Card>
             ))}

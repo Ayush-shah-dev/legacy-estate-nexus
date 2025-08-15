@@ -29,15 +29,13 @@ export const useVisitorTracking = () => {
               session_id: sessionId,
               user_agent: navigator.userAgent,
               ip_address: 'unknown', // We can't get real IP on client side
-              page_visited: currentPath,
+              page_visited: currentPath, // Include the required page_visited field
               referrer: document.referrer || null,
               time_spent_seconds: 0
             });
 
           if (insertError) {
             console.log('Error inserting visitor:', insertError.message);
-          } else {
-            console.log('Visitor tracked successfully');
           }
         }
       } catch (error) {
@@ -57,8 +55,6 @@ export const useVisitorTracking = () => {
 
         if (error) {
           console.log('Error tracking page view:', error.message);
-        } else {
-          console.log('Page view tracked:', path);
         }
       } catch (error) {
         console.log('Error in trackPageView:', error);

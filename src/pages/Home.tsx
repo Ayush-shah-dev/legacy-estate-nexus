@@ -3,16 +3,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Users, Award, Star, ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import heroImage from "@/assets/mumbai-skyline.jpg";
 import cinematicImage from "@/assets/mumbai-skyline-cinematic.jpg";
 import "./Home.css";
 import videoBackground from "../assets/BG_MAIN.mp4";
-import { supabase } from "@/integrations/supabase/client";
-
 export default function Home() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
-  const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -32,59 +29,6 @@ export default function Home() {
 
     return () => observer.disconnect();
   }, []);
-
-  useEffect(() => {
-    fetchTestimonials();
-  }, []);
-
-  const fetchTestimonials = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('testimonials')
-        .select('*')
-        .eq('status', 'published')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      
-      // Transform data to match existing structure
-      const formattedTestimonials = data?.map(testimonial => ({
-        name: testimonial.name,
-        role: testimonial.designation || "Client",
-        review: testimonial.quote,
-        rating: 5, // Default rating since testimonials don't have ratings
-      })) || [];
-      
-      setTestimonials(formattedTestimonials);
-    } catch (error) {
-      console.error('Error fetching testimonials:', error);
-      // Fallback to existing hardcoded testimonials if fetch fails
-      setTestimonials([
-        {
-          name: "Kinny Gidwani",
-          role: "Hong Kong Business Owner",
-          review:
-            "Working with Regal Estate Consultants, under the leadership of Ajay Punjabi, has been a refreshing experience. As someone in the hospitality industry, I deeply appreciate their attention to detail, discretion, and premium property curation. Ajay's expertise and guidance made my investment journey in India extremely smooth and rewarding. A class apart.",
-          rating: 4,
-        },
-        {
-          name: "Amit Kukreja",
-          role: "Dubai Business Owner",
-          review:
-            "Real estate transactions require trust and clarity — both of which I found in abundance with Ajay Punjabi and Regal Estate Consultants. From the first call to the final signing, their team was proactive, insightful, and always aligned with my vision. For NRIs like me looking for smart investments back home, they are a blessing.",
-          rating: 5,
-        },
-        {
-          name: "Sadanand Pujari",
-          role: "Restaurant Owner",
-          review:
-            "Ajay Punjabi is more than a consultant — he's an advisor you can count on. Regal Estate Consultants brings professionalism, sharp market sense, and above all, a commitment to client satisfaction. Their guidance helped me make a confident real estate investment in Mumbai. I look forward to many more.",
-          rating: 4.5,
-        },
-      ]);
-    }
-  };
-
   const highlights = [
     {
       icon: Award,
@@ -173,7 +117,7 @@ export default function Home() {
     },
   ];
 
-  const reviews = testimonials.length > 0 ? testimonials : [
+  const reviews = [
     {
       name: "Kinny Gidwani",
       role: "Hong Kong Business Owner",
