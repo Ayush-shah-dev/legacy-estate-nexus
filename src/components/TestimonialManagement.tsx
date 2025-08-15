@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -107,11 +108,8 @@ const TestimonialManagement = () => {
       }
 
       const testimonialPayload = {
-        name: testimonialData.name || '',
-        designation: testimonialData.designation || null,
-        quote: testimonialData.quote || '',
+        ...testimonialData,
         profile_image: imageUrl,
-        status: testimonialData.status || 'draft' as const,
         updated_at: new Date().toISOString()
       };
 
