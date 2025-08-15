@@ -3,7 +3,6 @@ import {
   BrowserRouter,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import {
   QueryClient,
@@ -45,11 +44,6 @@ function AppContent() {
             <AdminDashboard />
           </ProtectedRoute>
         } 
-      />
-      {/* Redirect /admin-dashboard to /admin */}
-      <Route 
-        path="/admin-dashboard" 
-        element={<Navigate to="/admin" replace />} 
       />
       <Route 
         path="/client-dashboard" 
