@@ -18,9 +18,45 @@ import Home from "./pages/Home";
 import Contact from "./pages/Contact";
 import Properties from "./pages/Properties";
 import AdminDashboard from "./pages/AdminDashboard";
+import ClientDashboard from "./pages/ClientDashboard";
 import Auth from "./pages/Auth";
 import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useVisitorTracking } from "./hooks/useVisitorTracking";
+
+function AppContent() {
+  useVisitorTracking();
+  
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/properties" element={<Properties />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
+      </Route>
+      <Route 
+        path="/admin" 
+        element={
+          <ProtectedRoute requireAdmin={true}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/client-dashboard" 
+        element={
+          <ProtectedRoute>
+            <ClientDashboard />
+          </ProtectedRoute>
+        } 
+      />
+      <Route path="/auth" element={<Auth />} />
+    </Routes>
+  );
+}
 
 function App() {
   const queryClient = new QueryClient();
@@ -31,17 +67,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/properties" element={<Properties />} />
-                <Route path="/blogs" element={<Blogs />} />
-                <Route path="/blog/:id" element={<BlogPost />} />
-              </Route>
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/auth" element={<Auth />} />
-            </Routes>
+            <AppContent />
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
