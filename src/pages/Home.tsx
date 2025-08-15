@@ -1,15 +1,27 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Building2, Users, Award, Star, ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/mumbai-skyline.jpg";
 import cinematicImage from "@/assets/mumbai-skyline-cinematic.jpg";
 import "./Home.css";
 import videoBackground from "../assets/BG_MAIN.mp4";
+
+interface Testimonial {
+  id: string;
+  name: string;
+  designation: string | null;
+  quote: string;
+  profile_image: string | null;
+}
+
 export default function Home() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -29,6 +41,26 @@ export default function Home() {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
+
+  const fetchTestimonials = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('testimonials')
+        .select('*')
+        .eq('status', 'published')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setTestimonials(data || []);
+    } catch (error) {
+      console.error('Error fetching testimonials:', error);
+    }
+  };
+
   const highlights = [
     {
       icon: Award,
@@ -114,30 +146,6 @@ export default function Home() {
       ],
       type: "Residential",
       image: "/lovable-uploads/54d3e00b-85c8-49e0-830b-b268e2e83865.png",
-    },
-  ];
-
-  const reviews = [
-    {
-      name: "Kinny Gidwani",
-      role: "Hong Kong Business Owner",
-      review:
-        "Working with Regal Estate Consultants, under the leadership of Ajay Punjabi, has been a refreshing experience. As someone in the hospitality industry, I deeply appreciate their attention to detail, discretion, and premium property curation. Ajay's expertise and guidance made my investment journey in India extremely smooth and rewarding. A class apart.",
-      rating: 4,
-    },
-    {
-      name: "Amit Kukreja",
-      role: "Dubai Business Owner",
-      review:
-        "Real estate transactions require trust and clarity — both of which I found in abundance with Ajay Punjabi and Regal Estate Consultants. From the first call to the final signing, their team was proactive, insightful, and always aligned with my vision. For NRIs like me looking for smart investments back home, they are a blessing.",
-      rating: 5,
-    },
-    {
-      name: "Sadanand Pujari",
-      role: "Restaurant Owner",
-      review:
-        "Ajay Punjabi is more than a consultant — he's an advisor you can count on. Regal Estate Consultants brings professionalism, sharp market sense, and above all, a commitment to client satisfaction. Their guidance helped me make a confident real estate investment in Mumbai. I look forward to many more.",
-      rating: 4.5,
     },
   ];
 
@@ -503,61 +511,65 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Client Reviews */}
-      <section
-        className="py-20 bg-gradient-hero text-white"
-        ref={(el) => el && (sectionsRef.current[4] = el)}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Client Testimonials
-            </h2>
-            <p className="text-xl text-white/90">
-              Hear from our satisfied clients about their experience
-            </p>
-          </div>
+      {/* Client Reviews - Now Dynamic from Supabase */}
+      {testimonials.length > 0 && (
+        <section
+          className="py-20 bg-gradient-hero text-white"
+          ref={(el) => el && (sectionsRef.current[4] = el)}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                Client Testimonials
+              </h2>
+              <p className="text-xl text-white/90">
+                Hear from our satisfied clients about their experience
+              </p>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {reviews.map((review, index) => (
-              <Card
-                key={index}
-                className="bg-white/10 backdrop-blur-sm border-white/20 text-white"
-              >
-                <CardContent className="p-6">
-                  <div className="flex mb-4">
-                    {[...Array(Math.floor(review.rating))].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-5 w-5 text-brand-classic-gold fill-current"
-                      />
-                    ))}
-                    {review.rating % 1 !== 0 && (
-                      <div className="relative">
-                        <Star className="h-5 w-5 text-gray-300" />
-                        <div className="absolute inset-0 overflow-hidden w-1/2">
-                          <Star className="h-5 w-5 text-brand-classic-gold fill-current" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {testimonials.slice(0, 3).map((testimonial) => (
+                <Card
+                  key={testimonial.id}
+                  className="bg-white/10 backdrop-blur-sm border-white/20 text-white"
+                >
+                  <CardContent className="p-6">
+                    <div className="flex mb-4 justify-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className="h-5 w-5 text-brand-classic-gold fill-current"
+                        />
+                      ))}
+                    </div>
+                    <p className="text-white/90 mb-4 italic">"{testimonial.quote}"</p>
+                    <div className="flex items-center space-x-3">
+                      {testimonial.profile_image ? (
+                        <img
+                          src={testimonial.profile_image}
+                          alt={testimonial.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-brand-classic-gold/20 flex items-center justify-center">
+                          <Users className="w-6 h-6 text-brand-classic-gold" />
                         </div>
+                      )}
+                      <div>
+                        <div className="font-semibold">{testimonial.name}</div>
+                        {testimonial.designation && (
+                          <div className="text-white/70 text-sm">{testimonial.designation}</div>
+                        )}
                       </div>
-                    )}
-                    {[...Array(5 - Math.ceil(review.rating))].map((_, i) => (
-                      <Star
-                        key={i + Math.ceil(review.rating)}
-                        className="h-5 w-5 text-gray-300"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-white/90 mb-4 italic">"{review.review}"</p>
-                  <div>
-                    <div className="font-semibold">{review.name}</div>
-                    <div className="text-white/70 text-sm">{review.role}</div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-20 bg-brand-classic-gold">
