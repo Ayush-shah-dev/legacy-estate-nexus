@@ -7,10 +7,35 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
+  }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
@@ -32,6 +57,42 @@ export type Database = {
           id?: string
           role?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      blogs: {
+        Row: {
+          content: string
+          created_at: string
+          featured_image: string | null
+          id: string
+          published_date: string | null
+          short_summary: string
+          status: Database["public"]["Enums"]["content_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          featured_image?: string | null
+          id?: string
+          published_date?: string | null
+          short_summary: string
+          status?: Database["public"]["Enums"]["content_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          featured_image?: string | null
+          id?: string
+          published_date?: string | null
+          short_summary?: string
+          status?: Database["public"]["Enums"]["content_status"]
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -223,6 +284,39 @@ export type Database = {
         }
         Relationships: []
       }
+      testimonials: {
+        Row: {
+          created_at: string
+          designation: string | null
+          id: string
+          name: string
+          profile_image: string | null
+          quote: string
+          status: Database["public"]["Enums"]["content_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          designation?: string | null
+          id?: string
+          name: string
+          profile_image?: string | null
+          quote: string
+          status?: Database["public"]["Enums"]["content_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          designation?: string | null
+          id?: string
+          name?: string
+          profile_image?: string | null
+          quote?: string
+          status?: Database["public"]["Enums"]["content_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       visitors: {
         Row: {
           created_at: string
@@ -267,7 +361,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      content_status: "published" | "draft"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -393,7 +487,12 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  public: {
+  graphql_public: {
     Enums: {},
+  },
+  public: {
+    Enums: {
+      content_status: ["published", "draft"],
+    },
   },
 } as const
