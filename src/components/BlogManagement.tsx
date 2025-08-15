@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -112,8 +111,11 @@ const BlogManagement = () => {
       }
 
       const blogPayload = {
-        ...blogData,
+        title: blogData.title || '',
+        short_summary: blogData.short_summary || '',
+        content: blogData.content || '',
         featured_image: imageUrl,
+        status: blogData.status || 'draft' as const,
         published_date: blogData.status === 'published' ? new Date().toISOString() : null,
         updated_at: new Date().toISOString()
       };
