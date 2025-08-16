@@ -105,6 +105,16 @@ const TestimonialManagement = () => {
 
   const handleSaveTestimonial = async (testimonialData: Partial<Testimonial>) => {
     try {
+      // Validate required fields
+      if (!testimonialData.name || !testimonialData.quote) {
+        toast({
+          title: "Error",
+          description: "Name and quote are required",
+          variant: "destructive",
+        });
+        return;
+      }
+
       let imageUrl = testimonialData.profile_image;
       
       if (imageFile) {
@@ -113,8 +123,11 @@ const TestimonialManagement = () => {
       }
 
       const testimonialPayload = {
-        ...testimonialData,
+        name: testimonialData.name,
+        quote: testimonialData.quote,
+        designation: testimonialData.designation || null,
         profile_image: imageUrl,
+        status: testimonialData.status || 'draft' as const,
         updated_at: new Date().toISOString()
       };
 
@@ -133,7 +146,7 @@ const TestimonialManagement = () => {
       } else {
         const { error } = await supabase
           .from('testimonials')
-          .insert([testimonialPayload]);
+          .insert(testimonialPayload);
 
         if (error) throw error;
         

@@ -109,6 +109,16 @@ const BlogManagement = () => {
 
   const handleSaveBlog = async (blogData: Partial<Blog>) => {
     try {
+      // Validate required fields
+      if (!blogData.title || !blogData.short_summary || !blogData.content) {
+        toast({
+          title: "Error",
+          description: "Title, summary, and content are required",
+          variant: "destructive",
+        });
+        return;
+      }
+
       let imageUrl = blogData.featured_image;
       
       if (imageFile) {
@@ -117,8 +127,11 @@ const BlogManagement = () => {
       }
 
       const blogPayload = {
-        ...blogData,
+        title: blogData.title,
+        short_summary: blogData.short_summary,
+        content: blogData.content,
         featured_image: imageUrl,
+        status: blogData.status || 'draft' as const,
         published_date: blogData.status === 'published' ? new Date().toISOString() : null,
         updated_at: new Date().toISOString()
       };
@@ -138,7 +151,7 @@ const BlogManagement = () => {
       } else {
         const { error } = await supabase
           .from('blogs')
-          .insert([blogPayload]);
+          .insert(blogPayload);
 
         if (error) throw error;
         
