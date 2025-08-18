@@ -28,15 +28,10 @@ const AppWithTracking = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="legacy" element={<Legacy />} />
-          <Route path="properties" element={<Properties />} />
-          <Route path="blogs" element={<Blogs />} />
-          <Route path="blogs/:id" element={<BlogPost />} />
-          <Route path="contact" element={<Contact />} />
-        </Route>
+        {/* Auth route outside of Layout to avoid 404 issues */}
         <Route path="/auth" element={<Auth />} />
+        
+        {/* Protected routes */}
         <Route 
           path="/admin-dashboard" 
           element={
@@ -53,6 +48,18 @@ const AppWithTracking = () => {
             </ProtectedRoute>
           } 
         />
+        
+        {/* Main layout routes */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="legacy" element={<Legacy />} />
+          <Route path="properties" element={<Properties />} />
+          <Route path="blogs" element={<Blogs />} />
+          <Route path="blogs/:id" element={<BlogPost />} />
+          <Route path="contact" element={<Contact />} />
+        </Route>
+        
+        {/* Catch all 404 route */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
