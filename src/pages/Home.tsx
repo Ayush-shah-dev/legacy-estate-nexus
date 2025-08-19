@@ -19,9 +19,26 @@ interface Testimonial {
   profile_image: string | null;
 }
 
+interface Property {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  property_type: string;
+  bedrooms: number;
+  bathrooms: number;
+  area_sqft: number;
+  status: string;
+  featured: boolean;
+  image_url: string;
+  created_at: string;
+}
+
 export default function Home() {
   const sectionsRef = useRef<(HTMLElement | null)[]>([]);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -44,6 +61,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchTestimonials();
+    fetchFeaturedProperties();
   }, []);
 
   const fetchTestimonials = async () => {
@@ -58,6 +76,23 @@ export default function Home() {
       setTestimonials(data || []);
     } catch (error) {
       console.error('Error fetching testimonials:', error);
+    }
+  };
+
+  const fetchFeaturedProperties = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .eq('featured', true)
+        .eq('status', 'available')
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      if (error) throw error;
+      setFeaturedProperties(data || []);
+    } catch (error) {
+      console.error('Error fetching featured properties:', error);
     }
   };
 
@@ -95,59 +130,20 @@ export default function Home() {
     { number: "3rd Gen", label: "Realtors" },
   ];
 
-  const featuredProperties = [
-    {
-      id: 1,
-      title: "Adcore Tower - Premium Commercial Space",
-      location: "Business District, Mumbai",
-      description:
-        "Modern commercial tower with state-of-the-art facilities and premium office spaces in the heart of Mumbai's business district.",
-      sqft: "500-5000 sq ft",
-      amenities: [
-        "24x7 Security",
-        "High-Speed Elevators",
-        "Power Backup",
-        "Parking",
-        "Food Court",
-      ],
-      type: "Commercial",
-      image: "/lovable-uploads/b9bc318e-2fb5-480d-8ee8-3cdd6f790a65.png",
-    },
-    {
-      id: 2,
-      title: "Westwood Heights - Luxury Residential",
-      location: "Andheri West, Mumbai",
-      description:
-        "Premium residential complex offering modern amenities and luxurious living spaces with excellent connectivity.",
-      sqft: "800-1500 sq ft",
-      amenities: [
-        "Swimming Pool",
-        "Gym",
-        "Children's Play Area",
-        "Landscaped Gardens",
-        "Club House",
-      ],
-      type: "Residential",
-      image: "/lovable-uploads/d2696bbb-2641-41bb-aa4f-23c280f24ea7.png",
-    },
-    {
-      id: 3,
-      title: "Sky Gardens - Premium Twin Towers",
-      location: "Goregaon East, Mumbai",
-      description:
-        "Stunning twin tower development featuring spacious apartments with panoramic city views and world-class amenities.",
-      sqft: "900-2000 sq ft",
-      amenities: [
-        "Sky Garden",
-        "Infinity Pool",
-        "Fitness Center",
-        "Concierge Service",
-        "Smart Home Features",
-      ],
-      type: "Residential",
-      image: "/lovable-uploads/54d3e00b-85c8-49e0-830b-b268e2e83865.png",
-    },
-  ];
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  const getDefaultAmenities = (propertyType: string) => {
+    if (propertyType === 'commercial') {
+      return ["24x7 Security", "High-Speed Elevators", "Power Backup", "Parking", "Food Court"];
+    }
+    return ["Swimming Pool", "Gym", "Children's Play Area", "Landscaped Gardens", "Club House"];
+  };
 
   return (
     <div className="min-h-screen">
@@ -307,7 +303,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Properties */}
+      {/* Featured Properties - Now Dynamic */}
       <section
         className="py-20 bg-secondary/30"
         ref={(el) => el && (sectionsRef.current[2] = el)}
@@ -325,87 +321,114 @@ export default function Home() {
             </p>
           </div>
 
-          <div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 animate-zoom-in"
-            style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
-          >
-            {featuredProperties.map((property) => (
-              <Card
-                key={property.id}
-                className="overflow-hidden hover:shadow-luxury transition-all duration-300"
-              >
-                <div className="relative">
-                  <img
-                    src={property.image}
-                    alt={property.title}
-                    className="w-full h-64 object-cover"
-                  />
-                  <Badge className="absolute top-4 right-4 bg-brand-maroon text-white">
-                    {property.type}
-                  </Badge>
-                </div>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-primary mb-2">
-                    {property.title}
-                  </h3>
-                  <p className="text-brand-grey mb-2">{property.location}</p>
-                  <p className="text-sm text-brand-grey mb-3">
-                    {property.description}
-                  </p>
+          {featuredProperties.length > 0 ? (
+            <div
+              className="grid grid-cols-1 md:grid-cols-3 gap-8 opacity-0 animate-zoom-in"
+              style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
+            >
+              {featuredProperties.map((property) => (
+                <Card
+                  key={property.id}
+                  className="overflow-hidden hover:shadow-luxury transition-all duration-300"
+                >
+                  <div className="relative">
+                    <img
+                      src={property.image_url || "/placeholder.svg"}
+                      alt={property.title}
+                      className="w-full h-64 object-cover"
+                    />
+                    <Badge className="absolute top-4 right-4 bg-brand-maroon text-white">
+                      {property.property_type}
+                    </Badge>
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-semibold text-primary mb-2">
+                      {property.title}
+                    </h3>
+                    <p className="text-brand-grey mb-2">{property.location}</p>
+                    <p className="text-sm text-brand-grey mb-3">
+                      {property.description}
+                    </p>
 
-                  <div className="space-y-2 mb-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-primary">
-                        Area:
-                      </span>
-                      <span className="text-sm text-brand-grey">
-                        {property.sqft}
-                      </span>
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium text-primary mb-1">
-                        Amenities:
-                      </span>
-                      <div className="flex flex-wrap gap-1">
-                        {property.amenities
-                          .slice(0, 3)
-                          .map((amenity, index) => (
+                    <div className="space-y-2 mb-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-primary">
+                          Price:
+                        </span>
+                        <span className="text-sm font-semibold text-green-600">
+                          {formatPrice(property.price)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-primary">
+                          Area:
+                        </span>
+                        <span className="text-sm text-brand-grey">
+                          {property.area_sqft} sq ft
+                        </span>
+                      </div>
+                      {property.bedrooms > 0 && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-primary">
+                            Details:
+                          </span>
+                          <span className="text-sm text-brand-grey">
+                            {property.bedrooms}BR • {property.bathrooms}BA
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium text-primary mb-1">
+                          Amenities:
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {getDefaultAmenities(property.property_type)
+                            .slice(0, 3)
+                            .map((amenity, index) => (
+                              <Badge
+                                key={index}
+                                variant="outline"
+                                className="text-xs border-brand-classic-gold/50 text-brand-classic-gold"
+                              >
+                                {amenity}
+                              </Badge>
+                            ))}
+                          {getDefaultAmenities(property.property_type).length > 3 && (
                             <Badge
-                              key={index}
                               variant="outline"
                               className="text-xs border-brand-classic-gold/50 text-brand-classic-gold"
                             >
-                              {amenity}
+                              +{getDefaultAmenities(property.property_type).length - 3} more
                             </Badge>
-                          ))}
-                        {property.amenities.length > 3 && (
-                          <Badge
-                            variant="outline"
-                            className="text-xs border-brand-classic-gold/50 text-brand-classic-gold"
-                          >
-                            +{property.amenities.length - 3} more
-                          </Badge>
-                        )}
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <Button
-                    className="w-full bg-primary hover:bg-brand-navy"
-                    onClick={() => {
-                      const message = `Hi, I have an enquiry regarding property: ${property.title}`;
-                      const whatsappUrl = `https://wa.me/919930033056?text=${encodeURIComponent(
-                        message
-                      )}`;
-                      window.open(whatsappUrl, "_blank");
-                    }}
-                  >
-                    Enquire Now
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                    <Button
+                      className="w-full bg-primary hover:bg-brand-navy"
+                      onClick={() => {
+                        const message = `Hi, I have an enquiry regarding property: ${property.title}`;
+                        const whatsappUrl = `https://wa.me/919930033056?text=${encodeURIComponent(
+                          message
+                        )}`;
+                        window.open(whatsappUrl, "_blank");
+                      }}
+                    >
+                      Enquire Now
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <Building2 className="w-16 h-16 mx-auto text-brand-grey/50 mb-4" />
+              <p className="text-brand-grey text-lg">
+                No featured properties available at the moment.
+              </p>
+            </div>
+          )}
 
           <div className="text-center mt-12">
             <Link to="/properties">
