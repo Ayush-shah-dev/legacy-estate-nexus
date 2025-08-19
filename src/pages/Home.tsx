@@ -355,8 +355,8 @@ export default function Home() {
                         <span className="text-sm font-medium text-primary">
                           Price:
                         </span>
-                        <span className="text-sm font-semibold text-green-600">
-                          {formatPrice(property.price)}
+                        <span className="text-sm font-semibold text-brand-classic-gold">
+                          Enquire now for price
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
