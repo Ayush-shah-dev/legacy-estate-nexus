@@ -110,16 +110,6 @@ export const Layout = () => {
                       </Button>
                     </NavLink>
                   )}
-                  <NavLink to="/client-dashboard">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-white"
-                    >
-                      <Building className="w-4 h-4 mr-2" />
-                      Dashboard
-                    </Button>
-                  </NavLink>
                   <Button
                     variant="outline"
                     size="sm"
@@ -202,18 +192,6 @@ export const Layout = () => {
                         </Button>
                       </NavLink>
                     )}
-                    <NavLink
-                      to="/client-dashboard"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <Button
-                        variant="outline"
-                        className="w-full border-brand-classic-gold text-brand-classic-gold hover:bg-brand-classic-gold hover:text-black"
-                      >
-                        <Building className="w-4 h-4 mr-2" />
-                        Client Dashboard
-                      </Button>
-                    </NavLink>
                     <Button
                       variant="outline"
                       className="w-full text-white border-white hover:bg-white hover:text-black"

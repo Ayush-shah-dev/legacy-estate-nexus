@@ -20,10 +20,13 @@ import {
   PieChart,
   Calendar,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  MessageSquare
 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell } from 'recharts';
 import PropertyManagement from "@/components/PropertyManagement";
+import BlogManagement from "@/components/BlogManagement";
+import TestimonialManagement from "@/components/TestimonialManagement";
 
 interface ContactSubmission {
   id: string;
@@ -368,6 +371,12 @@ const AdminDashboard = () => {
             <TabsTrigger value="properties" className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400">
               Properties
             </TabsTrigger>
+            <TabsTrigger value="blogs" className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400">
+              Blogs
+            </TabsTrigger>
+            <TabsTrigger value="testimonials" className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400">
+              Testimonials
+            </TabsTrigger>
             <TabsTrigger value="reviews" className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400">
               Reviews
             </TabsTrigger>
@@ -516,6 +525,14 @@ const AdminDashboard = () => {
 
           <TabsContent value="properties">
             <PropertyManagement />
+          </TabsContent>
+
+          <TabsContent value="blogs">
+            <BlogManagement />
+          </TabsContent>
+
+          <TabsContent value="testimonials">
+            <TestimonialManagement />
           </TabsContent>
 
           <TabsContent value="reviews">

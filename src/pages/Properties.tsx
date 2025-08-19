@@ -15,8 +15,7 @@ import {
   Heart,
   Phone,
   Eye,
-  Star,
-  ExternalLink
+  Star
 } from 'lucide-react';
 
 export default function Properties() {
@@ -315,25 +314,6 @@ export default function Properties() {
                 : 'Discover luxury living with our curated collection of premium properties in Mumbai'
               }
             </p>
-             
-            {/* Google Drive Button for Residential/Commercial */}
-            {(isResidentialSection || isCommercialSection) && (
-              <div className="mt-8 text-center animate-fade-in [animation-delay:600ms]">
-                <Button 
-                  size="lg" 
-                  className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold transition-all duration-300 hover:scale-105 hover:-translate-y-1 shadow-lg hover:shadow-xl"
-                  onClick={() => window.open(
-                    isCommercialSection 
-                      ? 'https://drive.google.com/drive/folders/1UjBtSHp8QBLNc-28MZzO4ehgPwQ9oFRX' 
-                      : 'https://drive.google.com/drive/folders/1d8lRTL3PrYJY51OOcxH-y1ot9qSnK-wc?usp=sharing', 
-                    '_blank'
-                  )}
-                >
-                  <ExternalLink className="mr-2 h-5 w-5 animate-bounce" />
-                  View All {isCommercialSection ? 'Commercial' : 'Residential'} Properties
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -359,18 +339,6 @@ export default function Properties() {
                 }
               </p>
             </div>
-            
-            <Select>
-              <SelectTrigger className="w-48">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="price-low">Price: Low to High</SelectItem>
-                <SelectItem value="price-high">Price: High to Low</SelectItem>
-                <SelectItem value="newest">Newest First</SelectItem>
-                <SelectItem value="rating">Highest Rated</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

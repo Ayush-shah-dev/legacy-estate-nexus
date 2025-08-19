@@ -1,3 +1,4 @@
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,6 +13,7 @@ import {
   MapPin,
   ArrowRight 
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Legacy() {
   const milestones = [
@@ -161,7 +163,7 @@ export default function Legacy() {
             </div>
             <div className="relative">
               <img
-                src="/lovable-uploads/dd4d2925-40db-4f86-ba79-c05c68adc814.png"
+                src="/lovable-uploads/d72b6422-4017-4a70-be06-399898a7a1b1.png"
                 alt="Mr. Narendra Punjabi and Ajay Punjabi - Father and Son Legacy"
                 className="rounded-lg shadow-luxury"
               />
@@ -402,12 +404,16 @@ export default function Legacy() {
             and create your own legacy in real estate.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold">
-              Explore Properties
-              <ArrowRight className="ml-2 h-5 w-5" />
+            <Button asChild size="lg" className="bg-brand-classic-gold text-primary hover:bg-brand-soft-gold">
+              <Link to="/properties">
+                Explore Properties
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
             </Button>
-            <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
-              Contact Our Team
+            <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
+              <Link to="/contact">
+                Contact Our Team
+              </Link>
             </Button>
           </div>
         </div>
