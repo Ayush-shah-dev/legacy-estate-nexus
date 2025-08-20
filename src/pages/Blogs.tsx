@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -177,7 +178,7 @@ export default function Blogs() {
                         {blog.short_summary}
                       </p>
                       
-                      <Link to={`/blog/${blog.id}`}>
+                      <Link to={`/blogs/${blog.id}`}>
                         <Button 
                           variant="ghost" 
                           className="p-0 h-auto text-brand-classic-gold hover:text-brand-soft-gold group-hover:translate-x-1 transition-all"
