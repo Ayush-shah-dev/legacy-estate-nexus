@@ -30,17 +30,17 @@ function App() {
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/properties" element={<Properties />} />
-                <Route path="/blogs" element={<Blogs />} />
-                <Route path="/blog/:slug" element={<BlogDetail />} />
-                <Route path="/blogs/:id" element={<BlogPost />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/auth" element={<Auth />} />
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Index />} />
+                <Route path="properties" element={<Properties />} />
+                <Route path="blogs" element={<Blogs />} />
+                <Route path="blog/:slug" element={<BlogDetail />} />
+                <Route path="blogs/:id" element={<BlogPost />} />
+                <Route path="contact" element={<Contact />} />
+                <Route path="auth" element={<Auth />} />
                 <Route 
-                  path="/admin-dashboard" 
+                  path="admin-dashboard" 
                   element={
                     <ProtectedRoute requireAdmin>
                       <AdminDashboard />
@@ -48,18 +48,18 @@ function App() {
                   } 
                 />
                 <Route 
-                  path="/client-dashboard" 
+                  path="client-dashboard" 
                   element={
                     <ProtectedRoute>
                       <ClientDashboard />
                     </ProtectedRoute>
                   } 
                 />
-                <Route path="/properties-database" element={<PropertiesDatabase />} />
-                <Route path="/legacy" element={<Legacy />} />
+                <Route path="properties-database" element={<PropertiesDatabase />} />
+                <Route path="legacy" element={<Legacy />} />
                 <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Layout>
+              </Route>
+            </Routes>
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
