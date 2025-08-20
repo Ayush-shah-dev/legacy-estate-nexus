@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./hooks/useAuth";
 import { Layout } from "./components/Layout";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
@@ -24,42 +25,44 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/properties" element={<Properties />} />
-              <Route path="/blogs" element={<Blogs />} />
-              <Route path="/blog/:slug" element={<BlogDetail />} />
-              <Route path="/blogs/:id" element={<BlogPost />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route 
-                path="/admin" 
-                element={
-                  <ProtectedRoute requireAdmin>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route 
-                path="/client-dashboard" 
-                element={
-                  <ProtectedRoute>
-                    <ClientDashboard />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route path="/properties-database" element={<PropertiesDatabase />} />
-              <Route path="/legacy" element={<Legacy />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Layout>
-        </BrowserRouter>
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/properties" element={<Properties />} />
+                <Route path="/blogs" element={<Blogs />} />
+                <Route path="/blog/:slug" element={<BlogDetail />} />
+                <Route path="/blogs/:id" element={<BlogPost />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route 
+                  path="/admin-dashboard" 
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/client-dashboard" 
+                  element={
+                    <ProtectedRoute>
+                      <ClientDashboard />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route path="/properties-database" element={<PropertiesDatabase />} />
+                <Route path="/legacy" element={<Legacy />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Layout>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
