@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -14,11 +15,11 @@ interface Property {
   id?: string;
   title: string;
   description: string;
-  price: number;
+  price: string;
   location: string;
   property_type: string;
-  bedrooms: number;
-  bathrooms: number;
+  bedrooms: string;
+  bathrooms: string;
   area_sqft: number;
   status: string;
   featured: boolean;
@@ -35,11 +36,11 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
   const [formData, setFormData] = useState<Property>({
     title: property?.title || "",
     description: property?.description || "",
-    price: property?.price || 0,
+    price: property?.price || "",
     location: property?.location || "",
     property_type: property?.property_type || "",
-    bedrooms: property?.bedrooms || 1,
-    bathrooms: property?.bathrooms || 1,
+    bedrooms: property?.bedrooms || "",
+    bathrooms: property?.bathrooms || "",
     area_sqft: property?.area_sqft || 0,
     status: property?.status || "available",
     featured: property?.featured || false,
@@ -131,10 +132,11 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                 <Label htmlFor="price" className="text-blue-100">Price</Label>
                 <Input
                   id="price"
-                  type="number"
+                  type="text"
                   value={formData.price}
-                  onChange={(e) => handleInputChange('price', parseInt(e.target.value))}
+                  onChange={(e) => handleInputChange('price', e.target.value)}
                   className="bg-black/20 border-blue-500/20 text-white"
+                  placeholder="e.g., ₹2.5 Cr, $500K, Contact for Price"
                   required
                 />
               </div>
@@ -183,22 +185,22 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                 <Label htmlFor="bedrooms" className="text-blue-100">Bedrooms</Label>
                 <Input
                   id="bedrooms"
-                  type="number"
+                  type="text"
                   value={formData.bedrooms}
-                  onChange={(e) => handleInputChange('bedrooms', parseInt(e.target.value))}
+                  onChange={(e) => handleInputChange('bedrooms', e.target.value)}
                   className="bg-black/20 border-blue-500/20 text-white"
-                  min="0"
+                  placeholder="e.g., 2, 3BHK, Studio"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="bathrooms" className="text-blue-100">Bathrooms</Label>
                 <Input
                   id="bathrooms"
-                  type="number"
+                  type="text"
                   value={formData.bathrooms}
-                  onChange={(e) => handleInputChange('bathrooms', parseInt(e.target.value))}
+                  onChange={(e) => handleInputChange('bathrooms', e.target.value)}
                   className="bg-black/20 border-blue-500/20 text-white"
-                  min="0"
+                  placeholder="e.g., 2, 2.5, Multiple"
                 />
               </div>
               <div className="space-y-2">
