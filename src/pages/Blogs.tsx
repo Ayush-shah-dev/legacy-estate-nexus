@@ -16,6 +16,7 @@ interface Blog {
   featured_image: string | null;
   published_date: string;
   created_at: string;
+  slug: string;
 }
 
 export default function Blogs() {
@@ -178,7 +179,7 @@ export default function Blogs() {
                         {blog.short_summary}
                       </p>
                       
-                      <Link to={`/blogs/${blog.id}`}>
+                      <Link to={`/blog/${blog.slug}`}>
                         <Button 
                           variant="ghost" 
                           className="p-0 h-auto text-brand-classic-gold hover:text-brand-soft-gold group-hover:translate-x-1 transition-all"

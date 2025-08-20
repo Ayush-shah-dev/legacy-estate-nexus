@@ -16,7 +16,8 @@ import {
   Edit, 
   Trash2, 
   Search,
-  Shield
+  Shield,
+  ExternalLink
 } from "lucide-react";
 
 interface Blog {
@@ -29,6 +30,7 @@ interface Blog {
   published_date: string | null;
   created_at: string;
   updated_at: string;
+  slug: string;
 }
 
 const BlogManagement = () => {
@@ -133,7 +135,9 @@ const BlogManagement = () => {
         featured_image: imageUrl,
         status: blogData.status || 'draft' as const,
         published_date: blogData.status === 'published' ? new Date().toISOString() : null,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        // Include slug if editing an existing blog, let trigger handle new ones
+        ...(editingBlog && { slug: blogData.slug })
       };
 
       if (editingBlog) {
@@ -286,6 +290,7 @@ const BlogManagement = () => {
             <TableHeader>
               <TableRow className="border-gray-700">
                 <TableHead className="text-gray-300">Title</TableHead>
+                <TableHead className="text-gray-300">Slug</TableHead>
                 <TableHead className="text-gray-300">Status</TableHead>
                 <TableHead className="text-gray-300">Published Date</TableHead>
                 <TableHead className="text-gray-300">Actions</TableHead>
@@ -295,6 +300,7 @@ const BlogManagement = () => {
               {paginatedBlogs.map((blog) => (
                 <TableRow key={blog.id} className="border-gray-700 hover:bg-white/5">
                   <TableCell className="text-white font-medium">{blog.title}</TableCell>
+                  <TableCell className="text-gray-400 font-mono text-sm">{blog.slug}</TableCell>
                   <TableCell>
                     <Badge variant={blog.status === 'published' ? "default" : "secondary"}>
                       {blog.status}
@@ -305,6 +311,16 @@ const BlogManagement = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
+                      {blog.status === 'published' && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => window.open(`/blog/${blog.slug}`, '_blank')}
+                          className="text-green-400 hover:bg-green-500/20"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </Button>
+                      )}
                       <Button
                         size="sm"
                         variant="ghost"

@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       admin_users: {
@@ -68,6 +43,7 @@ export type Database = {
           id: string
           published_date: string | null
           short_summary: string
+          slug: string
           status: Database["public"]["Enums"]["content_status"]
           title: string
           updated_at: string
@@ -79,6 +55,7 @@ export type Database = {
           id?: string
           published_date?: string | null
           short_summary: string
+          slug: string
           status?: Database["public"]["Enums"]["content_status"]
           title: string
           updated_at?: string
@@ -90,6 +67,7 @@ export type Database = {
           id?: string
           published_date?: string | null
           short_summary?: string
+          slug?: string
           status?: Database["public"]["Enums"]["content_status"]
           title?: string
           updated_at?: string
@@ -358,7 +336,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_unique_blog_slug: {
+        Args: { base: string }
+        Returns: string
+      }
+      slugify: {
+        Args: { input: string }
+        Returns: string
+      }
     }
     Enums: {
       content_status: "published" | "draft"
@@ -487,9 +472,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       content_status: ["published", "draft"],
