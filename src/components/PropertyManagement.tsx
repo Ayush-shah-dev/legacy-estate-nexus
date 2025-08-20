@@ -14,11 +14,11 @@ interface Property {
   id: string;
   title: string;
   description: string;
-  price: number;
+  price: string;
   location: string;
   property_type: string;
-  bedrooms: number;
-  bathrooms: number;
+  bedrooms: string;
+  bathrooms: string;
   area_sqft: number;
   status: string;
   featured: boolean;
@@ -110,14 +110,6 @@ const PropertyManagement = () => {
     
     return matchesSearch && matchesStatus && matchesType;
   });
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
 
   const getStatusBadge = (status: string) => {
     const statusColors = {
@@ -241,7 +233,7 @@ const PropertyManagement = () => {
                     </TableCell>
                     <TableCell className="text-gray-300">{property.location}</TableCell>
                     <TableCell className="text-green-400 font-medium">
-                      {formatPrice(property.price)}
+                      {property.price}
                     </TableCell>
                     <TableCell>{getStatusBadge(property.status)}</TableCell>
                     <TableCell className="text-gray-300">
