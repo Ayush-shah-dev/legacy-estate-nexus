@@ -1,0 +1,120 @@
+
+-- Insert dummy residential properties
+INSERT INTO public.properties (
+  title, 
+  description, 
+  price, 
+  location, 
+  property_type, 
+  bedrooms, 
+  bathrooms, 
+  area_sqft, 
+  status, 
+  featured, 
+  image_url
+) VALUES 
+(
+  'Luxury Villa in Bandra',
+  'Stunning 4BHK villa with modern amenities, private garden, and premium location in Bandra West. Perfect for families looking for luxury living.',
+  85000000,
+  'Bandra West, Mumbai',
+  'villa',
+  4,
+  3,
+  2500,
+  'available',
+  true,
+  '/lovable-uploads/2b1cae59-7af3-4cf0-ab36-fb6eebbf72e9.png'
+),
+(
+  'Premium Apartment in Juhu',
+  'Beautiful 3BHK apartment with sea view, modern interiors, and close proximity to the beach. Ideal for investment or personal use.',
+  65000000,
+  'Juhu, Mumbai',
+  'apartment',
+  3,
+  2,
+  1800,
+  'available',
+  true,
+  '/lovable-uploads/21130215-bbef-4e37-9770-dd46a8ea2827.png'
+),
+(
+  'Modern House in Andheri',
+  'Contemporary 3BHK house with all modern amenities, parking space, and excellent connectivity to business districts.',
+  45000000,
+  'Andheri East, Mumbai',
+  'house',
+  3,
+  2,
+  1600,
+  'available',
+  false,
+  '/lovable-uploads/3068d3a3-f113-4a53-81e7-7e7be23345e3.png'
+),
+(
+  'Spacious Villa in Powai',
+  'Large 5BHK villa with garden, swimming pool, and premium location in Powai. Perfect for large families.',
+  120000000,
+  'Powai, Mumbai',
+  'villa',
+  5,
+  4,
+  3200,
+  'available',
+  false,
+  '/lovable-uploads/4232ab82-271b-4d7c-99cb-e5ea49d1203a.png'
+),
+-- Insert dummy commercial properties
+(
+  'Prime Office Space in BKC',
+  'Premium office space in Bandra Kurla Complex with modern infrastructure, parking, and excellent connectivity.',
+  25000000,
+  'Bandra Kurla Complex, Mumbai',
+  'commercial',
+  0,
+  2,
+  1200,
+  'available',
+  true,
+  '/lovable-uploads/46b29d1b-4aa8-477f-81f8-f40b347788fe.png'
+),
+(
+  'Retail Space in Linking Road',
+  'Strategic retail space on busy Linking Road, perfect for fashion and lifestyle brands. High footfall area.',
+  18000000,
+  'Linking Road, Bandra',
+  'commercial',
+  0,
+  1,
+  800,
+  'available',
+  false,
+  '/lovable-uploads/470e3a57-3b84-4823-a54c-a55dd20eb262.png'
+),
+(
+  'Corporate Office in Lower Parel',
+  'Modern corporate office space in Lower Parel with state-of-the-art facilities and metro connectivity.',
+  35000000,
+  'Lower Parel, Mumbai',
+  'commercial',
+  0,
+  3,
+  1500,
+  'available',
+  true,
+  '/lovable-uploads/4ed064eb-f738-485d-aa48-053127a32861.png'
+),
+(
+  'Warehouse in Bhiwandi',
+  'Large warehouse facility in Bhiwandi with good road connectivity and loading facilities. Ideal for logistics.',
+  15000000,
+  'Bhiwandi, Mumbai',
+  'commercial',
+  0,
+  2,
+  5000,
+  'available',
+  false,
+  '/lovable-uploads/54d3e00b-85c8-49e0-830b-b268e2e83865.png'
+);
