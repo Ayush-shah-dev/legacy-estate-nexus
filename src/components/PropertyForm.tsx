@@ -99,10 +99,10 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
           description: "Property updated successfully",
         });
       } else {
-        // Create new property
+        // Create new property - send a single object (not an array) for proper typing
         const { error } = await supabase
           .from('properties')
-          .insert([values]);
+          .insert(values);
 
         if (error) throw error;
 
@@ -182,6 +182,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Title */}
                 <FormField
                   control={form.control}
                   name="title"
@@ -199,7 +200,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-
+                {/* Property Type */}
                 <FormField
                   control={form.control}
                   name="property_type"
@@ -224,7 +225,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-
+                {/* Price */}
                 <FormField
                   control={form.control}
                   name="price"
@@ -244,7 +245,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-
+                {/* Location */}
                 <FormField
                   control={form.control}
                   name="location"
@@ -262,7 +263,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-
+                {/* Bedrooms */}
                 <FormField
                   control={form.control}
                   name="bedrooms"
@@ -282,7 +283,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-
+                {/* Bathrooms */}
                 <FormField
                   control={form.control}
                   name="bathrooms"
@@ -302,7 +303,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-
+                {/* Area */}
                 <FormField
                   control={form.control}
                   name="area_sqft"
@@ -322,7 +323,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-
+                {/* Status */}
                 <FormField
                   control={form.control}
                   name="status"
@@ -348,6 +349,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                 />
               </div>
 
+              {/* Description */}
               <FormField
                 control={form.control}
                 name="description"
@@ -366,6 +368,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                 )}
               />
 
+              {/* Image Upload */}
               <FormField
                 control={form.control}
                 name="image_url"
@@ -395,6 +398,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                 )}
               />
 
+              {/* Featured */}
               <FormField
                 control={form.control}
                 name="featured"
@@ -418,6 +422,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                 )}
               />
 
+              {/* Actions */}
               <div className="flex justify-end space-x-4">
                 <Button
                   type="button"
