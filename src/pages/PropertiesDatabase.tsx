@@ -193,7 +193,7 @@ export default function PropertiesDatabase() {
       {/* Hero Section */}
       <section className={`relative overflow-hidden text-white py-20 ${
         isCommercialSection ? 'bg-gradient-to-br from-brand-navy via-brand-grey to-brand-beige-dark' : 
-        isResidentialSection ? 'bg-gradient-beige min-h-[70vh] flex items-center' : 
+        isResidentialSection ? 'bg-gradient-to-br from-brand-navy via-brand-grey to-brand-beige-dark' : 
         'bg-gradient-hero'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -210,7 +210,7 @@ export default function PropertiesDatabase() {
               {isCommercialSection 
                 ? 'Discover prime commercial spaces and investment opportunities in Mumbai\'s business districts'
                 : isResidentialSection
-                ? 'Find your dream home with our curated collection of luxury residential properties in Mumbai'
+                ? 'Discover prime residential properties and luxury homes in Mumbai\'s finest neighborhoods'
                 : 'Discover luxury living with our curated collection of premium properties in Mumbai'
               }
             </p>
@@ -271,7 +271,7 @@ export default function PropertiesDatabase() {
       {/* Properties Grid */}
       <section className={`py-16 ${
         isCommercialSection ? 'bg-gradient-to-br from-brand-beige-light to-brand-cream' :
-        isResidentialSection ? 'bg-gradient-to-br from-brand-cream via-brand-beige-light to-brand-beige' : 
+        isResidentialSection ? 'bg-gradient-to-br from-brand-beige-light to-brand-cream' : 
         'bg-background'
       } transition-all duration-700`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
