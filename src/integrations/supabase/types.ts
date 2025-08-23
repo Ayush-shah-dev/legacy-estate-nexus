@@ -173,8 +173,8 @@ export type Database = {
       properties: {
         Row: {
           area_sqft: number | null
-          bathrooms: string | null
-          bedrooms: string | null
+          bathrooms: number | null
+          bedrooms: number | null
           client_user_id: string | null
           created_at: string
           description: string | null
@@ -182,7 +182,7 @@ export type Database = {
           id: string
           image_url: string | null
           location: string | null
-          price: string | null
+          price: number | null
           property_type: string | null
           status: string | null
           title: string
@@ -190,8 +190,8 @@ export type Database = {
         }
         Insert: {
           area_sqft?: number | null
-          bathrooms?: string | null
-          bedrooms?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
           client_user_id?: string | null
           created_at?: string
           description?: string | null
@@ -199,7 +199,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           location?: string | null
-          price?: string | null
+          price?: number | null
           property_type?: string | null
           status?: string | null
           title: string
@@ -207,8 +207,8 @@ export type Database = {
         }
         Update: {
           area_sqft?: number | null
-          bathrooms?: string | null
-          bedrooms?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
           client_user_id?: string | null
           created_at?: string
           description?: string | null
@@ -216,7 +216,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           location?: string | null
-          price?: string | null
+          price?: number | null
           property_type?: string | null
           status?: string | null
           title?: string

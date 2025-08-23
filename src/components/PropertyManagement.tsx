@@ -14,11 +14,11 @@ interface Property {
   id: string;
   title: string;
   description: string;
-  price: string;
+  price: number;
   location: string;
   property_type: string;
-  bedrooms: string;
-  bathrooms: string;
+  bedrooms: number;
+  bathrooms: number;
   area_sqft: number;
   status: string;
   featured: boolean;
@@ -233,7 +233,7 @@ const PropertyManagement = () => {
                     </TableCell>
                     <TableCell className="text-gray-300">{property.location}</TableCell>
                     <TableCell className="text-green-400 font-medium">
-                      {property.price}
+                      ₹{property.price?.toLocaleString() || 'N/A'}
                     </TableCell>
                     <TableCell>{getStatusBadge(property.status)}</TableCell>
                     <TableCell className="text-gray-300">
