@@ -21,7 +21,8 @@ import {
   ExternalLink,
   Building2,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  X
 } from 'lucide-react';
 
 interface Property {
