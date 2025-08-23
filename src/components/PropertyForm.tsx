@@ -1,6 +1,6 @@
 // @ts-nocheck
 // Temporarily disable TS checking here to unblock build after schema change.
-// We’ll refine this form to the new string-based fields right after the app is back up.
+// We'll refine this form to the new string-based fields right after the app is back up.
 import React, { useState } from 'react';
 import {
   Form,
@@ -388,3 +388,6 @@ export function PropertyForm({ property, onSubmitSuccess }: PropertyFormProps) {
     </Card>
   )
 }
+
+// Add default export to satisfy existing default import usage
+export default PropertyForm;
