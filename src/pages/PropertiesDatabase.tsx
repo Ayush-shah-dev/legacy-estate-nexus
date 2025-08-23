@@ -47,6 +47,7 @@ export default function PropertiesDatabase() {
   const [priceRange, setPriceRange] = useState('all');
   const [propertyType, setPropertyType] = useState('all');
   const [locationFilter, setLocationFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('newest');
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
@@ -75,7 +76,6 @@ export default function PropertiesDatabase() {
         .from('properties')
         .select('*')
         .order('created_at', { ascending: false });
-        // Removed any limit() to show all properties
 
       if (error) {
         console.error('Supabase error:', error);
@@ -95,10 +95,54 @@ export default function PropertiesDatabase() {
     const matchesSearch = property.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          (property.location?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
                          (property.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
-    const matchesType = propertyType === 'all' || property.property_type === propertyType;
+    
+    // Filter by property type based on URL parameter
+    const urlParams = new URLSearchParams(location.search);
+    const typeParam = urlParams.get('type');
+    let matchesType = true;
+    
+    if (typeParam === 'residential') {
+      matchesType = property.property_type === 'Residential' || 
+                   property.property_type === 'apartment' || 
+                   property.property_type === 'house' || 
+                   property.property_type === 'villa';
+    } else if (typeParam === 'commercial') {
+      matchesType = property.property_type === 'Commercial' || 
+                   property.property_type === 'commercial';
+    } else if (propertyType !== 'all') {
+      matchesType = property.property_type === propertyType;
+    }
+    
     const matchesLocation = locationFilter === 'all' || (property.location?.includes(locationFilter) || false);
     
     return matchesSearch && matchesType && matchesLocation;
+  });
+
+  // Sort properties based on selected option
+  const sortedProperties = [...filteredProperties].sort((a, b) => {
+    switch (sortBy) {
+      case 'newest':
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      case 'oldest':
+        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+      case 'title':
+        return a.title.localeCompare(b.title);
+      case 'price-low':
+        // Handle text prices - put "Price on Request" at the end
+        if (!a.price || a.price === 'Price on Request') return 1;
+        if (!b.price || b.price === 'Price on Request') return -1;
+        const priceA = parseFloat(a.price.replace(/[^\d.]/g, '')) || 0;
+        const priceB = parseFloat(b.price.replace(/[^\d.]/g, '')) || 0;
+        return priceA - priceB;
+      case 'price-high':
+        if (!a.price || a.price === 'Price on Request') return 1;
+        if (!b.price || b.price === 'Price on Request') return -1;
+        const priceHighA = parseFloat(a.price.replace(/[^\d.]/g, '')) || 0;
+        const priceHighB = parseFloat(b.price.replace(/[^\d.]/g, '')) || 0;
+        return priceHighB - priceHighA;
+      default:
+        return 0;
+    }
   });
 
   const openPropertyDetail = (property: Property) => {
@@ -123,8 +167,10 @@ export default function PropertiesDatabase() {
     setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
   };
 
-  const isCommercialSection = propertyType === 'Commercial';
-  const isResidentialSection = propertyType === 'Residential';
+  const urlParams = new URLSearchParams(location.search);
+  const typeParam = urlParams.get('type');
+  const isCommercialSection = typeParam === 'commercial';
+  const isResidentialSection = typeParam === 'residential';
 
   if (loading) {
     return (
@@ -167,10 +213,10 @@ export default function PropertiesDatabase() {
         </div>
       </section>
 
-      {/* Search and Filter - Made visible again */}
+      {/* Search and Filter */}
       <section className="py-8 bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <Input
@@ -181,20 +227,22 @@ export default function PropertiesDatabase() {
               />
             </div>
             
-            <Select value={propertyType} onValueChange={setPropertyType}>
-              <SelectTrigger>
-                <SelectValue placeholder="Property Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="Residential">Residential</SelectItem>
-                <SelectItem value="Commercial">Commercial</SelectItem>
-                <SelectItem value="apartment">Apartment</SelectItem>
-                <SelectItem value="house">House</SelectItem>
-                <SelectItem value="villa">Villa</SelectItem>
-                <SelectItem value="land">Land</SelectItem>
-              </SelectContent>
-            </Select>
+            {!isCommercialSection && !isResidentialSection && (
+              <Select value={propertyType} onValueChange={setPropertyType}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Property Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="Residential">Residential</SelectItem>
+                  <SelectItem value="Commercial">Commercial</SelectItem>
+                  <SelectItem value="apartment">Apartment</SelectItem>
+                  <SelectItem value="house">House</SelectItem>
+                  <SelectItem value="villa">Villa</SelectItem>
+                  <SelectItem value="land">Land</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
             
             <Select value={locationFilter} onValueChange={setLocationFilter}>
               <SelectTrigger>
@@ -209,16 +257,11 @@ export default function PropertiesDatabase() {
                 <SelectItem value="Worli">Worli</SelectItem>
               </SelectContent>
             </Select>
-            
-            <Button className="bg-brand-classic-gold hover:bg-brand-soft-gold text-white">
-              <Filter className="h-4 w-4 mr-2" />
-              Apply Filters ({filteredProperties.length})
-            </Button>
           </div>
         </div>
       </section>
 
-      {/* Properties Grid - Showing all properties */}
+      {/* Properties Grid */}
       <section className={`py-16 ${
         isCommercialSection ? 'bg-gradient-to-br from-brand-beige-light to-brand-cream' :
         isResidentialSection ? 'bg-gradient-to-br from-brand-cream via-brand-beige-light to-brand-beige' : 
@@ -228,7 +271,7 @@ export default function PropertiesDatabase() {
           <div className="flex justify-between items-center mb-8 animate-fade-in">
             <div>
               <h2 className={`text-2xl font-bold ${(isResidentialSection || isCommercialSection) ? 'text-brand-navy' : 'text-primary'} animate-slide-up`}>
-                {filteredProperties.length} Properties Found
+                {sortedProperties.length} Properties Found
               </h2>
               <p className={`${(isResidentialSection || isCommercialSection) ? 'text-brand-beige-dark' : 'text-brand-grey'} animate-slide-up [animation-delay:200ms]`}>
                 {isCommercialSection 
@@ -240,7 +283,7 @@ export default function PropertiesDatabase() {
               </p>
             </div>
             
-            <Select defaultValue="newest">
+            <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
@@ -248,11 +291,13 @@ export default function PropertiesDatabase() {
                 <SelectItem value="newest">Newest First</SelectItem>
                 <SelectItem value="oldest">Oldest First</SelectItem>
                 <SelectItem value="title">Title A-Z</SelectItem>
+                <SelectItem value="price-low">Price: Low to High</SelectItem>
+                <SelectItem value="price-high">Price: High to Low</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {filteredProperties.length === 0 ? (
+          {sortedProperties.length === 0 ? (
             <div className="text-center py-16">
               <Building2 className="h-24 w-24 text-brand-beige-dark mx-auto mb-6" />
               <h3 className="text-2xl font-semibold text-brand-navy mb-4">No Properties Found</h3>
@@ -272,7 +317,7 @@ export default function PropertiesDatabase() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredProperties.map((property, index) => (
+              {sortedProperties.map((property, index) => (
                 <Card 
                   key={property.id} 
                   className={`overflow-hidden hover:shadow-luxury transition-all duration-300 group animate-fade-in cursor-pointer ${
@@ -351,7 +396,6 @@ export default function PropertiesDatabase() {
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-brand-classic-gold">
-                          {/* Display price as text */}
                           {property.price || 'Price on Request'}
                         </div>
                         <div className="text-sm text-brand-beige-dark">Contact for Details</div>
@@ -380,14 +424,12 @@ export default function PropertiesDatabase() {
                         {property.bedrooms && (
                           <div className="flex items-center">
                             <BedDouble className="h-4 w-4 mr-1" />
-                            {/* Display bedrooms as text */}
                             {property.bedrooms}
                           </div>
                         )}
                         {property.bathrooms && (
                           <div className="flex items-center">
                             <Bath className="h-4 w-4 mr-1" />
-                            {/* Display bathrooms as text */}
                             {property.bathrooms}
                           </div>
                         )}
