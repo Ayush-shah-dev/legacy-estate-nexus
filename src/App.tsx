@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,7 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./hooks/useAuth";
 import { Layout } from "./components/Layout";
 import Home from "./pages/Home";
-import Properties from "./pages/Properties";
+// Removed Properties import since we now use PropertiesDatabase for /properties
+// import Properties from "./pages/Properties";
 import Blogs from "./pages/Blogs";
 import BlogDetail from "./pages/BlogDetail";
 import BlogPost from "./pages/BlogPost";
@@ -34,7 +36,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
-                <Route path="properties" element={<Properties />} />
+                {/* Use PropertiesDatabase for /properties so ?type filters apply */}
+                <Route path="properties" element={<PropertiesDatabase />} />
                 <Route path="blogs" element={<Blogs />} />
                 <Route path="blog/:slug" element={<BlogDetail />} />
                 <Route path="blogs/:id" element={<BlogPost />} />
@@ -69,3 +72,4 @@ function App() {
 }
 
 export default App;
+

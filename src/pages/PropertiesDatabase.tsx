@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -92,27 +91,33 @@ export default function PropertiesDatabase() {
   };
 
   const filteredProperties = properties.filter(property => {
-    const matchesSearch = property.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (property.location?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
-                         (property.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
-    
-    // Filter by property type based on URL parameter
+    // Determine current section from URL
     const urlParams = new URLSearchParams(location.search);
     const typeParam = urlParams.get('type');
+    const isCommercial = typeParam === 'commercial';
+    const isResidential = typeParam === 'residential';
+
+    // Enforce type per tab
     let matchesType = true;
-    
-    if (typeParam === 'residential') {
-      matchesType = property.property_type === 'Residential' || 
-                   property.property_type === 'apartment' || 
-                   property.property_type === 'house' || 
-                   property.property_type === 'villa';
-    } else if (typeParam === 'commercial') {
-      matchesType = property.property_type === 'Commercial' || 
-                   property.property_type === 'commercial';
+    const typeValue = (property.property_type || '').toLowerCase();
+    if (isCommercial) {
+      matchesType = typeValue === 'commercial';
+    } else if (isResidential) {
+      // Show everything that's not commercial
+      matchesType = typeValue !== 'commercial';
     } else if (propertyType !== 'all') {
       matchesType = property.property_type === propertyType;
     }
-    
+
+    // On commercial tab: ignore search/location filters completely
+    if (isCommercial) {
+      return matchesType;
+    }
+
+    // Otherwise, apply search and location filters normally
+    const matchesSearch = property.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (property.location?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
+                         (property.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
     const matchesLocation = locationFilter === 'all' || (property.location?.includes(locationFilter) || false);
     
     return matchesSearch && matchesType && matchesLocation;
@@ -213,53 +218,55 @@ export default function PropertiesDatabase() {
         </div>
       </section>
 
-      {/* Search and Filter */}
-      <section className="py-8 bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input
-                placeholder="Search properties..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            
-            {!isCommercialSection && !isResidentialSection && (
-              <Select value={propertyType} onValueChange={setPropertyType}>
+      {/* Search and Filter - hidden entirely on Commercial tab */}
+      {!isCommercialSection && (
+        <section className="py-8 bg-white border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <Input
+                  placeholder="Search properties..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              
+              {!isCommercialSection && !isResidentialSection && (
+                <Select value={propertyType} onValueChange={setPropertyType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Property Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="Residential">Residential</SelectItem>
+                    <SelectItem value="Commercial">Commercial</SelectItem>
+                    <SelectItem value="apartment">Apartment</SelectItem>
+                    <SelectItem value="house">House</SelectItem>
+                    <SelectItem value="villa">Villa</SelectItem>
+                    <SelectItem value="land">Land</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+              
+              <Select value={locationFilter} onValueChange={setLocationFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Property Type" />
+                  <SelectValue placeholder="Location" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="Residential">Residential</SelectItem>
-                  <SelectItem value="Commercial">Commercial</SelectItem>
-                  <SelectItem value="apartment">Apartment</SelectItem>
-                  <SelectItem value="house">House</SelectItem>
-                  <SelectItem value="villa">Villa</SelectItem>
-                  <SelectItem value="land">Land</SelectItem>
+                  <SelectItem value="all">All Locations</SelectItem>
+                  <SelectItem value="Mumbai">Mumbai</SelectItem>
+                  <SelectItem value="Andheri">Andheri</SelectItem>
+                  <SelectItem value="Bandra">Bandra</SelectItem>
+                  <SelectItem value="Juhu">Juhu</SelectItem>
+                  <SelectItem value="Worli">Worli</SelectItem>
                 </SelectContent>
               </Select>
-            )}
-            
-            <Select value={locationFilter} onValueChange={setLocationFilter}>
-              <SelectTrigger>
-                <SelectValue placeholder="Location" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Locations</SelectItem>
-                <SelectItem value="Mumbai">Mumbai</SelectItem>
-                <SelectItem value="Andheri">Andheri</SelectItem>
-                <SelectItem value="Bandra">Bandra</SelectItem>
-                <SelectItem value="Juhu">Juhu</SelectItem>
-                <SelectItem value="Worli">Worli</SelectItem>
-              </SelectContent>
-            </Select>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Properties Grid */}
       <section className={`py-16 ${
@@ -371,7 +378,6 @@ export default function PropertiesDatabase() {
                         {property.property_type || 'Property'}
                       </Badge>
                     </div>
-                    {/* Show indicator if property has multiple images */}
                     {property.additional_images && property.additional_images.length > 0 && (
                       <div className="absolute bottom-4 right-4">
                         <Badge className="bg-black/60 text-white text-xs">
@@ -483,7 +489,6 @@ export default function PropertiesDatabase() {
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={closePropertyDetail}>
           <div className="bg-white rounded-lg max-w-4xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="relative">
-              {/* Image Gallery */}
               <div className="relative h-96">
                 {(() => {
                   const allImages = [selectedProperty.image_url, ...(selectedProperty.additional_images || [])].filter(Boolean);
@@ -526,7 +531,6 @@ export default function PropertiesDatabase() {
                 })()}
               </div>
               
-              {/* Close Button */}
               <Button
                 variant="outline"
                 size="sm"
@@ -537,7 +541,6 @@ export default function PropertiesDatabase() {
               </Button>
             </div>
 
-            {/* Property Details */}
             <div className="p-6">
               <div className="flex items-start justify-between mb-4">
                 <div>
