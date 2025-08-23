@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -14,15 +15,16 @@ interface Property {
   id: string;
   title: string;
   description: string;
-  price: number;
+  price: string; // Changed to string
   location: string;
   property_type: string;
-  bedrooms: number;
-  bathrooms: number;
+  bedrooms: string; // Changed to string
+  bathrooms: string; // Changed to string
   area_sqft: number;
   status: string;
   featured: boolean;
   image_url: string;
+  additional_images?: string[];
   created_at: string;
 }
 
@@ -233,12 +235,14 @@ const PropertyManagement = () => {
                     </TableCell>
                     <TableCell className="text-gray-300">{property.location}</TableCell>
                     <TableCell className="text-green-400 font-medium">
-                      ₹{property.price?.toLocaleString() || 'N/A'}
+                      {/* Display price as text instead of formatting as number */}
+                      {property.price || 'Price on Request'}
                     </TableCell>
                     <TableCell>{getStatusBadge(property.status)}</TableCell>
                     <TableCell className="text-gray-300">
                       <div className="text-sm">
-                        {property.bedrooms}BR • {property.bathrooms}BA • {property.area_sqft} sq ft
+                        {/* Display bedrooms and bathrooms as text */}
+                        {property.bedrooms} • {property.bathrooms} • {property.area_sqft} sq ft
                       </div>
                     </TableCell>
                     <TableCell>

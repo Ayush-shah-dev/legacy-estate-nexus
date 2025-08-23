@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { X, Save, Upload } from "lucide-react";
+import { X, Save, Upload, Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -30,30 +30,32 @@ import { useToast } from "@/hooks/use-toast";
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  price: z.number().min(0, "Price must be a positive number"),
+  price: z.string().min(1, "Price is required"), // Changed to string for text input
   location: z.string().min(1, "Location is required"),
   property_type: z.string().min(1, "Property type is required"),
-  bedrooms: z.number().min(0, "Bedrooms must be a positive number"),
-  bathrooms: z.number().min(0, "Bathrooms must be a positive number"),
+  bedrooms: z.string().min(1, "Bedrooms is required"), // Changed to string for text input
+  bathrooms: z.string().min(1, "Bathrooms is required"), // Changed to string for text input
   area_sqft: z.number().min(0, "Area must be a positive number"),
   status: z.string().min(1, "Status is required"),
   featured: z.boolean(),
   image_url: z.string().optional(),
+  additional_images: z.array(z.string()).optional(),
 });
 
 interface Property {
   id?: string;
   title: string;
   description: string;
-  price: number;
+  price: string; // Changed to string
   location: string;
   property_type: string;
-  bedrooms: number;
-  bathrooms: number;
+  bedrooms: string; // Changed to string
+  bathrooms: string; // Changed to string
   area_sqft: number;
   status: string;
   featured: boolean;
   image_url: string;
+  additional_images?: string[];
 }
 
 interface PropertyFormProps {
@@ -64,6 +66,9 @@ interface PropertyFormProps {
 
 const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
   const [uploading, setUploading] = useState(false);
+  const [additionalImages, setAdditionalImages] = useState<string[]>(
+    property?.additional_images || []
+  );
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,25 +76,31 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
     defaultValues: {
       title: property?.title || "",
       description: property?.description || "",
-      price: property?.price || 0,
+      price: property?.price || "", // Now string default
       location: property?.location || "",
       property_type: property?.property_type || "",
-      bedrooms: property?.bedrooms || 0,
-      bathrooms: property?.bathrooms || 0,
+      bedrooms: property?.bedrooms || "", // Now string default
+      bathrooms: property?.bathrooms || "", // Now string default
       area_sqft: property?.area_sqft || 0,
       status: property?.status || "available",
       featured: property?.featured || false,
       image_url: property?.image_url || "",
+      additional_images: property?.additional_images || [],
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      const submitData = {
+        ...values,
+        additional_images: additionalImages,
+      };
+
       if (property?.id) {
         // Update existing property
         const { error } = await supabase
           .from('properties')
-          .update(values)
+          .update(submitData)
           .eq('id', property.id);
 
         if (error) throw error;
@@ -99,10 +110,10 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
           description: "Property updated successfully",
         });
       } else {
-        // Create new property - send a single object (not an array) for proper typing
+        // Create new property
         const { error } = await supabase
           .from('properties')
-          .insert(values);
+          .insert(submitData);
 
         if (error) throw error;
 
@@ -160,6 +171,60 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleAdditionalImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `additional_${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('properties')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('properties')
+        .getPublicUrl(filePath);
+
+      setAdditionalImages(prev => [...prev, publicUrl]);
+
+      toast({
+        title: "Success",
+        description: "Additional image uploaded successfully",
+      });
+    } catch (error) {
+      console.error('Error uploading additional image:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload additional image",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const addImageUrlField = () => {
+    setAdditionalImages(prev => [...prev, ""]);
+  };
+
+  const updateImageUrl = (index: number, url: string) => {
+    setAdditionalImages(prev => {
+      const updated = [...prev];
+      updated[index] = url;
+      return updated;
+    });
+  };
+
+  const removeImageUrl = (index: number) => {
+    setAdditionalImages(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -225,7 +290,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-                {/* Price */}
+                {/* Price - Changed to text input */}
                 <FormField
                   control={form.control}
                   name="price"
@@ -234,10 +299,9 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                       <FormLabel className="text-blue-100">Price</FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="0"
+                          type="text"
+                          placeholder="e.g., ₹50,00,000 or Negotiable"
                           {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
                           className="bg-black/20 border-blue-500/20 text-white"
                         />
                       </FormControl>
@@ -263,7 +327,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-                {/* Bedrooms */}
+                {/* Bedrooms - Changed to text input */}
                 <FormField
                   control={form.control}
                   name="bedrooms"
@@ -272,10 +336,9 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                       <FormLabel className="text-blue-100">Bedrooms</FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="0"
+                          type="text"
+                          placeholder="e.g., 3 BHK, Studio, or 2+1"
                           {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
                           className="bg-black/20 border-blue-500/20 text-white"
                         />
                       </FormControl>
@@ -283,7 +346,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-                {/* Bathrooms */}
+                {/* Bathrooms - Changed to text input */}
                 <FormField
                   control={form.control}
                   name="bathrooms"
@@ -292,10 +355,9 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                       <FormLabel className="text-blue-100">Bathrooms</FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="0"
+                          type="text"
+                          placeholder="e.g., 2, 2.5, or Common"
                           {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
                           className="bg-black/20 border-blue-500/20 text-white"
                         />
                       </FormControl>
@@ -368,13 +430,13 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                 )}
               />
 
-              {/* Image Upload */}
+              {/* Main Image Upload */}
               <FormField
                 control={form.control}
                 name="image_url"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-blue-100">Property Image</FormLabel>
+                    <FormLabel className="text-blue-100">Main Property Image</FormLabel>
                     <FormControl>
                       <div className="space-y-4">
                         <Input
@@ -397,6 +459,61 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                   </FormItem>
                 )}
               />
+
+              {/* Additional Images */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <FormLabel className="text-blue-100">Additional Images</FormLabel>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addImageUrlField}
+                    className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Image
+                  </Button>
+                </div>
+                
+                <div className="space-y-3">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAdditionalImageUpload}
+                    disabled={uploading}
+                    className="bg-black/20 border-blue-500/20 text-white"
+                  />
+                  
+                  {additionalImages.map((imageUrl, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <Input
+                        type="text"
+                        placeholder="Image URL"
+                        value={imageUrl}
+                        onChange={(e) => updateImageUrl(index, e.target.value)}
+                        className="bg-black/20 border-blue-500/20 text-white flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => removeImageUrl(index)}
+                        className="border-red-500/50 text-red-400 hover:bg-red-500/10"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                      {imageUrl && (
+                        <img
+                          src={imageUrl}
+                          alt={`Additional ${index + 1}`}
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               {/* Featured */}
               <FormField
