@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { usePDFExport } from "@/hooks/usePDFExport";
 import { 
   Users, 
   FileText, 
@@ -21,7 +22,8 @@ import {
   Calendar,
   ArrowUpRight,
   ArrowDownRight,
-  MessageSquare
+  MessageSquare,
+  Download
 } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell } from 'recharts';
 import PropertyManagement from "@/components/PropertyManagement";
@@ -95,6 +97,7 @@ const AdminDashboard = () => {
   const [pageStats, setPageStats] = useState<PageStats[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { exportAnalyticsToPDF } = usePDFExport();
 
   useEffect(() => {
     fetchData();
@@ -210,6 +213,36 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleExportPDF = async () => {
+    if (!visitorStats || !dailyStats || !pageStats) {
+      toast({
+        title: "Error",
+        description: "Analytics data not available for export",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      await exportAnalyticsToPDF({
+        visitorStats,
+        dailyStats,
+        pageStats
+      });
+      toast({
+        title: "Success",
+        description: "Analytics report exported successfully",
+      });
+    } catch (error) {
+      console.error('Error exporting PDF:', error);
+      toast({
+        title: "Error",
+        description: "Failed to export analytics report",
+        variant: "destructive",
+      });
+    }
+  };
+
   const toggleReviewApproval = async (id: string, approved: boolean) => {
     try {
       const { error } = await supabase
@@ -258,7 +291,7 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Futuristic Header */}
-      <div className="border-b border-blue-500/20 bg-black/20 backdrop-blur-xl">
+      <div className="border-b border-blue-500/20 bg-black/20 backdrop-blur-xl fixed top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -272,6 +305,16 @@ const AdminDashboard = () => {
                 <Activity className="w-4 h-4 animate-pulse" />
                 <span className="text-sm">Live</span>
               </div>
+              {visitorStats && (
+                <Button 
+                  onClick={handleExportPDF}
+                  variant="outline" 
+                  className="border-green-500/50 text-green-400 hover:bg-green-500/10"
+                >
+                  <Download className="w-4 h-4 mr-2" />
+                  Export PDF
+                </Button>
+              )}
               <Button 
                 onClick={() => window.location.href = '/'}
                 variant="outline" 
@@ -284,7 +327,8 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Add padding-top to account for fixed header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-32">
         {/* Analytics Overview Cards */}
         {visitorStats && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">

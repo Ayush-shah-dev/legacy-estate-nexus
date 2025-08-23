@@ -361,8 +361,8 @@ export default function ClientDashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-beige-light to-brand-cream">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      {/* Header - Fixed */}
+      <div className="bg-white shadow-sm border-b fixed top-0 left-0 right-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div>
@@ -393,7 +393,8 @@ export default function ClientDashboard() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Main Content - Add padding-top for fixed header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-32">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card className="bg-white border-brand-beige">
