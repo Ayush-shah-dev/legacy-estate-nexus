@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -23,11 +22,11 @@ interface Property {
   id: string;
   title: string;
   description: string;
-  price: number;
+  price: string;
   location: string;
   property_type: string;
-  bedrooms: number;
-  bathrooms: number;
+  bedrooms: string;
+  bathrooms: string;
   area_sqft: number;
   status: string;
   featured: boolean;
@@ -367,16 +366,16 @@ export default function Home() {
                           {property.area_sqft} sq ft
                         </span>
                       </div>
-                      {property.bedrooms > 0 && (
+                      {(property.bedrooms && property.bedrooms.trim() !== "") || (property.bathrooms && property.bathrooms.trim() !== "") ? (
                         <div className="flex justify-between items-center">
                           <span className="text-sm font-medium text-primary">
                             Details:
                           </span>
                           <span className="text-sm text-brand-grey">
-                            {property.bedrooms}BR • {property.bathrooms}BA
+                            {[property.bedrooms, property.bathrooms].filter(Boolean).join(" • ")}
                           </span>
                         </div>
-                      )}
+                      ) : null}
                       <div className="flex flex-col">
                         <span className="text-sm font-medium text-primary mb-1">
                           Amenities:
