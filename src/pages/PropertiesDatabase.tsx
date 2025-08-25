@@ -165,24 +165,20 @@ const PropertyImageGallery = ({ property }: { property: Property }) => {
           {/* Auto-play Progress Bar */}
           {isAutoPlaying && !isHovered && (
             <div className="absolute bottom-0 left-0 w-full h-1 bg-black/20">
-              <div 
-                className="h-full bg-white/80 transition-all duration-100 ease-linear"
-                style={{
-                  width: '100%',
-                  animation: 'progress-bar 3s linear infinite'
-                }}
-              />
+              <div className="h-full bg-white/80 animate-[progress-bar_3s_linear_infinite]" />
             </div>
           )}
         </>
       )}
 
-      <style jsx>{`
-        @keyframes progress-bar {
-          from { width: 0%; }
-          to { width: 100%; }
-        }
-      `}</style>
+      <style>
+        {`
+          @keyframes progress-bar {
+            from { width: 0%; }
+            to { width: 100%; }
+          }
+        `}
+      </style>
     </div>
   );
 };
