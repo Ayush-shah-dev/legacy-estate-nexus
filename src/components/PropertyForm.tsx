@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { X, Save, Upload, Plus, Trash2 } from "lucide-react";
+import { X, Save, Upload, Plus, Trash2, Eye } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -30,12 +30,12 @@ import { useToast } from "@/hooks/use-toast";
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  price: z.string().min(1, "Price is required"), // Changed to string for text input
+  price: z.string().min(1, "Price is required"),
   location: z.string().min(1, "Location is required"),
   property_type: z.string().min(1, "Property type is required"),
-  bedrooms: z.string().min(1, "Bedrooms is required"), // Changed to string for text input
-  bathrooms: z.string().min(1, "Bathrooms is required"), // Changed to string for text input
-  area_sqft: z.number().min(0, "Area must be a positive number"),
+  bedrooms: z.string().min(1, "Detail 1 is required"),
+  bathrooms: z.string().min(1, "Detail 2 is required"),
+  area_sqft: z.string().min(1, "Area is required"), // Changed to string
   status: z.string().min(1, "Status is required"),
   featured: z.boolean(),
   image_url: z.string().optional(),
@@ -46,11 +46,11 @@ interface Property {
   id?: string;
   title: string;
   description: string;
-  price: string; // Changed to string
+  price: string;
   location: string;
   property_type: string;
-  bedrooms: string; // Changed to string
-  bathrooms: string; // Changed to string
+  bedrooms: string;
+  bathrooms: string;
   area_sqft: number;
   status: string;
   featured: boolean;
@@ -69,6 +69,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
   const [additionalImages, setAdditionalImages] = useState<string[]>(
     property?.additional_images || []
   );
+  const [showImageGallery, setShowImageGallery] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -76,12 +77,12 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
     defaultValues: {
       title: property?.title || "",
       description: property?.description || "",
-      price: property?.price || "", // Now string default
+      price: property?.price || "",
       location: property?.location || "",
       property_type: property?.property_type || "",
-      bedrooms: property?.bedrooms || "", // Now string default
-      bathrooms: property?.bathrooms || "", // Now string default
-      area_sqft: property?.area_sqft || 0,
+      bedrooms: property?.bedrooms || "",
+      bathrooms: property?.bathrooms || "",
+      area_sqft: property?.area_sqft ? property.area_sqft.toString() : "", // Convert to string
       status: property?.status || "available",
       featured: property?.featured || false,
       image_url: property?.image_url || "",
@@ -89,15 +90,18 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
     },
   });
 
+  const watchPropertyType = form.watch("property_type");
+  const isCommercial = watchPropertyType === "commercial";
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const submitData = {
         ...values,
+        area_sqft: parseInt(values.area_sqft) || 0, // Convert back to number for database
         additional_images: additionalImages,
       };
 
       if (property?.id) {
-        // Update existing property
         const { error } = await supabase
           .from('properties')
           .update(submitData)
@@ -110,7 +114,6 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
           description: "Property updated successfully",
         });
       } else {
-        // Create new property
         const { error } = await supabase
           .from('properties')
           .insert(submitData);
@@ -173,37 +176,42 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
     }
   };
 
-  const handleAdditionalImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const handleMultipleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
 
     setUploading(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `additional_${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      const uploadPromises = files.map(async (file) => {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `additional_${Math.random()}.${fileExt}`;
+        const filePath = `${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from('properties')
-        .upload(filePath, file);
+        const { error: uploadError } = await supabase.storage
+          .from('properties')
+          .upload(filePath, file);
 
-      if (uploadError) throw uploadError;
+        if (uploadError) throw uploadError;
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('properties')
-        .getPublicUrl(filePath);
+        const { data: { publicUrl } } = supabase.storage
+          .from('properties')
+          .getPublicUrl(filePath);
 
-      setAdditionalImages(prev => [...prev, publicUrl]);
+        return publicUrl;
+      });
+
+      const uploadedUrls = await Promise.all(uploadPromises);
+      setAdditionalImages(prev => [...prev, ...uploadedUrls]);
 
       toast({
         title: "Success",
-        description: "Additional image uploaded successfully",
+        description: `${files.length} images uploaded successfully`,
       });
     } catch (error) {
-      console.error('Error uploading additional image:', error);
+      console.error('Error uploading images:', error);
       toast({
         title: "Error",
-        description: "Failed to upload additional image",
+        description: "Failed to upload some images",
         variant: "destructive",
       });
     } finally {
@@ -227,6 +235,24 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
     setAdditionalImages(prev => prev.filter((_, i) => i !== index));
   };
 
+  const getFieldLabel = (field: string) => {
+    if (!isCommercial) {
+      return field === 'bedrooms' ? 'Bedrooms' : 'Bathrooms';
+    }
+    return field === 'bedrooms' ? 'Detail 1' : 'Detail 2';
+  };
+
+  const getFieldPlaceholder = (field: string) => {
+    if (!isCommercial) {
+      return field === 'bedrooms' 
+        ? 'e.g., 3 BHK, Studio, or 2+1' 
+        : 'e.g., 2, 2.5, or Common';
+    }
+    return field === 'bedrooms' 
+      ? 'e.g., Office Space, Conference Room' 
+      : 'e.g., Parking Available, 24/7 Security';
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-black/90 border-blue-500/20">
@@ -234,14 +260,25 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
           <CardTitle className="text-blue-100">
             {property ? 'Edit Property' : 'Add New Property'}
           </CardTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className="text-gray-400 hover:text-white"
-          >
-            <X className="w-4 h-4" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowImageGallery(!showImageGallery)}
+              className="text-gray-400 hover:text-white"
+            >
+              <Eye className="w-4 h-4 mr-1" />
+              Gallery
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="text-gray-400 hover:text-white"
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -290,7 +327,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-                {/* Price - Changed to text input */}
+                {/* Price */}
                 <FormField
                   control={form.control}
                   name="price"
@@ -327,17 +364,17 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-                {/* Bedrooms - Changed to text input */}
+                {/* Dynamic Field 1 */}
                 <FormField
                   control={form.control}
                   name="bedrooms"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-blue-100">Bedrooms</FormLabel>
+                      <FormLabel className="text-blue-100">{getFieldLabel('bedrooms')}</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="e.g., 3 BHK, Studio, or 2+1"
+                          placeholder={getFieldPlaceholder('bedrooms')}
                           {...field}
                           className="bg-black/20 border-blue-500/20 text-white"
                         />
@@ -346,17 +383,17 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-                {/* Bathrooms - Changed to text input */}
+                {/* Dynamic Field 2 */}
                 <FormField
                   control={form.control}
                   name="bathrooms"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-blue-100">Bathrooms</FormLabel>
+                      <FormLabel className="text-blue-100">{getFieldLabel('bathrooms')}</FormLabel>
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="e.g., 2, 2.5, or Common"
+                          placeholder={getFieldPlaceholder('bathrooms')}
                           {...field}
                           className="bg-black/20 border-blue-500/20 text-white"
                         />
@@ -365,19 +402,18 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     </FormItem>
                   )}
                 />
-                {/* Area */}
+                {/* Area - Now text input */}
                 <FormField
                   control={form.control}
                   name="area_sqft"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-blue-100">Area (sq ft)</FormLabel>
+                      <FormLabel className="text-blue-100">Area</FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="0"
+                          type="text"
+                          placeholder="e.g., 1200 sqft, 500 sq.m, 2500 sq yards"
                           {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
                           className="bg-black/20 border-blue-500/20 text-white"
                         />
                       </FormControl>
@@ -460,10 +496,10 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                 )}
               />
 
-              {/* Additional Images */}
+              {/* Enhanced Photo Gallery Section */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <FormLabel className="text-blue-100">Additional Images</FormLabel>
+                  <FormLabel className="text-blue-100">Photo Gallery</FormLabel>
                   <Button
                     type="button"
                     variant="outline"
@@ -472,7 +508,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                     className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10"
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    Add Image
+                    Add URL
                   </Button>
                 </div>
                 
@@ -480,10 +516,47 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                   <Input
                     type="file"
                     accept="image/*"
-                    onChange={handleAdditionalImageUpload}
+                    multiple
+                    onChange={handleMultipleImageUpload}
                     disabled={uploading}
                     className="bg-black/20 border-blue-500/20 text-white"
                   />
+                  
+                  {/* Image Gallery Grid */}
+                  {showImageGallery && (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-black/10 rounded-lg">
+                      {form.watch('image_url') && (
+                        <div className="relative">
+                          <img
+                            src={form.watch('image_url')}
+                            alt="Main"
+                            className="w-full h-20 object-cover rounded"
+                          />
+                          <div className="absolute top-1 left-1 bg-blue-600 text-white text-xs px-1 rounded">
+                            Main
+                          </div>
+                        </div>
+                      )}
+                      {additionalImages.filter(Boolean).map((imageUrl, index) => (
+                        <div key={index} className="relative">
+                          <img
+                            src={imageUrl}
+                            alt={`Gallery ${index + 1}`}
+                            className="w-full h-20 object-cover rounded"
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeImageUrl(index)}
+                            className="absolute top-1 right-1 w-6 h-6 p-0 border-red-500/50 text-red-400 hover:bg-red-500/10"
+                          >
+                            <X className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   
                   {additionalImages.map((imageUrl, index) => (
                     <div key={index} className="flex items-center space-x-3">

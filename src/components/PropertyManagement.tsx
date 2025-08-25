@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -15,12 +14,12 @@ interface Property {
   id: string;
   title: string;
   description: string;
-  price: string; // Changed to string
+  price: string;
   location: string;
   property_type: string;
-  bedrooms: string; // Changed to string
-  bathrooms: string; // Changed to string
-  area_sqft: number;
+  bedrooms: string;
+  bathrooms: string;
+  area_sqft: string;
   status: string;
   featured: boolean;
   image_url: string;
@@ -128,6 +127,14 @@ const PropertyManagement = () => {
     );
   };
 
+  const getPropertyDetails = (property: Property) => {
+    const isCommercial = property.property_type === 'commercial';
+    if (isCommercial) {
+      return `${property.bedrooms} • ${property.bathrooms} • ${property.area_sqft}`;
+    }
+    return `${property.bedrooms} • ${property.bathrooms} • ${property.area_sqft}`;
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -155,7 +162,6 @@ const PropertyManagement = () => {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Filters */}
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -193,7 +199,6 @@ const PropertyManagement = () => {
             </Select>
           </div>
 
-          {/* Properties Table */}
           <div className="rounded-md border border-blue-500/20 overflow-hidden">
             <Table>
               <TableHeader>
@@ -204,6 +209,7 @@ const PropertyManagement = () => {
                   <TableHead className="text-blue-100">Price</TableHead>
                   <TableHead className="text-blue-100">Status</TableHead>
                   <TableHead className="text-blue-100">Details</TableHead>
+                  <TableHead className="text-blue-100">Gallery</TableHead>
                   <TableHead className="text-blue-100">Featured</TableHead>
                   <TableHead className="text-blue-100">Actions</TableHead>
                 </TableRow>
@@ -235,14 +241,20 @@ const PropertyManagement = () => {
                     </TableCell>
                     <TableCell className="text-gray-300">{property.location}</TableCell>
                     <TableCell className="text-green-400 font-medium">
-                      {/* Display price as text instead of formatting as number */}
                       {property.price || 'Price on Request'}
                     </TableCell>
                     <TableCell>{getStatusBadge(property.status)}</TableCell>
                     <TableCell className="text-gray-300">
                       <div className="text-sm">
-                        {/* Display bedrooms and bathrooms as text */}
-                        {property.bedrooms} • {property.bathrooms} • {property.area_sqft} sq ft
+                        {getPropertyDetails(property)}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-gray-300">
+                      <div className="text-sm">
+                        {property.additional_images?.length 
+                          ? `${(property.additional_images.length + 1)} photos` 
+                          : '1 photo'
+                        }
                       </div>
                     </TableCell>
                     <TableCell>
