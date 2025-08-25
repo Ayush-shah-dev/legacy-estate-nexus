@@ -19,7 +19,7 @@ interface Property {
   property_type: string;
   bedrooms: string;
   bathrooms: string;
-  area_sqft: string;
+  area_sqft: number;
   status: string;
   featured: boolean;
   image_url: string;
