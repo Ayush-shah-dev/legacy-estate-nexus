@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Form,
@@ -239,7 +238,7 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
     if (!isCommercial) {
       return field === 'bedrooms' ? 'Bedrooms' : 'Bathrooms';
     }
-    return field === 'bedrooms' ? 'Detail 1' : 'Detail 2';
+    return field === 'bedrooms' ? 'Space Details' : 'Additional Info';
   };
 
   const getFieldPlaceholder = (field: string) => {
@@ -249,8 +248,8 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
         : 'e.g., 2, 2.5, or Common';
     }
     return field === 'bedrooms' 
-      ? 'e.g., Office Space, Conference Room' 
-      : 'e.g., Parking Available, 24/7 Security';
+      ? 'e.g., Office Space, Conference Room, Retail Floor' 
+      : 'e.g., Parking Available, 24/7 Security, AC';
   };
 
   return (
