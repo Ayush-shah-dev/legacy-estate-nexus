@@ -30,14 +30,14 @@ interface Property {
   description?: string;
   location?: string;
   property_type?: string;
-  bedrooms?: string; // Changed to string
-  bathrooms?: string; // Changed to string
-  area_sqft?: number;
+  bedrooms?: string;
+  bathrooms?: string;
+  area_sqft?: string;
   image_url?: string;
   additional_images?: string[];
   featured: boolean;
   status: string;
-  price?: string; // Changed to string
+  price?: string;
   created_at: string;
 }
 
@@ -170,6 +170,26 @@ export default function PropertiesDatabase() {
     if (!selectedProperty) return;
     const allImages = [selectedProperty.image_url, ...(selectedProperty.additional_images || [])].filter(Boolean);
     setCurrentImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+  };
+
+  const getPropertyDetails = (property: Property) => {
+    const isCommercial = property.property_type?.toLowerCase() === 'commercial';
+    
+    if (isCommercial) {
+      // For commercial properties, show custom details
+      return [
+        property.bedrooms && { icon: Building2, label: property.bedrooms },
+        property.bathrooms && { icon: Building2, label: property.bathrooms },
+        property.area_sqft && { icon: Square, label: property.area_sqft }
+      ].filter(Boolean);
+    } else {
+      // For residential properties, show traditional bedroom/bathroom info
+      return [
+        property.bedrooms && { icon: BedDouble, label: property.bedrooms },
+        property.bathrooms && { icon: Bath, label: property.bathrooms },
+        property.area_sqft && { icon: Square, label: property.area_sqft }
+      ].filter(Boolean);
+    }
   };
 
   const urlParams = new URLSearchParams(location.search);
@@ -381,7 +401,7 @@ export default function PropertiesDatabase() {
                     {property.additional_images && property.additional_images.length > 0 && (
                       <div className="absolute bottom-4 right-4">
                         <Badge className="bg-black/60 text-white text-xs">
-                          +{property.additional_images.length + 1} photos
+                          +{property.additional_images.filter(Boolean).length + 1} photos
                         </Badge>
                       </div>
                     )}
@@ -427,24 +447,12 @@ export default function PropertiesDatabase() {
 
                     <div className="flex items-center justify-between mb-4 text-sm text-brand-grey">
                       <div className="flex items-center space-x-4">
-                        {property.bedrooms && (
-                          <div className="flex items-center">
-                            <BedDouble className="h-4 w-4 mr-1" />
-                            {property.bedrooms}
+                        {getPropertyDetails(property).map((detail, idx) => (
+                          <div key={idx} className="flex items-center">
+                            <detail.icon className="h-4 w-4 mr-1" />
+                            {detail.label}
                           </div>
-                        )}
-                        {property.bathrooms && (
-                          <div className="flex items-center">
-                            <Bath className="h-4 w-4 mr-1" />
-                            {property.bathrooms}
-                          </div>
-                        )}
-                        {property.area_sqft && (
-                          <div className="flex items-center">
-                            <Square className="h-4 w-4 mr-1" />
-                            {property.area_sqft} sq ft
-                          </div>
-                        )}
+                        ))}
                       </div>
                     </div>
 
@@ -484,7 +492,7 @@ export default function PropertiesDatabase() {
         </div>
       </section>
 
-      {/* Property Detail Modal with Image Gallery */}
+      {/* Property Detail Modal with Enhanced Image Gallery */}
       {selectedProperty && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={closePropertyDetail}>
           <div className="bg-white rounded-lg max-w-4xl max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
@@ -567,33 +575,20 @@ export default function PropertiesDatabase() {
               )}
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                {selectedProperty.bedrooms && (
-                  <div className="flex items-center p-4 bg-brand-beige-light rounded-lg">
-                    <BedDouble className="h-8 w-8 text-brand-navy mr-3" />
+                {getPropertyDetails(selectedProperty).map((detail, index) => (
+                  <div key={index} className="flex items-center p-4 bg-brand-beige-light rounded-lg">
+                    <detail.icon className="h-8 w-8 text-brand-navy mr-3" />
                     <div>
-                      <div className="font-semibold text-brand-navy">Bedrooms</div>
-                      <div className="text-brand-grey">{selectedProperty.bedrooms}</div>
+                      <div className="font-semibold text-brand-navy">
+                        {selectedProperty.property_type?.toLowerCase() === 'commercial' 
+                          ? index === 0 ? 'Detail 1' : index === 1 ? 'Detail 2' : 'Area'
+                          : index === 0 ? 'Bedrooms' : index === 1 ? 'Bathrooms' : 'Area'
+                        }
+                      </div>
+                      <div className="text-brand-grey">{detail.label}</div>
                     </div>
                   </div>
-                )}
-                {selectedProperty.bathrooms && (
-                  <div className="flex items-center p-4 bg-brand-beige-light rounded-lg">
-                    <Bath className="h-8 w-8 text-brand-navy mr-3" />
-                    <div>
-                      <div className="font-semibold text-brand-navy">Bathrooms</div>
-                      <div className="text-brand-grey">{selectedProperty.bathrooms}</div>
-                    </div>
-                  </div>
-                )}
-                {selectedProperty.area_sqft && (
-                  <div className="flex items-center p-4 bg-brand-beige-light rounded-lg">
-                    <Square className="h-8 w-8 text-brand-navy mr-3" />
-                    <div>
-                      <div className="font-semibold text-brand-navy">Area</div>
-                      <div className="text-brand-grey">{selectedProperty.area_sqft} sq ft</div>
-                    </div>
-                  </div>
-                )}
+                ))}
               </div>
 
               <div className="flex space-x-4">

@@ -173,7 +173,7 @@ export type Database = {
       properties: {
         Row: {
           additional_images: string[] | null
-          area_sqft: number | null
+          area_sqft: string | null
           bathrooms: string | null
           bedrooms: string | null
           client_user_id: string | null
@@ -191,7 +191,7 @@ export type Database = {
         }
         Insert: {
           additional_images?: string[] | null
-          area_sqft?: number | null
+          area_sqft?: string | null
           bathrooms?: string | null
           bedrooms?: string | null
           client_user_id?: string | null
@@ -209,7 +209,7 @@ export type Database = {
         }
         Update: {
           additional_images?: string[] | null
-          area_sqft?: number | null
+          area_sqft?: string | null
           bathrooms?: string | null
           bedrooms?: string | null
           client_user_id?: string | null
