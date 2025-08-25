@@ -38,6 +38,7 @@ interface Property {
   featured: boolean;
   status: string;
   price?: string;
+  project_details?: string;
   created_at: string;
 }
 
@@ -88,6 +89,70 @@ export default function PropertiesDatabase() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const formatProjectDetails = (details: string): string => {
+    if (!details) return '';
+    
+    // Split into lines and process each line
+    const lines = details.split('\n');
+    const formattedLines = lines.map(line => {
+      const trimmedLine = line.trim();
+      if (!trimmedLine) return line;
+      
+      // Check if line looks like it should be a bullet point
+      if (!trimmedLine.startsWith('•') && 
+          !trimmedLine.startsWith('*') && 
+          !trimmedLine.startsWith('-') &&
+          (trimmedLine.match(/^[A-Z][a-z]+ [a-z]+/) || // "Swimming pool", "Gym facilities"
+           trimmedLine.match(/^24\/7/) || // "24/7 security"
+           trimmedLine.includes('sqft') ||
+           trimmedLine.includes('parking') ||
+           trimmedLine.includes('amenities') ||
+           trimmedLine.includes('facilities'))) {
+        return `• ${trimmedLine}`;
+      }
+      
+      return line;
+    });
+    
+    return formattedLines.join('\n');
+  };
+
+  const parseProjectDetails = (details: string) => {
+    if (!details) return { header1: 'Features', items1: [], header2: 'Amenities', items2: [] };
+    
+    const formatted = formatProjectDetails(details);
+    const lines = formatted.split('\n').filter(line => line.trim());
+    
+    // Try to find headers (lines that start with ### or are all caps)
+    const headers = lines.filter(line => 
+      line.startsWith('###') || 
+      (line === line.toUpperCase() && line.length > 3 && !line.startsWith('•'))
+    );
+    
+    let header1 = 'Features';
+    let header2 = 'Amenities';
+    let items1: string[] = [];
+    let items2: string[] = [];
+    
+    if (headers.length >= 1) {
+      header1 = headers[0].replace('###', '').trim();
+    }
+    if (headers.length >= 2) {
+      header2 = headers[1].replace('###', '').trim();
+    }
+    
+    // Split items between two sections
+    const bulletPoints = lines.filter(line => 
+      line.startsWith('•') || line.startsWith('*') || line.startsWith('-')
+    ).map(line => line.replace(/^[•*-]\s*/, ''));
+    
+    const midPoint = Math.ceil(bulletPoints.length / 2);
+    items1 = bulletPoints.slice(0, midPoint);
+    items2 = bulletPoints.slice(midPoint);
+    
+    return { header1, items1, header2, items2 };
   };
 
   const filteredProperties = properties.filter(property => {
@@ -469,7 +534,7 @@ export default function PropertiesDatabase() {
                         }}
                       >
                         <Phone className="h-4 w-4 mr-2" />
-                        Enquire Now
+                        Contact Us
                       </Button>
                       <Button 
                         variant="outline" 
@@ -574,22 +639,38 @@ export default function PropertiesDatabase() {
                 <p className="text-brand-grey mb-6">{selectedProperty.description}</p>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                {getPropertyDetails(selectedProperty).map((detail, index) => (
-                  <div key={index} className="flex items-center p-4 bg-brand-beige-light rounded-lg">
-                    <detail.icon className="h-8 w-8 text-brand-navy mr-3" />
-                    <div>
-                      <div className="font-semibold text-brand-navy">
-                        {selectedProperty.property_type?.toLowerCase() === 'commercial' 
-                          ? index === 0 ? 'Detail 1' : index === 1 ? 'Detail 2' : 'Area'
-                          : index === 0 ? 'Bedrooms' : index === 1 ? 'Bathrooms' : 'Area'
-                        }
-                      </div>
-                      <div className="text-brand-grey">{detail.label}</div>
-                    </div>
+              {selectedProperty.project_details && (
+                <div className="mb-6 p-4 bg-brand-beige-light rounded-lg">
+                  <h3 className="text-lg font-semibold text-brand-navy mb-3">Project Details</h3>
+                  <div className="whitespace-pre-line text-brand-grey">
+                    {formatProjectDetails(selectedProperty.project_details)}
                   </div>
-                ))}
-              </div>
+                </div>
+              )}
+
+              {(() => {
+                const details = parseProjectDetails(selectedProperty.project_details || '');
+                const propertyDetails = getPropertyDetails(selectedProperty);
+                
+                return (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    {propertyDetails.map((detail, index) => (
+                      <div key={index} className="flex items-center p-4 bg-brand-beige-light rounded-lg">
+                        <detail.icon className="h-8 w-8 text-brand-navy mr-3" />
+                        <div>
+                          <div className="font-semibold text-brand-navy">
+                            {selectedProperty.property_type?.toLowerCase() === 'commercial' 
+                              ? index === 0 ? details.header1 : index === 1 ? details.header2 : 'Area'
+                              : index === 0 ? 'Bedrooms' : index === 1 ? 'Bathrooms' : 'Area'
+                            }
+                          </div>
+                          <div className="text-brand-grey">{detail.label}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
 
               <div className="flex space-x-4">
                 <Button 
@@ -597,7 +678,7 @@ export default function PropertiesDatabase() {
                   onClick={() => navigate('/contact')}
                 >
                   <Phone className="h-4 w-4 mr-2" />
-                  Contact Agent
+                  Contact Us
                 </Button>
                 <Button variant="outline" className="flex-1 border-brand-beige text-brand-navy hover:bg-brand-beige-light">
                   <Heart className="h-4 w-4 mr-2" />
