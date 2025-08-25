@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,7 +21,9 @@ import {
   Building2,
   ChevronLeft,
   ChevronRight,
-  X
+  X,
+  Pause,
+  Play
 } from 'lucide-react';
 
 interface Property {
@@ -41,6 +43,149 @@ interface Property {
   project_details?: string;
   created_at: string;
 }
+
+// Property Card Image Gallery Component
+const PropertyImageGallery = ({ property }: { property: Property }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const allImages = [property.image_url, ...(property.additional_images || [])].filter(Boolean);
+
+  useEffect(() => {
+    if (allImages.length <= 1) return;
+
+    if (isAutoPlaying && !isHovered) {
+      intervalRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % allImages.length);
+      }, 3000); // Auto-scroll every 3 seconds
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isAutoPlaying, isHovered, allImages.length]);
+
+  const handlePrevious = () => {
+    setIsAutoPlaying(false);
+    setCurrentIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
+  };
+
+  const handleNext = () => {
+    setIsAutoPlaying(false);
+    setCurrentIndex((prev) => (prev + 1) % allImages.length);
+  };
+
+  const toggleAutoPlay = () => {
+    setIsAutoPlaying(!isAutoPlaying);
+  };
+
+  if (allImages.length === 0) {
+    return (
+      <div className="w-full h-64 bg-brand-beige-light flex items-center justify-center">
+        <Building2 className="h-16 w-16 text-brand-beige-dark" />
+      </div>
+    );
+  }
+
+  return (
+    <div 
+      className="relative w-full h-64 overflow-hidden group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <img
+        src={allImages[currentIndex]}
+        alt={`${property.title} - Image ${currentIndex + 1}`}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      />
+
+      {allImages.length > 1 && (
+        <>
+          {/* Navigation Controls */}
+          <div className="absolute inset-0 flex items-center justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handlePrevious}
+              className="bg-white/90 hover:bg-white border-white hover:scale-110 transition-all duration-200"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleNext}
+              className="bg-white/90 hover:bg-white border-white hover:scale-110 transition-all duration-200"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+
+          {/* Auto-play Control */}
+          <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleAutoPlay}
+              className="bg-black/60 hover:bg-black/80 border-transparent text-white"
+            >
+              {isAutoPlaying ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+            </Button>
+          </div>
+
+          {/* Image Counter */}
+          <div className="absolute bottom-2 left-2">
+            <Badge className="bg-black/60 text-white text-xs">
+              {currentIndex + 1} / {allImages.length}
+            </Badge>
+          </div>
+
+          {/* Progress Indicators */}
+          <div className="absolute bottom-2 right-2 flex space-x-1">
+            {allImages.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  setIsAutoPlaying(false);
+                }}
+                className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                  index === currentIndex 
+                    ? 'bg-white scale-125' 
+                    : 'bg-white/50 hover:bg-white/80'
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Auto-play Progress Bar */}
+          {isAutoPlaying && !isHovered && (
+            <div className="absolute bottom-0 left-0 w-full h-1 bg-black/20">
+              <div 
+                className="h-full bg-white/80 transition-all duration-100 ease-linear"
+                style={{
+                  width: '100%',
+                  animation: 'progress-bar 3s linear infinite'
+                }}
+              />
+            </div>
+          )}
+        </>
+      )}
+
+      <style jsx>{`
+        @keyframes progress-bar {
+          from { width: 0%; }
+          to { width: 100%; }
+        }
+      `}</style>
+    </div>
+  );
+};
 
 export default function PropertiesDatabase() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -421,17 +566,9 @@ export default function PropertiesDatabase() {
                   onClick={() => openPropertyDetail(property)}
                 >
                   <div className="relative">
-                    {property.image_url ? (
-                      <img
-                        src={property.image_url}
-                        alt={property.title}
-                        className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    ) : (
-                      <div className="w-full h-64 bg-brand-beige-light flex items-center justify-center">
-                        <Building2 className="h-16 w-16 text-brand-beige-dark" />
-                      </div>
-                    )}
+                    {/* Replace the simple image with the PropertyImageGallery component */}
+                    <PropertyImageGallery property={property} />
+                    
                     <div className="absolute top-4 left-4">
                       <Badge 
                         className={`${
