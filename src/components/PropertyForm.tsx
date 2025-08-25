@@ -89,6 +89,44 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
 
   const [showFormatHelp, setShowFormatHelp] = useState(false);
 
+  // Auto-format existing project details when component loads
+  React.useEffect(() => {
+    if (property?.project_details) {
+      const formattedDetails = autoFormatProjectDetails(property.project_details);
+      if (formattedDetails !== property.project_details) {
+        form.setValue('project_details', formattedDetails);
+      }
+    }
+  }, [property, form]);
+
+  const autoFormatProjectDetails = (text: string): string => {
+    if (!text) return text;
+    
+    // Split into lines and process each line
+    const lines = text.split('\n');
+    const formattedLines = lines.map(line => {
+      const trimmedLine = line.trim();
+      if (!trimmedLine) return line;
+      
+      // Check if line looks like it should be a bullet point
+      if (!trimmedLine.startsWith('•') && 
+          !trimmedLine.startsWith('*') && 
+          !trimmedLine.startsWith('-') &&
+          (trimmedLine.match(/^[A-Z][a-z]+ [a-z]+/) || // "Swimming pool", "Gym facilities"
+           trimmedLine.match(/^24\/7/) || // "24/7 security"
+           trimmedLine.includes('sqft') ||
+           trimmedLine.includes('parking') ||
+           trimmedLine.includes('amenities') ||
+           trimmedLine.includes('facilities'))) {
+        return `• ${trimmedLine}`;
+      }
+      
+      return line;
+    });
+    
+    return formattedLines.join('\n');
+  };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(e.target.files || []);
   
@@ -143,7 +181,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
     form.setValue("existingImageUrls", imageUrls.filter(imageUrl => imageUrl !== url));
   };
 
-  const formatText = (type: 'bold' | 'italic' | 'bullet') => {
+  const formatText = (type: 'bold' | 'italic' | 'bullet' | 'underline' | 'heading') => {
     const textarea = document.querySelector('[name="project_details"]') as HTMLTextAreaElement;
     if (!textarea) return;
 
@@ -161,6 +199,12 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
         break;
       case 'italic':
         formattedText = selectedText ? `*${selectedText}*` : '*Italic Text*';
+        break;
+      case 'underline':
+        formattedText = selectedText ? `__${selectedText}__` : '__Underlined Text__';
+        break;
+      case 'heading':
+        formattedText = selectedText ? `### ${selectedText}` : '### Heading';
         break;
       case 'bullet':
         if (selectedText) {
@@ -388,14 +432,15 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                   <FormItem>
                     <FormLabel>Project Details</FormLabel>
                     <div className="space-y-2">
-                      {/* Formatting Toolbar */}
-                      <div className="flex items-center gap-2 p-2 bg-muted rounded-md">
+                      {/* Enhanced Formatting Toolbar */}
+                      <div className="flex items-center gap-2 p-2 bg-muted rounded-md flex-wrap">
                         <Button
                           type="button"
                           variant="outline"
                           size="sm"
                           onClick={() => formatText('bold')}
                           className="h-8 px-2"
+                          title="Bold"
                         >
                           <Bold className="h-3 w-3" />
                         </Button>
@@ -405,6 +450,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                           size="sm"
                           onClick={() => formatText('italic')}
                           className="h-8 px-2"
+                          title="Italic"
                         >
                           <Italic className="h-3 w-3" />
                         </Button>
@@ -412,8 +458,29 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                           type="button"
                           variant="outline"
                           size="sm"
+                          onClick={() => formatText('underline')}
+                          className="h-8 px-2"
+                          title="Underline"
+                        >
+                          <span className="text-xs font-bold underline">U</span>
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => formatText('heading')}
+                          className="h-8 px-2"
+                          title="Heading"
+                        >
+                          <span className="text-xs font-bold">H</span>
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
                           onClick={() => formatText('bullet')}
                           className="h-8 px-2"
+                          title="Bullet Points"
                         >
                           <List className="h-3 w-3" />
                         </Button>
@@ -435,6 +502,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                           <ul className="space-y-1">
                             <li>• Use <code>**text**</code> for <strong>bold text</strong></li>
                             <li>• Use <code>*text*</code> for <em>italic text</em></li>
+                            <li>• Use <code>__text__</code> for <u>underlined text</u></li>
+                            <li>• Use <code>### text</code> for headings</li>
                             <li>• Use <code>• text</code> for bullet points</li>
                             <li>• Select text and click buttons to format automatically</li>
                           </ul>
