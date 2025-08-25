@@ -6,458 +6,302 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { X, Save, Upload, Plus, Trash2, Eye } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+} from '@/components/ui/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { Upload, X, Plus, Bold, Italic, List, Type } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
-const formSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  price: z.string().min(1, "Price is required"),
-  location: z.string().min(1, "Location is required"),
-  property_type: z.string().min(1, "Property type is required"),
-  bedrooms: z.string().min(1, "Detail 1 is required"),
-  bathrooms: z.string().min(1, "Detail 2 is required"),
-  area_sqft: z.string().min(1, "Area is required"), // Changed to string
-  status: z.string().min(1, "Status is required"),
-  featured: z.boolean(),
-  image_url: z.string().optional(),
-  additional_images: z.array(z.string()).optional(),
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+const PropertyFormDataSchema = z.object({
+  title: z.string().min(3, {
+    message: "Title must be at least 3 characters.",
+  }),
+  description: z.string().min(10, {
+    message: "Description must be at least 10 characters.",
+  }),
+  property_type: z.string().min(1, {
+    message: "Please select a property type.",
+  }),
+  location: z.string().min(3, {
+    message: "Location must be at least 3 characters.",
+  }),
+  price: z.number().min(1, {
+    message: "Price must be greater than 0.",
+  }),
+  amenities: z.string().optional(),
+  project_details: z.string().optional(),
+  imageFiles: z.array(z.instanceof(File))
+    .max(5, "You can upload up to 5 images.")
+    .optional(),
+  existingImageUrls: z.array(z.string()).optional(),
+  is_featured: z.boolean().default(false).optional(),
+  is_active: z.boolean().default(true).optional(),
 });
 
-interface Property {
-  id?: string;
-  title: string;
-  description: string;
-  price: string;
-  location: string;
-  property_type: string;
-  bedrooms: string;
-  bathrooms: string;
-  area_sqft: number;
-  status: string;
-  featured: boolean;
-  image_url: string;
-  additional_images?: string[];
-}
-
 interface PropertyFormProps {
-  property?: Property;
-  onClose: () => void;
+  property?: any;
   onSave: () => void;
+  onCancel: () => void;
 }
 
-const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
-  const [uploading, setUploading] = useState(false);
-  const [additionalImages, setAdditionalImages] = useState<string[]>(
-    property?.additional_images || []
-  );
-  const [showImageGallery, setShowImageGallery] = useState(false);
+type PropertyFormData = z.infer<typeof PropertyFormDataSchema>;
+
+const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel }) => {
+  const [isUploading, setIsUploading] = useState(false);
+  const [imageUrls, setImageUrls] = useState<string[]>(property?.image_urls || []);
+  const [files, setFiles] = useState<File[]>([]);
+
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<PropertyFormData>({
+    resolver: zodResolver(PropertyFormDataSchema),
     defaultValues: {
       title: property?.title || "",
       description: property?.description || "",
-      price: property?.price || "",
-      location: property?.location || "",
       property_type: property?.property_type || "",
-      bedrooms: property?.bedrooms || "",
-      bathrooms: property?.bathrooms || "",
-      area_sqft: property?.area_sqft ? property.area_sqft.toString() : "", // Convert to string
-      status: property?.status || "available",
-      featured: property?.featured || false,
-      image_url: property?.image_url || "",
-      additional_images: property?.additional_images || [],
+      location: property?.location || "",
+      price: property?.price || 0,
+      amenities: property?.amenities || "",
+      project_details: property?.project_details || "",
+      existingImageUrls: property?.image_urls || [],
+      is_featured: property?.is_featured || false,
+      is_active: property?.is_active || true,
     },
+    mode: "onChange",
   });
 
-  const watchPropertyType = form.watch("property_type");
-  const isCommercial = watchPropertyType === "commercial";
+  const [showFormatHelp, setShowFormatHelp] = useState(false);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newFiles = Array.from(e.target.files || []);
+  
+    if (newFiles.length > 5) {
+      toast({
+        title: "Too many files",
+        description: "You can only upload a maximum of 5 files.",
+        variant: "destructive",
+      });
+      return;
+    }
+  
+    const totalFiles = files.length + newFiles.length;
+    if (totalFiles > 5) {
+      toast({
+        title: "Too many files",
+        description: "You can only upload a maximum of 5 files in total.",
+        variant: "destructive",
+      });
+      return;
+    }
+  
+    newFiles.forEach(file => {
+      if (file.size > MAX_FILE_SIZE) {
+        toast({
+          title: "File too large",
+          description: `File ${file.name} exceeds the maximum file size of 5MB.`,
+          variant: "destructive",
+        });
+        return;
+      }
+  
+      if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+        toast({
+          title: "Invalid file type",
+          description: `File ${file.name} is not a valid image type. Only JPEG, JPG, PNG, and WEBP are allowed.`,
+          variant: "destructive",
+        });
+        return;
+      }
+    });
+  
+    setFiles(prevFiles => [...prevFiles, ...newFiles]);
+  };
+
+  const removeImage = (index: number) => {
+    setFiles(files.filter((_, i) => i !== index));
+  };
+
+  const removeExistingImage = (url: string) => {
+    setImageUrls(imageUrls.filter(imageUrl => imageUrl !== url));
+    form.setValue("existingImageUrls", imageUrls.filter(imageUrl => imageUrl !== url));
+  };
+
+  const formatText = (type: 'bold' | 'italic' | 'bullet') => {
+    const textarea = document.querySelector('[name="project_details"]') as HTMLTextAreaElement;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+    const beforeText = textarea.value.substring(0, start);
+    const afterText = textarea.value.substring(end);
+
+    let formattedText = '';
+    
+    switch (type) {
+      case 'bold':
+        formattedText = selectedText ? `**${selectedText}**` : '**Bold Text**';
+        break;
+      case 'italic':
+        formattedText = selectedText ? `*${selectedText}*` : '*Italic Text*';
+        break;
+      case 'bullet':
+        if (selectedText) {
+          formattedText = selectedText.split('\n').map(line => line.trim() ? `• ${line.trim()}` : line).join('\n');
+        } else {
+          formattedText = '• Bullet Point';
+        }
+        break;
+    }
+
+    const newValue = beforeText + formattedText + afterText;
+    form.setValue('project_details', newValue);
+    
+    // Set cursor position after formatting
+    setTimeout(() => {
+      const newCursorPos = start + formattedText.length;
+      textarea.setSelectionRange(newCursorPos, newCursorPos);
+      textarea.focus();
+    }, 0);
+  };
+
+  const handleSubmit = async (data: PropertyFormData) => {
+    setIsUploading(true);
     try {
-      const submitData = {
-        ...values,
-        area_sqft: parseInt(values.area_sqft) || 0, // Convert back to number for database
-        additional_images: additionalImages,
+      const imageUploads = files.map(async (file) => {
+        const uniqueId = Date.now();
+        const storagePath = `properties/${uniqueId}-${file.name}`;
+        const { error } = await supabase.storage
+          .from('property-images')
+          .upload(storagePath, file, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (error) {
+          console.error("Error uploading image:", error);
+          toast({
+            title: "Image Upload Failed",
+            description: `Failed to upload ${file.name}. Please try again.`,
+            variant: "destructive",
+          });
+          return null;
+        }
+
+        const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/property-images/${storagePath}`;
+        return imageUrl;
+      });
+
+      const uploadedImageUrls = (await Promise.all(imageUploads)).filter(url => url !== null) as string[];
+      const allImageUrls = [...(data.existingImageUrls || []), ...uploadedImageUrls];
+
+      const propertyData = {
+        ...data,
+        price: Number(data.price),
+        image_urls: allImageUrls,
       };
 
-      if (property?.id) {
+      if (property) {
         const { error } = await supabase
           .from('properties')
-          .update(submitData)
+          .update(propertyData)
           .eq('id', property.id);
 
-        if (error) throw error;
-
+        if (error) {
+          throw error;
+        }
         toast({
-          title: "Success",
-          description: "Property updated successfully",
+          title: "Property Updated",
+          description: "Property has been updated successfully!",
         });
       } else {
         const { error } = await supabase
           .from('properties')
-          .insert(submitData);
+          .insert([propertyData]);
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
 
         toast({
-          title: "Success",
-          description: "Property created successfully",
+          title: "Property Added",
+          description: "Property has been added successfully!",
         });
       }
 
       onSave();
-      onClose();
-    } catch (error) {
-      console.error('Error saving property:', error);
+    } catch (error: any) {
+      console.error("Error during submission:", error);
       toast({
-        title: "Error",
-        description: "Failed to save property",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    setUploading(true);
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('properties')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('properties')
-        .getPublicUrl(filePath);
-
-      form.setValue('image_url', publicUrl);
-
-      toast({
-        title: "Success",
-        description: "Image uploaded successfully",
-      });
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      toast({
-        title: "Error",
-        description: "Failed to upload image",
+        title: "Submission Failed",
+        description: error.message || "An error occurred. Please try again.",
         variant: "destructive",
       });
     } finally {
-      setUploading(false);
+      setIsUploading(false);
     }
   };
 
-  const handleMultipleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    if (files.length === 0) return;
-
-    setUploading(true);
-    try {
-      const uploadPromises = files.map(async (file) => {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `additional_${Math.random()}.${fileExt}`;
-        const filePath = `${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('properties')
-          .upload(filePath, file);
-
-        if (uploadError) throw uploadError;
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('properties')
-          .getPublicUrl(filePath);
-
-        return publicUrl;
-      });
-
-      const uploadedUrls = await Promise.all(uploadPromises);
-      setAdditionalImages(prev => [...prev, ...uploadedUrls]);
-
-      toast({
-        title: "Success",
-        description: `${files.length} images uploaded successfully`,
-      });
-    } catch (error) {
-      console.error('Error uploading images:', error);
-      toast({
-        title: "Error",
-        description: "Failed to upload some images",
-        variant: "destructive",
-      });
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const addImageUrlField = () => {
-    setAdditionalImages(prev => [...prev, ""]);
-  };
-
-  const updateImageUrl = (index: number, url: string) => {
-    setAdditionalImages(prev => {
-      const updated = [...prev];
-      updated[index] = url;
-      return updated;
-    });
-  };
-
-  const removeImageUrl = (index: number) => {
-    setAdditionalImages(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const getFieldLabel = (field: string) => {
-    if (!isCommercial) {
-      return field === 'bedrooms' ? 'Bedrooms' : 'Bathrooms';
-    }
-    return field === 'bedrooms' ? 'Space Details' : 'Additional Info';
-  };
-
-  const getFieldPlaceholder = (field: string) => {
-    if (!isCommercial) {
-      return field === 'bedrooms' 
-        ? 'e.g., 3 BHK, Studio, or 2+1' 
-        : 'e.g., 2, 2.5, or Common';
-    }
-    return field === 'bedrooms' 
-      ? 'e.g., Office Space, Conference Room, Retail Floor' 
-      : 'e.g., Parking Available, 24/7 Security, AC';
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+    }).format(value);
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-black/90 border-blue-500/20">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-blue-100">
-            {property ? 'Edit Property' : 'Add New Property'}
-          </CardTitle>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowImageGallery(!showImageGallery)}
-              className="text-gray-400 hover:text-white"
-            >
-              <Eye className="w-4 h-4 mr-1" />
-              Gallery
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="text-gray-400 hover:text-white"
-            >
-              <X className="w-4 h-4" />
-            </Button>
-          </div>
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>{property ? 'Edit Property' : 'Add New Property'}</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Title */}
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-blue-100">Title</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Property title"
-                          {...field}
-                          className="bg-black/20 border-blue-500/20 text-white"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* Property Type */}
-                <FormField
-                  control={form.control}
-                  name="property_type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-blue-100">Property Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="bg-black/20 border-blue-500/20 text-white">
-                            <SelectValue placeholder="Select property type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="apartment">Apartment</SelectItem>
-                          <SelectItem value="house">House</SelectItem>
-                          <SelectItem value="villa">Villa</SelectItem>
-                          <SelectItem value="commercial">Commercial</SelectItem>
-                          <SelectItem value="land">Land</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* Price */}
-                <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-blue-100">Price</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="e.g., ₹50,00,000 or Negotiable"
-                          {...field}
-                          className="bg-black/20 border-blue-500/20 text-white"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* Location */}
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-blue-100">Location</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Property location"
-                          {...field}
-                          className="bg-black/20 border-blue-500/20 text-white"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* Dynamic Field 1 */}
-                <FormField
-                  control={form.control}
-                  name="bedrooms"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-blue-100">{getFieldLabel('bedrooms')}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder={getFieldPlaceholder('bedrooms')}
-                          {...field}
-                          className="bg-black/20 border-blue-500/20 text-white"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* Dynamic Field 2 */}
-                <FormField
-                  control={form.control}
-                  name="bathrooms"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-blue-100">{getFieldLabel('bathrooms')}</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder={getFieldPlaceholder('bathrooms')}
-                          {...field}
-                          className="bg-black/20 border-blue-500/20 text-white"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* Area - Now text input */}
-                <FormField
-                  control={form.control}
-                  name="area_sqft"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-blue-100">Area</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="e.g., 1200 sqft, 500 sq.m, 2500 sq yards"
-                          {...field}
-                          className="bg-black/20 border-blue-500/20 text-white"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* Status */}
-                <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-blue-100">Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="bg-black/20 border-blue-500/20 text-white">
-                            <SelectValue placeholder="Select status" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="available">Available</SelectItem>
-                          <SelectItem value="sold">Sold</SelectItem>
-                          <SelectItem value="rented">Rented</SelectItem>
-                          <SelectItem value="pending">Pending</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+              {/* Basic Information */}
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Property Title" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              {/* Description */}
               <FormField
                 control={form.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-blue-100">Description</FormLabel>
+                    <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Property description"
+                        placeholder="Detailed property description..."
+                        className="min-h-[100px] resize-y"
                         {...field}
-                        className="bg-black/20 border-blue-500/20 text-white min-h-[100px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -465,169 +309,272 @@ const PropertyForm = ({ property, onClose, onSave }: PropertyFormProps) => {
                 )}
               />
 
-              {/* Main Image Upload */}
               <FormField
                 control={form.control}
-                name="image_url"
+                name="property_type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-blue-100">Main Property Image</FormLabel>
+                    <FormLabel>Property Type</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="apartment">Apartment</SelectItem>
+                        <SelectItem value="house">House</SelectItem>
+                        <SelectItem value="villa">Villa</SelectItem>
+                        <SelectItem value="commercial">Commercial</SelectItem>
+                        <SelectItem value="land">Land</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Location</FormLabel>
                     <FormControl>
-                      <div className="space-y-4">
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleImageUpload}
-                          disabled={uploading}
-                          className="bg-black/20 border-blue-500/20 text-white"
-                        />
-                        {field.value && (
-                          <img
-                            src={field.value}
-                            alt="Property"
-                            className="w-32 h-32 object-cover rounded"
-                          />
-                        )}
-                      </div>
+                      <Input placeholder="Property Location" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              {/* Enhanced Photo Gallery Section */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <FormLabel className="text-blue-100">Photo Gallery</FormLabel>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={addImageUrlField}
-                    className="border-blue-500/50 text-blue-400 hover:bg-blue-500/10"
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    Add URL
-                  </Button>
-                </div>
-                
-                <div className="space-y-3">
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleMultipleImageUpload}
-                    disabled={uploading}
-                    className="bg-black/20 border-blue-500/20 text-white"
-                  />
-                  
-                  {/* Image Gallery Grid */}
-                  {showImageGallery && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-black/10 rounded-lg">
-                      {form.watch('image_url') && (
-                        <div className="relative">
-                          <img
-                            src={form.watch('image_url')}
-                            alt="Main"
-                            className="w-full h-20 object-cover rounded"
-                          />
-                          <div className="absolute top-1 left-1 bg-blue-600 text-white text-xs px-1 rounded">
-                            Main
-                          </div>
-                        </div>
-                      )}
-                      {additionalImages.filter(Boolean).map((imageUrl, index) => (
-                        <div key={index} className="relative">
-                          <img
-                            src={imageUrl}
-                            alt={`Gallery ${index + 1}`}
-                            className="w-full h-20 object-cover rounded"
-                          />
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removeImageUrl(index)}
-                            className="absolute top-1 right-1 w-6 h-6 p-0 border-red-500/50 text-red-400 hover:bg-red-500/10"
-                          >
-                            <X className="w-3 h-3" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {additionalImages.map((imageUrl, index) => (
-                    <div key={index} className="flex items-center space-x-3">
-                      <Input
-                        type="text"
-                        placeholder="Image URL"
-                        value={imageUrl}
-                        onChange={(e) => updateImageUrl(index, e.target.value)}
-                        className="bg-black/20 border-blue-500/20 text-white flex-1"
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => removeImageUrl(index)}
-                        className="border-red-500/50 text-red-400 hover:bg-red-500/10"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                      {imageUrl && (
-                        <img
-                          src={imageUrl}
-                          alt={`Additional ${index + 1}`}
-                          className="w-16 h-16 object-cover rounded"
-                        />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Featured */}
               <FormField
                 control={form.control}
-                name="featured"
+                name="price"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border border-blue-500/20 p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base text-blue-100">
-                        Featured Property
-                      </FormLabel>
-                      <div className="text-sm text-gray-400">
-                        This property will be highlighted on the homepage
-                      </div>
-                    </div>
+                  <FormItem>
+                    <FormLabel>Price (INR)</FormLabel>
                     <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
+                      <Input
+                        placeholder="Property Price in INR"
+                        type="number"
+                        {...field}
                       />
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
 
-              {/* Actions */}
+              <FormField
+                control={form.control}
+                name="amenities"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Amenities</FormLabel>
+                    <FormControl>
+                      <Input placeholder="List of amenities (comma-separated)" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Project Details with Enhanced Formatting */}
+              <FormField
+                control={form.control}
+                name="project_details"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Project Details</FormLabel>
+                    <div className="space-y-2">
+                      {/* Formatting Toolbar */}
+                      <div className="flex items-center gap-2 p-2 bg-muted rounded-md">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => formatText('bold')}
+                          className="h-8 px-2"
+                        >
+                          <Bold className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => formatText('italic')}
+                          className="h-8 px-2"
+                        >
+                          <Italic className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => formatText('bullet')}
+                          className="h-8 px-2"
+                        >
+                          <List className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowFormatHelp(!showFormatHelp)}
+                          className="h-8 px-2 text-muted-foreground"
+                        >
+                          <Type className="h-3 w-3 mr-1" />
+                          Help
+                        </Button>
+                      </div>
+                      
+                      {showFormatHelp && (
+                        <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
+                          <p className="font-medium mb-2">Formatting Guide:</p>
+                          <ul className="space-y-1">
+                            <li>• Use <code>**text**</code> for <strong>bold text</strong></li>
+                            <li>• Use <code>*text*</code> for <em>italic text</em></li>
+                            <li>• Use <code>• text</code> for bullet points</li>
+                            <li>• Select text and click buttons to format automatically</li>
+                          </ul>
+                        </div>
+                      )}
+                      
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="Enter detailed project information with amenities, features, and highlights..."
+                          className="min-h-[120px] resize-y"
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Image Upload */}
+              <FormField
+                control={form.control}
+                name="imageFiles"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Property Images</FormLabel>
+                    <FormControl>
+                      <div className="flex flex-wrap gap-3">
+                        <label
+                          htmlFor="image-upload"
+                          className="relative flex items-center justify-center w-32 h-32 border-2 border-dashed rounded-md cursor-pointer bg-muted hover:bg-accent"
+                        >
+                          <Upload className="h-6 w-6 text-muted-foreground" />
+                          <input
+                            type="file"
+                            id="image-upload"
+                            multiple
+                            accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                            onChange={handleImageChange}
+                            className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                          />
+                        </label>
+                        {files.map((file, index) => (
+                          <div key={index} className="relative w-32 h-32">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={file.name}
+                              className="object-cover w-full h-full rounded-md"
+                            />
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => removeImage(index)}
+                              className="absolute top-1 right-1 bg-background/80 text-destructive hover:bg-background"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                        {imageUrls.map((url, index) => (
+                          <div key={index} className="relative w-32 h-32">
+                            <img
+                              src={url}
+                              alt={`Property Image ${index}`}
+                              className="object-cover w-full h-full rounded-md"
+                            />
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => removeExistingImage(url)}
+                              className="absolute top-1 right-1 bg-background/80 text-destructive hover:bg-background"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Upload up to 5 images. Max size: 5MB each. Accepted types: JPEG, JPG, PNG, WEBP.
+                    </p>
+                  </FormItem>
+                )}
+              />
+
+              {/* Featured and Active Status */}
+              <div className="flex items-center space-x-4">
+                <FormField
+                  control={form.control}
+                  name="is_featured"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <input
+                          type="checkbox"
+                          className="h-5 w-5 border-primary focus:ring-0 focus:ring-offset-0"
+                          checked={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">
+                        Featured
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="is_active"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                      <FormControl>
+                        <input
+                          type="checkbox"
+                          className="h-5 w-5 border-primary focus:ring-0 focus:ring-offset-0"
+                          checked={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">
+                        Active
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Form Actions */}
               <div className="flex justify-end space-x-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onClose}
-                  className="border-gray-500 text-gray-300 hover:bg-gray-500/10"
-                >
+                <Button type="button" variant="outline" onClick={onCancel}>
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
-                  className="bg-blue-600 hover:bg-blue-700"
-                  disabled={uploading}
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  {property ? 'Update Property' : 'Create Property'}
+                <Button type="submit" disabled={isUploading}>
+                  {isUploading ? 'Uploading...' : property ? 'Update Property' : 'Contact Us'}
                 </Button>
               </div>
             </form>
