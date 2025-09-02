@@ -10,6 +10,9 @@ import {
   LogOut,
   Settings,
   Building,
+  Instagram,
+  Linkedin,
+  Youtube,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
@@ -283,6 +286,40 @@ export const Layout = () => {
                   <br />
                   Sunday: 10am - 4pm
                 </p>
+              </div>
+              
+              {/* Social Media Links */}
+              <div className="flex items-center space-x-4 mt-6">
+                <h5 className="text-lg font-semibold">Follow Us:</h5>
+                <div className="flex space-x-3">
+                  <a
+                    href="https://www.instagram.com/regalestateconsultants?igsh=MThpejh3d3kxczQ2Yg%3D%3D&utm_source=qr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-white/10 rounded-full hover:bg-brand-classic-gold transition-all duration-300 hover:scale-110"
+                    aria-label="Follow us on Instagram"
+                  >
+                    <Instagram className="h-5 w-5" />
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/company/regal-estate-consultants/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-white/10 rounded-full hover:bg-brand-classic-gold transition-all duration-300 hover:scale-110"
+                    aria-label="Connect with us on LinkedIn"
+                  >
+                    <Linkedin className="h-5 w-5" />
+                  </a>
+                  <a
+                    href="https://youtube.com/@regalestateconsultants?si=JZwaRzed9drK8AW6"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 bg-white/10 rounded-full hover:bg-brand-classic-gold transition-all duration-300 hover:scale-110"
+                    aria-label="Subscribe to our YouTube channel"
+                  >
+                    <Youtube className="h-5 w-5" />
+                  </a>
+                </div>
               </div>
             </div>
 
