@@ -554,7 +554,7 @@ export default function PropertiesDatabase() {
               {sortedProperties.map((property, index) => (
                 <Card 
                   key={property.id} 
-                  className={`overflow-hidden hover:shadow-luxury transition-all duration-300 group animate-fade-in cursor-pointer ${
+                  className={`overflow-hidden hover:shadow-luxury transition-all duration-300 group animate-fade-in cursor-pointer flex flex-col h-full ${
                     (isResidentialSection || isCommercialSection) 
                       ? 'bg-brand-cream border-brand-beige hover:border-brand-beige-dark' 
                       : 'bg-card'
@@ -606,7 +606,7 @@ export default function PropertiesDatabase() {
                     )}
                   </div>
 
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 flex flex-col flex-1">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-1">
                         {[...Array(5)].map((_, i) => (
@@ -620,88 +620,127 @@ export default function PropertiesDatabase() {
                         </span>
                       </div>
                       <div className="text-right">
-                        <div className="text-2xl font-bold text-brand-classic-gold">
+                        <div className="text-lg font-bold text-brand-classic-gold">
                           {property.price || 'Price on Request'}
                         </div>
-                        <div className="text-sm text-brand-beige-dark">Contact for Details</div>
+                        <div className="text-xs text-brand-beige-dark">Contact for Details</div>
                       </div>
                     </div>
 
-                    <h3 className="text-xl font-semibold text-primary mb-2 group-hover:text-brand-maroon transition-colors">
+                    <h3 className="text-xl font-semibold text-primary mb-2 group-hover:text-brand-maroon transition-colors line-clamp-2">
                       {property.title}
                     </h3>
                     
                     {property.location && (
                       <div className="flex items-center text-brand-grey mb-3">
-                        <MapPin className="h-4 w-4 mr-1" />
-                        <span className="text-sm">{property.location}</span>
+                        <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
+                        <span className="text-sm truncate">{property.location}</span>
                       </div>
                     )}
 
                     {property.description && (
-                      <p className="text-sm text-brand-grey mb-4 line-clamp-2">
+                      <p className="text-sm text-brand-grey mb-3 line-clamp-2 flex-shrink-0">
                         {property.description}
                       </p>
                     )}
 
-                    <div className="flex items-center justify-between mb-4 text-sm text-brand-grey">
+                    <div className="flex items-center justify-between mb-4 text-sm text-brand-grey flex-shrink-0">
                       <div className="flex items-center space-x-4">
                         {getPropertyDetails(property).map((detail, idx) => (
                           <div key={idx} className="flex items-center">
-                            <detail.icon className="h-4 w-4 mr-1" />
-                            {detail.label}
+                            <detail.icon className="h-4 w-4 mr-1 flex-shrink-0" />
+                            <span className="truncate">{detail.label}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                     <div className="flex space-x-2">
-                       <Button 
-                         className={`flex-1 ${
-                           (isResidentialSection || isCommercialSection)
-                             ? 'bg-brand-classic-gold text-white hover:bg-brand-soft-gold'
-                             : 'bg-brand-maroon text-white hover:bg-brand-maroon/90'
-                         } hover:scale-105 transition-all duration-200`}
-                         onClick={(e) => {
-                           e.stopPropagation();
-                           navigate('/contact');
-                         }}
-                       >
-                         <Phone className="h-4 w-4 mr-2" />
-                         Contact Us
-                       </Button>
-                       {property.youtube_url && (
-                         <Button 
-                           variant="outline" 
-                           className={`${
-                             (isResidentialSection || isCommercialSection)
-                               ? 'border-red-500 text-red-500 hover:bg-red-50'
-                               : 'border-red-500 text-red-500 hover:bg-red-50'
-                           } hover:scale-105 transition-all duration-200`}
-                           onClick={(e) => {
-                             e.stopPropagation();
-                             window.open(property.youtube_url, '_blank');
-                           }}
-                           title="Watch Property Video"
-                         >
-                           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                             <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                           </svg>
-                         </Button>
-                       )}
-                       <Button 
-                         variant="outline" 
-                         className={`${
-                           (isResidentialSection || isCommercialSection)
-                             ? 'border-brand-beige text-brand-navy hover:bg-brand-beige-light'
-                             : 'border-brand-grey text-primary hover:bg-brand-grey/10'
-                         } hover:scale-105 transition-all duration-200`}
-                         onClick={(e) => e.stopPropagation()}
-                       >
-                         <Heart className="h-4 w-4 mr-2" />
-                         Save
-                       </Button>
-                     </div>
+                    {/* Project Details Preview */}
+                    {property.project_details && (
+                      <div className="mb-4 flex-1">
+                        <h4 className="text-sm font-semibold text-primary mb-2">Key Features:</h4>
+                        <div className="text-xs text-brand-grey space-y-1">
+                          {(() => {
+                            const formatted = formatProjectDetails(property.project_details);
+                            const lines = formatted.split('\n').filter(line => line.trim());
+                            const bulletPoints = lines.filter(line => 
+                              line.startsWith('•') || line.startsWith('*') || line.startsWith('-')
+                            ).slice(0, 4); // Show only first 4 bullet points
+                            
+                            return bulletPoints.length > 0 ? (
+                              <div className="space-y-0.5">
+                                {bulletPoints.map((point, idx) => (
+                                  <div key={idx} className="flex items-start">
+                                    <span className="text-brand-classic-gold mr-1 mt-0.5 flex-shrink-0">•</span>
+                                    <span className="line-clamp-1 text-xs">
+                                      {point.replace(/^[•*-]\s*/, '')}
+                                    </span>
+                                  </div>
+                                ))}
+                                {lines.length > 4 && (
+                                  <div className="text-brand-classic-gold text-xs mt-1">
+                                    +{lines.length - 4} more features...
+                                  </div>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="text-xs text-brand-grey line-clamp-3">
+                                {property.project_details.substring(0, 100)}...
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Buttons - Fixed at bottom */}
+                    <div className="flex space-x-2 mt-auto pt-2">
+                      <Button 
+                        className={`flex-1 ${
+                          (isResidentialSection || isCommercialSection)
+                            ? 'bg-brand-classic-gold text-white hover:bg-brand-soft-gold'
+                            : 'bg-brand-maroon text-white hover:bg-brand-maroon/90'
+                        } hover:scale-105 transition-all duration-200`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate('/contact');
+                        }}
+                      >
+                        <Phone className="h-4 w-4 mr-2" />
+                        Contact Us
+                      </Button>
+                      {property.youtube_url && (
+                        <Button 
+                          variant="outline" 
+                          className={`${
+                            (isResidentialSection || isCommercialSection)
+                              ? 'border-red-500 text-red-500 hover:bg-red-50'
+                              : 'border-red-500 text-red-500 hover:bg-red-50'
+                          } hover:scale-105 transition-all duration-200`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            window.open(property.youtube_url, '_blank');
+                          }}
+                          title="Watch Property Video"
+                        >
+                          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                          </svg>
+                        </Button>
+                      )}
+                      <Button 
+                        variant="outline" 
+                        className={`${
+                          (isResidentialSection || isCommercialSection)
+                            ? 'border-brand-beige text-brand-navy hover:bg-brand-beige-light'
+                            : 'border-brand-grey text-primary hover:bg-brand-grey/10'
+                        } hover:scale-105 transition-all duration-200`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Heart className="h-4 w-4 mr-2" />
+                        Save
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               ))}
