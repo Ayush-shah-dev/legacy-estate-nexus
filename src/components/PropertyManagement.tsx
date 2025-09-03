@@ -20,11 +20,12 @@ interface Property {
   property_type: string;
   bedrooms: string;
   bathrooms: string;
-  area_sqft: number;
+  area_sqft: string;
   status: string;
   featured: boolean;
   image_url: string;
   additional_images?: string[];
+  youtube_url?: string;
   created_at: string;
 }
 

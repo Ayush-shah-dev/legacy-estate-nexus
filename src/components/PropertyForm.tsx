@@ -45,14 +45,18 @@ const PropertyFormDataSchema = z.object({
   price: z.string().min(1, {
     message: "Price is required.",
   }),
+  bedrooms: z.string().optional(),
+  bathrooms: z.string().optional(),
+  area_sqft: z.string().optional(),
   amenities: z.string().optional(),
   project_details: z.string().optional(),
+  youtube_url: z.string().optional(),
   imageFiles: z.array(z.instanceof(File))
     .max(5, "You can upload up to 5 images.")
     .optional(),
   existingImageUrls: z.array(z.string()).optional(),
-  is_featured: z.boolean().default(false).optional(),
-  is_active: z.boolean().default(true).optional(),
+  featured: z.boolean().default(false).optional(),
+  status: z.string().default("available").optional(),
 });
 
 interface PropertyFormProps {
@@ -78,11 +82,15 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
       property_type: property?.property_type || "",
       location: property?.location || "",
       price: property?.price?.toString() || "",
+      bedrooms: property?.bedrooms || "",
+      bathrooms: property?.bathrooms || "",
+      area_sqft: property?.area_sqft || "",
       amenities: property?.amenities || "",
       project_details: property?.project_details || "",
-      existingImageUrls: property?.image_urls || [],
-      is_featured: property?.is_featured || false,
-      is_active: property?.is_active || true,
+      youtube_url: property?.youtube_url || "",
+      existingImageUrls: property?.additional_images || [],
+      featured: property?.featured || false,
+      status: property?.status || "available",
     },
     mode: "onChange",
   });
@@ -249,17 +257,29 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
           return null;
         }
 
-        const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/property-images/${storagePath}`;
-        return imageUrl;
+        const { data: urlData } = supabase.storage.from('property-images').getPublicUrl(storagePath);
+        return urlData.publicUrl;
       });
 
       const uploadedImageUrls = (await Promise.all(imageUploads)).filter(url => url !== null) as string[];
       const allImageUrls = [...(data.existingImageUrls || []), ...uploadedImageUrls];
 
       const propertyData = {
-        ...data,
+        title: data.title,
+        description: data.description,
+        property_type: data.property_type,
+        location: data.location,
         price: data.price,
-        image_urls: allImageUrls,
+        bedrooms: data.bedrooms,
+        bathrooms: data.bathrooms,
+        area_sqft: data.area_sqft,
+        amenities: data.amenities,
+        project_details: data.project_details,
+        youtube_url: data.youtube_url,
+        featured: data.featured,
+        status: data.status,
+        image_url: allImageUrls[0] || null,
+        additional_images: allImageUrls.slice(1),
       };
 
       if (property) {
@@ -410,6 +430,51 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                 )}
               />
 
+              {/* Bedrooms, Bathrooms, Area */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <FormField
+                  control={form.control}
+                  name="bedrooms"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Bedrooms</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., 2 BHK, Studio, Office Space" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="bathrooms"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Bathrooms</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., 2, 1.5, 3, Washrooms" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="area_sqft"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Area</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., 850 sqft, 2000 sqft" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
                 name="amenities"
@@ -418,6 +483,20 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                     <FormLabel>Amenities</FormLabel>
                     <FormControl>
                       <Input placeholder="List of amenities (comma-separated)" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="youtube_url"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>YouTube Video URL (Optional)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="https://www.youtube.com/watch?v=..." {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -596,7 +675,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
               <div className="flex items-center space-x-4">
                 <FormField
                   control={form.control}
-                  name="is_featured"
+                  name="featured"
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-center space-x-2 space-y-0">
                       <FormControl>
@@ -617,20 +696,23 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
 
                 <FormField
                   control={form.control}
-                  name="is_active"
+                  name="status"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-2 space-y-0">
-                      <FormControl>
-                        <input
-                          type="checkbox"
-                          className="h-5 w-5 border-primary focus:ring-0 focus:ring-offset-0"
-                          checked={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">
-                        Active
-                      </FormLabel>
+                    <FormItem>
+                      <FormLabel>Status</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="available">Available</SelectItem>
+                          <SelectItem value="sold">Sold</SelectItem>
+                          <SelectItem value="rented">Rented</SelectItem>
+                          <SelectItem value="pending">Pending</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -643,7 +725,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                   Cancel
                 </Button>
                 <Button type="submit" disabled={isUploading}>
-                  {isUploading ? 'Uploading...' : property ? 'Update Property' : 'Contact Us'}
+                  {isUploading ? 'Uploading...' : property ? 'Update Property' : 'Add Property'}
                 </Button>
               </div>
             </form>

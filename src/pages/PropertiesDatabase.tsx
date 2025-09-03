@@ -41,6 +41,7 @@ interface Property {
   status: string;
   price?: string;
   project_details?: string;
+  youtube_url?: string;
   created_at: string;
 }
 
@@ -654,34 +655,53 @@ export default function PropertiesDatabase() {
                       </div>
                     </div>
 
-                    <div className="flex space-x-2">
-                      <Button 
-                        className={`flex-1 ${
-                          (isResidentialSection || isCommercialSection)
-                            ? 'bg-brand-classic-gold text-white hover:bg-brand-soft-gold'
-                            : 'bg-brand-maroon text-white hover:bg-brand-maroon/90'
-                        } hover:scale-105 transition-all duration-200`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate('/contact');
-                        }}
-                      >
-                        <Phone className="h-4 w-4 mr-2" />
-                        Contact Us
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        className={`flex-1 ${
-                          (isResidentialSection || isCommercialSection)
-                            ? 'border-brand-beige text-brand-navy hover:bg-brand-beige-light'
-                            : 'border-brand-grey text-primary hover:bg-brand-grey/10'
-                        } hover:scale-105 transition-all duration-200`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <Heart className="h-4 w-4 mr-2" />
-                        Save
-                      </Button>
-                    </div>
+                     <div className="flex space-x-2">
+                       <Button 
+                         className={`flex-1 ${
+                           (isResidentialSection || isCommercialSection)
+                             ? 'bg-brand-classic-gold text-white hover:bg-brand-soft-gold'
+                             : 'bg-brand-maroon text-white hover:bg-brand-maroon/90'
+                         } hover:scale-105 transition-all duration-200`}
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           navigate('/contact');
+                         }}
+                       >
+                         <Phone className="h-4 w-4 mr-2" />
+                         Contact Us
+                       </Button>
+                       {property.youtube_url && (
+                         <Button 
+                           variant="outline" 
+                           className={`${
+                             (isResidentialSection || isCommercialSection)
+                               ? 'border-red-500 text-red-500 hover:bg-red-50'
+                               : 'border-red-500 text-red-500 hover:bg-red-50'
+                           } hover:scale-105 transition-all duration-200`}
+                           onClick={(e) => {
+                             e.stopPropagation();
+                             window.open(property.youtube_url, '_blank');
+                           }}
+                           title="Watch Property Video"
+                         >
+                           <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                             <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                           </svg>
+                         </Button>
+                       )}
+                       <Button 
+                         variant="outline" 
+                         className={`${
+                           (isResidentialSection || isCommercialSection)
+                             ? 'border-brand-beige text-brand-navy hover:bg-brand-beige-light'
+                             : 'border-brand-grey text-primary hover:bg-brand-grey/10'
+                         } hover:scale-105 transition-all duration-200`}
+                         onClick={(e) => e.stopPropagation()}
+                       >
+                         <Heart className="h-4 w-4 mr-2" />
+                         Save
+                       </Button>
+                     </div>
                   </CardContent>
                 </Card>
               ))}
@@ -813,6 +833,19 @@ export default function PropertiesDatabase() {
                   <Phone className="h-4 w-4 mr-2" />
                   Contact Us
                 </Button>
+                {selectedProperty.youtube_url && (
+                  <Button 
+                    variant="outline" 
+                    className="border-red-500 text-red-500 hover:bg-red-50"
+                    onClick={() => window.open(selectedProperty.youtube_url, '_blank')}
+                    title="Watch Property Video"
+                  >
+                    <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    Video Tour
+                  </Button>
+                )}
                 <Button variant="outline" className="flex-1 border-brand-beige text-brand-navy hover:bg-brand-beige-light">
                   <Heart className="h-4 w-4 mr-2" />
                   Save Property
