@@ -655,39 +655,34 @@ export default function PropertiesDatabase() {
                       </div>
                     </div>
 
-                    {/* Project Details Preview */}
+                    {/* Project Details Preview - Clean & Minimal */}
                     {property.project_details && (
-                      <div className="mb-4 flex-1">
-                        <h4 className="text-sm font-semibold text-primary mb-2">Key Features:</h4>
+                      <div className="mb-4">
                         <div className="text-xs text-brand-grey space-y-1">
                           {(() => {
                             const formatted = formatProjectDetails(property.project_details);
                             const lines = formatted.split('\n').filter(line => line.trim());
                             const bulletPoints = lines.filter(line => 
                               line.startsWith('•') || line.startsWith('*') || line.startsWith('-')
-                            ).slice(0, 4); // Show only first 4 bullet points
+                            ).slice(0, 3); // Show only first 3 bullet points
                             
                             return bulletPoints.length > 0 ? (
                               <div className="space-y-0.5">
                                 {bulletPoints.map((point, idx) => (
                                   <div key={idx} className="flex items-start">
-                                    <span className="text-brand-classic-gold mr-1 mt-0.5 flex-shrink-0">•</span>
+                                    <span className="text-brand-classic-gold mr-2 mt-0.5 flex-shrink-0 text-xs">•</span>
                                     <span className="line-clamp-1 text-xs">
                                       {point.replace(/^[•*-]\s*/, '')}
                                     </span>
                                   </div>
                                 ))}
-                                {lines.length > 4 && (
-                                  <div className="text-brand-classic-gold text-xs mt-1">
-                                    +{lines.length - 4} more features...
+                                {lines.filter(line => line.startsWith('•') || line.startsWith('*') || line.startsWith('-')).length > 3 && (
+                                  <div className="text-brand-classic-gold text-xs mt-1 font-medium">
+                                    View more details →
                                   </div>
                                 )}
                               </div>
-                            ) : (
-                              <div className="text-xs text-brand-grey line-clamp-3">
-                                {property.project_details.substring(0, 100)}...
-                              </div>
-                            );
+                            ) : null;
                           })()}
                         </div>
                       </div>
@@ -833,9 +828,54 @@ export default function PropertiesDatabase() {
 
               {selectedProperty.project_details && (
                 <div className="mb-6 p-4 bg-brand-beige-light rounded-lg">
-                  <h3 className="text-lg font-semibold text-brand-navy mb-3">Project Details</h3>
-                  <div className="whitespace-pre-line text-brand-grey">
-                    {formatProjectDetails(selectedProperty.project_details)}
+                  <h3 className="text-lg font-semibold text-brand-navy mb-3">Project Details & Amenities</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {(() => {
+                      const details = parseProjectDetails(selectedProperty.project_details || '');
+                      
+                      return (
+                        <>
+                          {/* First Column */}
+                          {details.items1.length > 0 && (
+                            <div>
+                              <h4 className="font-medium text-brand-navy mb-2">{details.header1}</h4>
+                              <ul className="space-y-1 text-sm text-brand-grey">
+                                {details.items1.map((item, idx) => (
+                                  <li key={idx} className="flex items-start">
+                                    <span className="text-brand-classic-gold mr-2 mt-1 flex-shrink-0">•</span>
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          
+                          {/* Second Column */}
+                          {details.items2.length > 0 && (
+                            <div>
+                              <h4 className="font-medium text-brand-navy mb-2">{details.header2}</h4>
+                              <ul className="space-y-1 text-sm text-brand-grey">
+                                {details.items2.map((item, idx) => (
+                                  <li key={idx} className="flex items-start">
+                                    <span className="text-brand-classic-gold mr-2 mt-1 flex-shrink-0">•</span>
+                                    <span>{item}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          
+                          {/* Fallback for unformatted content */}
+                          {details.items1.length === 0 && details.items2.length === 0 && (
+                            <div className="col-span-2">
+                              <div className="whitespace-pre-line text-brand-grey text-sm">
+                                {formatProjectDetails(selectedProperty.project_details)}
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
               )}
