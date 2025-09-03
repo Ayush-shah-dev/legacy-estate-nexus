@@ -42,8 +42,8 @@ const PropertyFormDataSchema = z.object({
   location: z.string().min(3, {
     message: "Location must be at least 3 characters.",
   }),
-  price: z.number().min(1, {
-    message: "Price must be greater than 0.",
+  price: z.string().min(1, {
+    message: "Price is required.",
   }),
   amenities: z.string().optional(),
   project_details: z.string().optional(),
@@ -77,7 +77,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
       description: property?.description || "",
       property_type: property?.property_type || "",
       location: property?.location || "",
-      price: property?.price || 0,
+      price: property?.price?.toString() || "",
       amenities: property?.amenities || "",
       project_details: property?.project_details || "",
       existingImageUrls: property?.image_urls || [],
@@ -258,7 +258,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
 
       const propertyData = {
         ...data,
-        price: Number(data.price),
+        price: data.price,
         image_urls: allImageUrls,
       };
 
@@ -400,8 +400,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                     <FormLabel>Price (INR)</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Property Price in INR"
-                        type="number"
+                        placeholder="Property Price in INR (e.g., 50L, 2.5Cr, Negotiable)"
+                        type="text"
                         {...field}
                       />
                     </FormControl>
