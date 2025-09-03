@@ -432,33 +432,37 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
 
               {/* Bedrooms, Bathrooms, Area */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <FormField
-                  control={form.control}
-                  name="bedrooms"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Bedrooms</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., 2 BHK, Studio, Office Space" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {form.watch('property_type') !== 'commercial' && (
+                  <>
+                    <FormField
+                      control={form.control}
+                      name="bedrooms"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Bedrooms</FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g., 2 BHK, Studio" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="bathrooms"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Bathrooms</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., 2, 1.5, 3, Washrooms" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name="bathrooms"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Bathrooms</FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g., 2, 1.5, 3" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
 
                 <FormField
                   control={form.control}
@@ -467,7 +471,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                     <FormItem>
                       <FormLabel>Area</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., 850 sqft, 2000 sqft" {...field} />
+                        <Input placeholder="e.g., 850 sqft, 2000 sqft, 5 acres" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

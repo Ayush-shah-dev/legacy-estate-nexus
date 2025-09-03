@@ -173,6 +173,7 @@ export type Database = {
       properties: {
         Row: {
           additional_images: string[] | null
+          amenities: string | null
           area_sqft: string | null
           bathrooms: string | null
           bedrooms: string | null
@@ -184,6 +185,7 @@ export type Database = {
           image_url: string | null
           location: string | null
           price: string | null
+          project_details: string | null
           property_type: string | null
           status: string | null
           title: string
@@ -192,6 +194,7 @@ export type Database = {
         }
         Insert: {
           additional_images?: string[] | null
+          amenities?: string | null
           area_sqft?: string | null
           bathrooms?: string | null
           bedrooms?: string | null
@@ -203,6 +206,7 @@ export type Database = {
           image_url?: string | null
           location?: string | null
           price?: string | null
+          project_details?: string | null
           property_type?: string | null
           status?: string | null
           title: string
@@ -211,6 +215,7 @@ export type Database = {
         }
         Update: {
           additional_images?: string[] | null
+          amenities?: string | null
           area_sqft?: string | null
           bathrooms?: string | null
           bedrooms?: string | null
@@ -222,6 +227,7 @@ export type Database = {
           image_url?: string | null
           location?: string | null
           price?: string | null
+          project_details?: string | null
           property_type?: string | null
           status?: string | null
           title?: string
