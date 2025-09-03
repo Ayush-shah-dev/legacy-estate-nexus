@@ -188,6 +188,7 @@ export type Database = {
           status: string | null
           title: string
           updated_at: string
+          youtube_url: string | null
         }
         Insert: {
           additional_images?: string[] | null
@@ -206,6 +207,7 @@ export type Database = {
           status?: string | null
           title: string
           updated_at?: string
+          youtube_url?: string | null
         }
         Update: {
           additional_images?: string[] | null
@@ -224,6 +226,7 @@ export type Database = {
           status?: string | null
           title?: string
           updated_at?: string
+          youtube_url?: string | null
         }
         Relationships: [
           {
