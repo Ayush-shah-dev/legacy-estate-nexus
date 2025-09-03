@@ -442,7 +442,23 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                   <FormItem>
                     <FormLabel>YouTube Video URL (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://www.youtube.com/watch?v=..." {...field} />
+                      <Input 
+                        placeholder="https://www.youtube.com/watch?v=..." 
+                        {...field}
+                        onChange={(e) => {
+                          let value = e.target.value.trim();
+                          
+                          // If user enters a YouTube URL without protocol, add https://
+                          if (value && !value.startsWith('http://') && !value.startsWith('https://')) {
+                            if (value.startsWith('youtube.com') || value.startsWith('www.youtube.com') || 
+                                value.startsWith('youtu.be') || value.startsWith('www.youtu.be')) {
+                              value = 'https://' + value;
+                            }
+                          }
+                          
+                          field.onChange(value);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
