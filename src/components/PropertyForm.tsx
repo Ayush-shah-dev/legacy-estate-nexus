@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Form,
   FormControl,
@@ -67,13 +67,7 @@ type PropertyFormData = z.infer<typeof PropertyFormDataSchema>;
 
 const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel }) => {
   const [isUploading, setIsUploading] = useState(false);
-  const [imageUrls, setImageUrls] = useState<string[]>(() => {
-    if (!property) return [];
-    const existingImages = [];
-    if (property.image_url) existingImages.push(property.image_url);
-    if (property.additional_images) existingImages.push(...property.additional_images);
-    return existingImages;
-  });
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
 
   const { toast } = useToast();
@@ -81,6 +75,37 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
   const form = useForm<PropertyFormData>({
     resolver: zodResolver(PropertyFormDataSchema),
     defaultValues: {
+      title: "",
+      description: "",
+      property_type: "",
+      location: "",
+      price: "",
+      bedrooms: "",
+      bathrooms: "",
+      area_sqft: "",
+      project_details: "",
+      youtube_url: "",
+      existingImageUrls: [],
+      featured: false,
+      status: "available",
+    },
+    mode: "onChange",
+  });
+
+  // Reset form and state when property prop changes
+  useEffect(() => {
+    const getExistingImages = (prop: any) => {
+      if (!prop) return [];
+      const existingImages = [];
+      if (prop.image_url) existingImages.push(prop.image_url);
+      if (prop.additional_images) existingImages.push(...prop.additional_images);
+      return existingImages;
+    };
+
+    const existingImages = getExistingImages(property);
+    
+    // Reset form with new values
+    form.reset({
       title: property?.title || "",
       description: property?.description || "",
       property_type: property?.property_type || "",
@@ -91,18 +116,15 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
       area_sqft: property?.area_sqft || "",
       project_details: property?.project_details || "",
       youtube_url: property?.youtube_url || "",
-      existingImageUrls: (() => {
-        if (!property) return [];
-        const existingImages = [];
-        if (property.image_url) existingImages.push(property.image_url);
-        if (property.additional_images) existingImages.push(...property.additional_images);
-        return existingImages;
-      })(),
+      existingImageUrls: existingImages,
       featured: property?.featured || false,
       status: property?.status || "available",
-    },
-    mode: "onChange",
-  });
+    });
+
+    // Reset image state
+    setImageUrls(existingImages);
+    setFiles([]);
+  }, [property, form]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(e.target.files || []);
