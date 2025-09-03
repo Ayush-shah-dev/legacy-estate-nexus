@@ -23,8 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Upload, X, Plus, Bold, Italic, List, Type } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Upload, X } from 'lucide-react';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -48,7 +47,6 @@ const PropertyFormDataSchema = z.object({
   bedrooms: z.string().optional(),
   bathrooms: z.string().optional(),
   area_sqft: z.string().optional(),
-  amenities: z.string().optional(),
   project_details: z.string().optional(),
   youtube_url: z.string().optional(),
   imageFiles: z.array(z.instanceof(File))
@@ -69,7 +67,13 @@ type PropertyFormData = z.infer<typeof PropertyFormDataSchema>;
 
 const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel }) => {
   const [isUploading, setIsUploading] = useState(false);
-  const [imageUrls, setImageUrls] = useState<string[]>(property?.image_urls || []);
+  const [imageUrls, setImageUrls] = useState<string[]>(() => {
+    if (!property) return [];
+    const existingImages = [];
+    if (property.image_url) existingImages.push(property.image_url);
+    if (property.additional_images) existingImages.push(...property.additional_images);
+    return existingImages;
+  });
   const [files, setFiles] = useState<File[]>([]);
 
   const { toast } = useToast();
@@ -85,55 +89,20 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
       bedrooms: property?.bedrooms || "",
       bathrooms: property?.bathrooms || "",
       area_sqft: property?.area_sqft || "",
-      amenities: property?.amenities || "",
       project_details: property?.project_details || "",
       youtube_url: property?.youtube_url || "",
-      existingImageUrls: property?.additional_images || [],
+      existingImageUrls: (() => {
+        if (!property) return [];
+        const existingImages = [];
+        if (property.image_url) existingImages.push(property.image_url);
+        if (property.additional_images) existingImages.push(...property.additional_images);
+        return existingImages;
+      })(),
       featured: property?.featured || false,
       status: property?.status || "available",
     },
     mode: "onChange",
   });
-
-  const [showFormatHelp, setShowFormatHelp] = useState(false);
-
-  // Auto-format existing project details when component loads
-  React.useEffect(() => {
-    if (property?.project_details) {
-      const formattedDetails = autoFormatProjectDetails(property.project_details);
-      if (formattedDetails !== property.project_details) {
-        form.setValue('project_details', formattedDetails);
-      }
-    }
-  }, [property, form]);
-
-  const autoFormatProjectDetails = (text: string): string => {
-    if (!text) return text;
-    
-    // Split into lines and process each line
-    const lines = text.split('\n');
-    const formattedLines = lines.map(line => {
-      const trimmedLine = line.trim();
-      if (!trimmedLine) return line;
-      
-      // Check if line looks like it should be a bullet point
-      if (!trimmedLine.startsWith('•') && 
-          !trimmedLine.startsWith('*') && 
-          !trimmedLine.startsWith('-') &&
-          (trimmedLine.match(/^[A-Z][a-z]+ [a-z]+/) || // "Swimming pool", "Gym facilities"
-           trimmedLine.match(/^24\/7/) || // "24/7 security"
-           trimmedLine.includes('sqft') ||
-           trimmedLine.includes('parking') ||
-           trimmedLine.includes('amenities') ||
-           trimmedLine.includes('facilities'))) {
-        return `• ${trimmedLine}`;
-      }
-      
-      return line;
-    });
-    
-    return formattedLines.join('\n');
-  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(e.target.files || []);
@@ -185,53 +154,9 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
   };
 
   const removeExistingImage = (url: string) => {
-    setImageUrls(imageUrls.filter(imageUrl => imageUrl !== url));
-    form.setValue("existingImageUrls", imageUrls.filter(imageUrl => imageUrl !== url));
-  };
-
-  const formatText = (type: 'bold' | 'italic' | 'bullet' | 'underline' | 'heading') => {
-    const textarea = document.querySelector('[name="project_details"]') as HTMLTextAreaElement;
-    if (!textarea) return;
-
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = textarea.value.substring(start, end);
-    const beforeText = textarea.value.substring(0, start);
-    const afterText = textarea.value.substring(end);
-
-    let formattedText = '';
-    
-    switch (type) {
-      case 'bold':
-        formattedText = selectedText ? `**${selectedText}**` : '**Bold Text**';
-        break;
-      case 'italic':
-        formattedText = selectedText ? `*${selectedText}*` : '*Italic Text*';
-        break;
-      case 'underline':
-        formattedText = selectedText ? `__${selectedText}__` : '__Underlined Text__';
-        break;
-      case 'heading':
-        formattedText = selectedText ? `### ${selectedText}` : '### Heading';
-        break;
-      case 'bullet':
-        if (selectedText) {
-          formattedText = selectedText.split('\n').map(line => line.trim() ? `• ${line.trim()}` : line).join('\n');
-        } else {
-          formattedText = '• Bullet Point';
-        }
-        break;
-    }
-
-    const newValue = beforeText + formattedText + afterText;
-    form.setValue('project_details', newValue);
-    
-    // Set cursor position after formatting
-    setTimeout(() => {
-      const newCursorPos = start + formattedText.length;
-      textarea.setSelectionRange(newCursorPos, newCursorPos);
-      textarea.focus();
-    }, 0);
+    const updatedUrls = imageUrls.filter(imageUrl => imageUrl !== url);
+    setImageUrls(updatedUrls);
+    form.setValue("existingImageUrls", updatedUrls);
   };
 
   const handleSubmit = async (data: PropertyFormData) => {
@@ -273,7 +198,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
         bedrooms: data.bedrooms,
         bathrooms: data.bathrooms,
         area_sqft: data.area_sqft,
-        amenities: data.amenities,
         project_details: data.project_details,
         youtube_url: data.youtube_url,
         featured: data.featured,
@@ -323,14 +247,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
     }
   };
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      minimumFractionDigits: 0,
-    }).format(value);
-  };
-
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <Card>
@@ -363,8 +279,8 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Detailed property description..."
-                        className="min-h-[100px] resize-y"
+                        placeholder="Brief property description..."
+                        className="min-h-[80px] resize-y"
                         {...field}
                       />
                     </FormControl>
@@ -417,10 +333,10 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price (INR)</FormLabel>
+                    <FormLabel>Price</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Property Price in INR (e.g., 50L, 2.5Cr, Negotiable)"
+                        placeholder="e.g., 50L, 2.5Cr, Negotiable"
                         type="text"
                         {...field}
                       />
@@ -430,7 +346,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                 )}
               />
 
-              {/* Bedrooms, Bathrooms, Area */}
+              {/* Property Details Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {form.watch('property_type') !== 'commercial' && (
                   <>
@@ -471,7 +387,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                     <FormItem>
                       <FormLabel>Area</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., 850 sqft, 2000 sqft, 5 acres" {...field} />
+                        <Input placeholder="e.g., 850 sqft, 5 acres" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -481,12 +397,16 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
 
               <FormField
                 control={form.control}
-                name="amenities"
+                name="project_details"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Amenities</FormLabel>
+                    <FormLabel>Features & Amenities</FormLabel>
                     <FormControl>
-                      <Input placeholder="List of amenities (comma-separated)" {...field} />
+                      <Textarea
+                        {...field}
+                        placeholder="List key features and amenities (use • for bullet points)..."
+                        className="min-h-[100px] resize-y"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -502,105 +422,6 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                     <FormControl>
                       <Input placeholder="https://www.youtube.com/watch?v=..." {...field} />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* Project Details with Enhanced Formatting */}
-              <FormField
-                control={form.control}
-                name="project_details"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Project Details</FormLabel>
-                    <div className="space-y-2">
-                      {/* Enhanced Formatting Toolbar */}
-                      <div className="flex items-center gap-2 p-2 bg-muted rounded-md flex-wrap">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => formatText('bold')}
-                          className="h-8 px-2"
-                          title="Bold"
-                        >
-                          <Bold className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => formatText('italic')}
-                          className="h-8 px-2"
-                          title="Italic"
-                        >
-                          <Italic className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => formatText('underline')}
-                          className="h-8 px-2"
-                          title="Underline"
-                        >
-                          <span className="text-xs font-bold underline">U</span>
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => formatText('heading')}
-                          className="h-8 px-2"
-                          title="Heading"
-                        >
-                          <span className="text-xs font-bold">H</span>
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => formatText('bullet')}
-                          className="h-8 px-2"
-                          title="Bullet Points"
-                        >
-                          <List className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setShowFormatHelp(!showFormatHelp)}
-                          className="h-8 px-2 text-muted-foreground"
-                        >
-                          <Type className="h-3 w-3 mr-1" />
-                          Help
-                        </Button>
-                      </div>
-                      
-                      {showFormatHelp && (
-                        <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
-                          <p className="font-medium mb-2">Formatting Guide:</p>
-                          <ul className="space-y-1">
-                            <li>• Use <code>**text**</code> for <strong>bold text</strong></li>
-                            <li>• Use <code>*text*</code> for <em>italic text</em></li>
-                            <li>• Use <code>__text__</code> for <u>underlined text</u></li>
-                            <li>• Use <code>### text</code> for headings</li>
-                            <li>• Use <code>• text</code> for bullet points</li>
-                            <li>• Select text and click buttons to format automatically</li>
-                          </ul>
-                        </div>
-                      )}
-                      
-                      <FormControl>
-                        <Textarea
-                          {...field}
-                          placeholder="Enter detailed project information with amenities, features, and highlights..."
-                          className="min-h-[120px] resize-y"
-                        />
-                      </FormControl>
-                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -669,13 +490,13 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                     </FormControl>
                     <FormMessage />
                     <p className="text-sm text-muted-foreground mt-2">
-                      Upload up to 5 images. Max size: 5MB each. Accepted types: JPEG, JPG, PNG, WEBP.
+                      Upload up to 5 images. Max size: 5MB each.
                     </p>
                   </FormItem>
                 )}
               />
 
-              {/* Featured and Active Status */}
+              {/* Featured and Status */}
               <div className="flex items-center space-x-4">
                 <FormField
                   control={form.control}
@@ -685,13 +506,13 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                       <FormControl>
                         <input
                           type="checkbox"
-                          className="h-5 w-5 border-primary focus:ring-0 focus:ring-offset-0"
+                          className="h-4 w-4"
                           checked={field.value}
                           onChange={field.onChange}
                         />
                       </FormControl>
-                      <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed">
-                        Featured
+                      <FormLabel className="text-sm font-medium">
+                        Featured Property
                       </FormLabel>
                       <FormMessage />
                     </FormItem>
