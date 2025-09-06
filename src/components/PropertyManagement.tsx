@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus, Edit, Trash2, Search, Home } from "lucide-react";
 import PropertyForm from "./PropertyForm";
 
@@ -26,6 +27,7 @@ interface Property {
   image_url: string;
   additional_images?: string[];
   youtube_url?: string;
+  project_details?: string;
   created_at: string;
 }
 
@@ -130,11 +132,19 @@ const PropertyManagement = () => {
   };
 
   const getPropertyDetails = (property: Property) => {
-    const isCommercial = property.property_type === 'commercial';
-    if (isCommercial) {
-      return `${property.bedrooms} • ${property.bathrooms} • ${property.area_sqft}`;
-    }
-    return `${property.bedrooms} • ${property.bathrooms} • ${property.area_sqft}`;
+    const details = [];
+    if (property.bedrooms) details.push(`${property.bedrooms} BHK`);
+    if (property.bathrooms) details.push(`${property.bathrooms} Bath`);
+    if (property.area_sqft) details.push(`${property.area_sqft} sqft`);
+    return details.join(' • ') || 'N/A';
+  };
+
+  const parseProjectDetails = (details: string) => {
+    if (!details) return [];
+    const lines = details.split('\n').filter(line => line.trim());
+    return lines.filter(line => 
+      line.startsWith('•') || line.startsWith('*') || line.startsWith('-')
+    ).map(line => line.replace(/^[•*-]\s*/, '').trim());
   };
 
   if (loading) {
@@ -247,8 +257,29 @@ const PropertyManagement = () => {
                     </TableCell>
                     <TableCell>{getStatusBadge(property.status)}</TableCell>
                     <TableCell className="text-gray-300">
-                      <div className="text-sm">
-                        {getPropertyDetails(property)}
+                      <div className="space-y-2">
+                        <div className="text-sm">
+                          {getPropertyDetails(property)}
+                        </div>
+                        {property.project_details && (
+                          <div className="max-w-[200px]">
+                            <div className="text-xs font-medium text-blue-300 mb-1">Amenities:</div>
+                            <ScrollArea className="h-16 w-full">
+                              {parseProjectDetails(property.project_details).length > 0 ? (
+                                <div className="space-y-0.5 pr-3">
+                                  {parseProjectDetails(property.project_details).map((amenity, idx) => (
+                                    <div key={idx} className="flex items-start text-xs">
+                                      <span className="text-blue-400 mr-1 flex-shrink-0">•</span>
+                                      <span className="text-gray-300 leading-tight">{amenity}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : (
+                                <span className="text-xs text-gray-500">No amenities listed</span>
+                              )}
+                            </ScrollArea>
+                          </div>
+                        )}
                       </div>
                     </TableCell>
                     <TableCell className="text-gray-300">
