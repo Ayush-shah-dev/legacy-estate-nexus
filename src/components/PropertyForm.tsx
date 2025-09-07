@@ -126,6 +126,53 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
     setFiles([]);
   }, [property, form]);
 
+  const handleBulletKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const textarea = e.currentTarget;
+    const { selectionStart, selectionEnd, value } = textarea;
+
+    const getLineStart = (pos: number) => {
+      const idx = value.lastIndexOf('\n', Math.max(0, pos - 1));
+      return idx === -1 ? 0 : idx + 1;
+    };
+
+    // Convert dash/star to bullet at line start when pressing space
+    if (e.key === ' ') {
+      const lineStart = getLineStart(selectionStart);
+      const current = value.slice(lineStart, selectionStart);
+      if (current === '-' || current === '*') {
+        e.preventDefault();
+        const newValue = value.slice(0, lineStart) + '• ' + value.slice(selectionStart);
+        form.setValue('project_details', newValue, { shouldDirty: true });
+        requestAnimationFrame(() => {
+          textarea.selectionStart = textarea.selectionEnd = lineStart + 2;
+        });
+      }
+      return;
+    }
+
+    // Continue bullet on Enter
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const lineStart = getLineStart(selectionStart);
+      const currentLine = value.slice(lineStart, selectionStart);
+      let bullet = '• ';
+      const trimmed = currentLine.trimStart();
+      if (trimmed.startsWith('• ')) bullet = '• ';
+      else if (trimmed.startsWith('- ')) bullet = '- ';
+      else if (trimmed.startsWith('* ')) bullet = '* ';
+
+      const insert = '\n' + bullet;
+      const before = value.slice(0, selectionStart);
+      const after = value.slice(selectionEnd);
+      const newValue = before + insert + after;
+      form.setValue('project_details', newValue, { shouldDirty: true });
+      requestAnimationFrame(() => {
+        const pos = before.length + insert.length;
+        textarea.selectionStart = textarea.selectionEnd = pos;
+      });
+    }
+  };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(e.target.files || []);
   
@@ -428,6 +475,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                         {...field}
                         placeholder="List key features and amenities (use • for bullet points)..."
                         className="min-h-[100px] resize-y"
+                        onKeyDown={handleBulletKeyDown}
                       />
                     </FormControl>
                     <FormMessage />
