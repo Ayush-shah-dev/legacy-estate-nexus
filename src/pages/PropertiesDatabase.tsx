@@ -833,35 +833,39 @@ export default function PropertiesDatabase() {
                       
                       return (
                         <>
-                          {/* First Column */}
-                          {details.items1.length > 0 && (
-                            <div>
-                              <h4 className="font-medium text-brand-navy mb-2">{details.header1}</h4>
-                              <ul className="space-y-1 text-sm text-brand-grey">
-                                {details.items1.map((item, idx) => (
-                                  <li key={idx} className="flex items-start">
-                                    <span className="text-brand-classic-gold mr-2 mt-1 flex-shrink-0">•</span>
-                                    <span>{item}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                          
-                          {/* Second Column */}
-                          {details.items2.length > 0 && (
-                            <div>
-                              <h4 className="font-medium text-brand-navy mb-2">{details.header2}</h4>
-                              <ul className="space-y-1 text-sm text-brand-grey">
-                                {details.items2.map((item, idx) => (
-                                  <li key={idx} className="flex items-start">
-                                    <span className="text-brand-classic-gold mr-2 mt-1 flex-shrink-0">•</span>
-                                    <span>{item}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
+                           {/* First Column */}
+                           {details.items1.length > 0 && (
+                             <div>
+                               <h4 className="font-medium text-brand-navy mb-2">{details.header1}</h4>
+                               <ScrollArea className="h-32 w-full">
+                                 <ul className="space-y-1 text-sm text-brand-grey pr-4">
+                                   {details.items1.map((item, idx) => (
+                                     <li key={idx} className="flex items-start">
+                                       <span className="text-brand-classic-gold mr-2 mt-1 flex-shrink-0">•</span>
+                                       <span>{item}</span>
+                                     </li>
+                                   ))}
+                                 </ul>
+                               </ScrollArea>
+                             </div>
+                           )}
+                           
+                           {/* Second Column */}
+                           {details.items2.length > 0 && (
+                             <div>
+                               <h4 className="font-medium text-brand-navy mb-2">{details.header2}</h4>
+                               <ScrollArea className="h-32 w-full">
+                                 <ul className="space-y-1 text-sm text-brand-grey pr-4">
+                                   {details.items2.map((item, idx) => (
+                                     <li key={idx} className="flex items-start">
+                                       <span className="text-brand-classic-gold mr-2 mt-1 flex-shrink-0">•</span>
+                                       <span>{item}</span>
+                                     </li>
+                                   ))}
+                                 </ul>
+                               </ScrollArea>
+                             </div>
+                           )}
                           
                           {/* Fallback for unformatted content */}
                           {details.items1.length === 0 && details.items2.length === 0 && (
