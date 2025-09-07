@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Search, 
@@ -664,24 +665,21 @@ export default function PropertiesDatabase() {
                             const lines = formatted.split('\n').filter(line => line.trim());
                             const bulletPoints = lines.filter(line => 
                               line.startsWith('•') || line.startsWith('*') || line.startsWith('-')
-                            ).slice(0, 3); // Show only first 3 bullet points
+                            );
                             
                             return bulletPoints.length > 0 ? (
-                              <div className="space-y-0.5">
-                                {bulletPoints.map((point, idx) => (
-                                  <div key={idx} className="flex items-start">
-                                    <span className="text-brand-classic-gold mr-2 mt-0.5 flex-shrink-0 text-xs">•</span>
-                                    <span className="line-clamp-1 text-xs">
-                                      {point.replace(/^[•*-]\s*/, '')}
-                                    </span>
-                                  </div>
-                                ))}
-                                {lines.filter(line => line.startsWith('•') || line.startsWith('*') || line.startsWith('-')).length > 3 && (
-                                  <div className="text-brand-classic-gold text-xs mt-1 font-medium">
-                                    View more details →
-                                  </div>
-                                )}
-                              </div>
+                              <ScrollArea className="h-16 w-full">
+                                <div className="space-y-0.5 pr-4">
+                                  {bulletPoints.map((point, idx) => (
+                                    <div key={idx} className="flex items-start">
+                                      <span className="text-brand-classic-gold mr-2 mt-0.5 flex-shrink-0 text-xs">•</span>
+                                      <span className="text-xs">
+                                        {point.replace(/^[•*-]\s*/, '')}
+                                      </span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </ScrollArea>
                             ) : null;
                           })()}
                         </div>

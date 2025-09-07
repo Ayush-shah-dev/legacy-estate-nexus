@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Building2, Users, Award, Star, ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -380,27 +381,20 @@ export default function Home() {
                         <span className="text-sm font-medium text-primary mb-1">
                           Amenities:
                         </span>
-                        <div className="flex flex-wrap gap-1">
-                          {getDefaultAmenities(property.property_type)
-                            .slice(0, 3)
-                            .map((amenity, index) => (
-                              <Badge
-                                key={index}
-                                variant="outline"
-                                className="text-xs border-brand-classic-gold/50 text-brand-classic-gold"
-                              >
-                                {amenity}
-                              </Badge>
-                            ))}
-                          {getDefaultAmenities(property.property_type).length > 3 && (
-                            <Badge
-                              variant="outline"
-                              className="text-xs border-brand-classic-gold/50 text-brand-classic-gold"
-                            >
-                              +{getDefaultAmenities(property.property_type).length - 3} more
-                            </Badge>
-                          )}
-                        </div>
+                        <ScrollArea className="h-16 w-full">
+                          <div className="flex flex-wrap gap-1 pr-4">
+                            {getDefaultAmenities(property.property_type)
+                              .map((amenity, index) => (
+                                <Badge
+                                  key={index}
+                                  variant="outline"
+                                  className="text-xs border-brand-classic-gold/50 text-brand-classic-gold"
+                                >
+                                  {amenity}
+                                </Badge>
+                              ))}
+                          </div>
+                        </ScrollArea>
                       </div>
                     </div>
 
