@@ -470,6 +470,29 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Features & Amenities</FormLabel>
+                    <div className="flex gap-2 mb-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const currentValue = field.value || '';
+                          const lines = currentValue.split('\n');
+                          const bulletedLines = lines.map(line => {
+                            const trimmed = line.trim();
+                            if (trimmed && !trimmed.startsWith('•') && !trimmed.startsWith('*') && !trimmed.startsWith('-')) {
+                              return `• ${trimmed}`;
+                            }
+                            return line;
+                          });
+                          const newValue = bulletedLines.join('\n');
+                          form.setValue('project_details', newValue, { shouldDirty: true });
+                        }}
+                        className="text-xs"
+                      >
+                        • Auto Bullet
+                      </Button>
+                    </div>
                     <FormControl>
                       <Textarea
                         {...field}

@@ -656,7 +656,7 @@ export default function PropertiesDatabase() {
                       </div>
                     </div>
 
-                    {/* Project Details Preview - Clean & Minimal */}
+                    {/* Project Details Preview - Show only first 3 bullet points */}
                     {property.project_details && (
                       <div className="mb-4">
                         <div className="text-xs text-brand-grey space-y-1">
@@ -668,18 +668,21 @@ export default function PropertiesDatabase() {
                             );
                             
                             return bulletPoints.length > 0 ? (
-                              <ScrollArea className="max-h-32 w-full"> {/* Increase height or remove for all points */}
-                                <div className="space-y-0.5 pr-4">
-                                  {bulletPoints.map((point, idx) => (
-                                    <div key={idx} className="flex items-start">
-                                      <span className="text-brand-classic-gold mr-2 mt-0.5 flex-shrink-0 text-xs">•</span>
-                                      <span className="text-xs">
-                                        {point.replace(/^[•*-]\s*/, '')}
-                                      </span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </ScrollArea>
+                              <div className="space-y-0.5">
+                                {bulletPoints.slice(0, 3).map((point, idx) => (
+                                  <div key={idx} className="flex items-start">
+                                    <span className="text-brand-classic-gold mr-2 mt-0.5 flex-shrink-0 text-xs">•</span>
+                                    <span className="text-xs">
+                                      {point.replace(/^[•*-]\s*/, '')}
+                                    </span>
+                                  </div>
+                                ))}
+                                {bulletPoints.length > 3 && (
+                                  <div className="text-xs text-brand-grey/70 italic">
+                                    +{bulletPoints.length - 3} more features...
+                                  </div>
+                                )}
+                              </div>
                             ) : null;
                           })()}
                         </div>
