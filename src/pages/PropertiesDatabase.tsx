@@ -659,26 +659,31 @@ export default function PropertiesDatabase() {
                     {property.project_details && (
                       <div className="mb-4">
                         <div className="text-xs text-brand-grey space-y-1">
-                            {(() => {
-                             const formatted = formatProjectDetails(property.project_details);
-                             const lines = formatted.split('\n').filter(line => line.trim());
-                             const bulletPoints = lines.filter(line => 
-                               line.startsWith('•') || line.startsWith('*') || line.startsWith('-')
-                             );
-                             
-                             return bulletPoints.length > 0 ? (
-                               <div className="max-h-20 overflow-y-auto">
-                                 {bulletPoints.map((point, idx) => (
-                                   <div key={idx} className="flex items-start">
-                                     <span className="text-brand-classic-gold mr-2 mt-0.5 flex-shrink-0 text-xs">•</span>
-                                     <span className="line-clamp-1 text-xs">
-                                       {point.replace(/^[•*-]\s*/, '')}
-                                     </span>
-                                   </div>
-                                 ))}
-                               </div>
-                             ) : null;
-                           })()}
+                          {(() => {
+                            const formatted = formatProjectDetails(property.project_details);
+                            const lines = formatted.split('\n').filter(line => line.trim());
+                            const bulletPoints = lines.filter(line => 
+                              line.startsWith('•') || line.startsWith('*') || line.startsWith('-')
+                            ).slice(0, 3); // Show only first 3 bullet points
+                            
+                            return bulletPoints.length > 0 ? (
+                              <div className="space-y-0.5">
+                                {bulletPoints.map((point, idx) => (
+                                  <div key={idx} className="flex items-start">
+                                    <span className="text-brand-classic-gold mr-2 mt-0.5 flex-shrink-0 text-xs">•</span>
+                                    <span className="line-clamp-1 text-xs">
+                                      {point.replace(/^[•*-]\s*/, '')}
+                                    </span>
+                                  </div>
+                                ))}
+                                {lines.filter(line => line.startsWith('•') || line.startsWith('*') || line.startsWith('-')).length > 3 && (
+                                  <div className="text-brand-classic-gold text-xs mt-1 font-medium">
+                                    View more details →
+                                  </div>
+                                )}
+                              </div>
+                            ) : null;
+                          })()}
                         </div>
                       </div>
                     )}
