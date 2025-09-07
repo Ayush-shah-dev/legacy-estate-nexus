@@ -668,7 +668,7 @@ export default function PropertiesDatabase() {
                             );
                             
                             return bulletPoints.length > 0 ? (
-                              <ScrollArea className="h-16 w-full">
+                              <ScrollArea className="max-h-32 w-full"> {/* Increase height or remove for all points */}
                                 <div className="space-y-0.5 pr-4">
                                   {bulletPoints.map((point, idx) => (
                                     <div key={idx} className="flex items-start">
@@ -827,58 +827,27 @@ export default function PropertiesDatabase() {
               {selectedProperty.project_details && (
                 <div className="mb-6 p-4 bg-brand-beige-light rounded-lg">
                   <h3 className="text-lg font-semibold text-brand-navy mb-3">Project Details & Amenities</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {(() => {
-                      const details = parseProjectDetails(selectedProperty.project_details || '');
-                      
-                      return (
-                        <>
-                           {/* First Column */}
-                           {details.items1.length > 0 && (
-                             <div>
-                               <h4 className="font-medium text-brand-navy mb-2">{details.header1}</h4>
-                               <ScrollArea className="h-32 w-full">
-                                 <ul className="space-y-1 text-sm text-brand-grey pr-4">
-                                   {details.items1.map((item, idx) => (
-                                     <li key={idx} className="flex items-start">
-                                       <span className="text-brand-classic-gold mr-2 mt-1 flex-shrink-0">•</span>
-                                       <span>{item}</span>
-                                     </li>
-                                   ))}
-                                 </ul>
-                               </ScrollArea>
-                             </div>
-                           )}
-                           
-                           {/* Second Column */}
-                           {details.items2.length > 0 && (
-                             <div>
-                               <h4 className="font-medium text-brand-navy mb-2">{details.header2}</h4>
-                               <ScrollArea className="h-32 w-full">
-                                 <ul className="space-y-1 text-sm text-brand-grey pr-4">
-                                   {details.items2.map((item, idx) => (
-                                     <li key={idx} className="flex items-start">
-                                       <span className="text-brand-classic-gold mr-2 mt-1 flex-shrink-0">•</span>
-                                       <span>{item}</span>
-                                     </li>
-                                   ))}
-                                 </ul>
-                               </ScrollArea>
-                             </div>
-                           )}
-                          
-                          {/* Fallback for unformatted content */}
-                          {details.items1.length === 0 && details.items2.length === 0 && (
-                            <div className="col-span-2">
-                              <div className="whitespace-pre-line text-brand-grey text-sm">
-                                {formatProjectDetails(selectedProperty.project_details)}
-                              </div>
-                            </div>
-                          )}
-                        </>
-                      );
-                    })()}
-                  </div>
+                  <ScrollArea className="h-48 w-full">
+                    <ul className="space-y-1 text-sm text-brand-grey pr-4">
+                      {(() => {
+                        const details = parseProjectDetails(selectedProperty.project_details || '');
+                        // Combine both arrays for single column
+                        const allItems = [...details.items1, ...details.items2];
+                        return allItems.length > 0 ? (
+                          allItems.map((item, idx) => (
+                            <li key={idx} className="flex items-start">
+                              <span className="text-brand-classic-gold mr-2 mt-1 flex-shrink-0">•</span>
+                              <span>{item}</span>
+                            </li>
+                          ))
+                        ) : (
+                          <div className="whitespace-pre-line text-brand-grey text-sm">
+                            {formatProjectDetails(selectedProperty.project_details)}
+                          </div>
+                        );
+                      })()}
+                    </ul>
+                  </ScrollArea>
                 </div>
               )}
 
