@@ -608,18 +608,7 @@ export default function PropertiesDatabase() {
                   </div>
 
                   <CardContent className="p-6 flex flex-col flex-1">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i} 
-                            className={`h-4 w-4 ${i < 4 ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
-                          />
-                        ))}
-                        <span className="text-sm text-brand-grey ml-1">
-                          4.5 (15 reviews)
-                        </span>
-                      </div>
+                    <div className="flex items-center justify-end mb-4">
                       <div className="text-right">
                         <div className="text-lg font-bold text-brand-classic-gold">
                           {property.price || 'Price on Request'}
