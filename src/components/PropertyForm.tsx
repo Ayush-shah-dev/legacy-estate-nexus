@@ -497,7 +497,7 @@ const PropertyForm: React.FC<PropertyFormProps> = ({ property, onSave, onCancel 
                       <Textarea
                         {...field}
                         placeholder="List key features and amenities (use • for bullet points)..."
-                        className="min-h-[100px] resize-y"
+                        className="min-h-[150px] resize-y overflow-auto" // Adjusted height and enabled scrolling
                         onKeyDown={handleBulletKeyDown}
                       />
                     </FormControl>

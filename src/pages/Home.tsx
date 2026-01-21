@@ -176,7 +176,16 @@ export default function Home() {
         </video>
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <div>
+          <div className="text-center">
+            <img
+              src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png"
+              alt="Regal Estate Consultants"
+              className="h-40 w-auto mx-auto animate-fade-in drop-shadow-2xl"
+              style={{
+                filter: 'drop-shadow(0 0 25px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 50px rgba(255, 255, 255, 0.7)) drop-shadow(0 0 75px rgba(255, 255, 255, 0.5))'
+              }}
+            />
+            <p className="text-sm text-white/80  animate-fade-in font-bold">Since 1987</p>
             <h1 className="animate-fade-in">
               Mumbai Real Estate,
               <span>The Regal Way</span>

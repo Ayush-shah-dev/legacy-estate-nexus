@@ -56,15 +56,7 @@ export const Layout = () => {
                 <div className="flex items-center">MahaRERA</div>
               </div>
             </div>
-            <div className="flex-shrink-0">
-              <NavLink to="/" className="flex items-center">
-                <img
-                  src="/lovable-uploads/e3e8d4b3-aff7-449c-8663-a9e656c4ed74.png"
-                  alt="Regal Estate Consultants"
-                  className="h-24 w-auto"
-                />
-              </NavLink>
-            </div>
+
 
             {/* Desktop Navigation */}
             <div className="hidden md:block">

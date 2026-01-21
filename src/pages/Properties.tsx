@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -300,6 +299,9 @@ export default function Properties() {
                             {property.area_sqft} sq ft
                           </div>
                         )}
+                      </div>
+                      <div className="text-right">
+                        <span className="text-xs text-brand-classic-gold">Residential Property</span>
                       </div>
                     </div>
 
